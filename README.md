@@ -26,13 +26,14 @@ When `a custom role is first created`, it exists in isolation. It must then be a
 In a role hierarchy, roles are granted to other roles to form an inheritance relationship. Permissions granted to roles at a lower level are inherited by roles at a higher level.
 
 **RBAC creation best practices:**
-- Create object `access roles` with different permissions on objects and assign them to `functional roles`
 - `Grant permissions` on database objects or account objects to `access roles`.
-- `Functional roles` correspond to the business functions.
+- Assign access roles to `functional roles`. (Functional roles correspond to the business functions.)
 - When appropriate, grant `lower-level functional roles` to `higher-level functional roles` in a parent-child relationship where the parent roles map to business functions.
 - Grant the `highest-level functional roles` via a role hierarchy to the SYSADMIN.
 
 There is no technical difference between an object `access role` and a `functional role` in Snowflake. The difference is `logical`. 
+
+Refer to `https://docs.snowflake.com/en/user-guide/security-access-control-considerations.html`.
 
 
 
