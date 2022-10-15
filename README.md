@@ -43,11 +43,17 @@ For security reasons, only the user who executed a query can access the query re
 
 A cloned container object (a database or schema) retains any privileges granted on the objects inside the container. e.g., a cloned schema retains any privileges granted on the tables, views, UDFs, and other objects in this schema. 
 
+## Data Encryption
+End-to-end encryption (E2EE) is a method to secure data that prevents third parties from reading data while at-rest or in transit to and from Snowflake and to minimize the attack surface.
 
+Client-side encryption means that a client encrypts data before copying it into a cloud storage staging area. It follows a specific protocol defined by the cloud storage service. The service SDK and third-party tools implement this protocol. The client-side encryption protocol works as follows:
+1. The customer creates a secret master key, which is shared with Snowflake.
+2. The client, which is provided by the cloud storage service, generates a random encryption key and encrypts the file before uploading it into cloud storage. The random encryption key, in turn, is encrypted with the customer’s master key.
+3. Both the encrypted file and the encrypted random key are uploaded to the cloud storage service. The encrypted random key is stored with the file’s metadata.
 
+When downloading data, the client downloads both the encrypted file and the encrypted random key. The client decrypts the encrypted random key using the customer’s master key. Next, the client decrypts the encrypted file using the now decrypted random key. This encryption and decryption happens on the client side. At no time does the cloud storage service or any other third party (such as an ISP) see the data in the clear. Customers may upload client-side encrypted data using any client or tool that supports client-side encryption.
 
-
-
+## Encryption Key Management in Snowflake
 
 
 
