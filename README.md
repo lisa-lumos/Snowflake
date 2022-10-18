@@ -54,9 +54,13 @@ Client-side encryption means that a client encrypts data before copying it into 
 When downloading data, the client downloads both the encrypted file and the encrypted random key. The client decrypts the encrypted random key using the customer’s master key. Next, the client decrypts the encrypted file using the now decrypted random key. This encryption and decryption happens on the client side. At no time does the cloud storage service or any other third party (such as an ISP) see the data in the clear. Customers may upload client-side encrypted data using any client or tool that supports client-side encryption.
 
 ## Encryption Key Management in Snowflake
+Tri-Secret Secure: Snowflake manages data encryption keys to protect customer data. This management occurs automatically without any need for customer intervention. Customers can use the key management service in the cloud platform that hosts their Snowflake account to maintain their own additional encryption key. When enabled, the combination of `a Snowflake-maintained key` and `a customer-managed key` creates `a composite master key` to protect the Snowflake data. This is called `Tri-Secret Secure`.
 
+Snowflake uses strong `AES 256-bit encryption` with a `hierarchical key model` rooted in a hardware security module. A hierarchical key model provides a framework for Snowflake’s encryption key management. The hierarchy is composed of several layers of keys in which `each higher layer of keys (parent keys) encrypts the layer below (child keys`). Snowflake’s hierarchical key model consists of four levels of keys: The root key, Account master keys, Table master keys, File keys. 
 
+<img src="images/hierarchical-key-model.png" style="width: 70%">
 
+### Encryption Key Rotation
 
 
 
