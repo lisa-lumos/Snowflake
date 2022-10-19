@@ -53,14 +53,34 @@ Client-side encryption means that a client encrypts data before copying it into 
 
 When downloading data, the client downloads both the encrypted file and the encrypted random key. The client decrypts the encrypted random key using the customer’s master key. Next, the client decrypts the encrypted file using the now decrypted random key. This encryption and decryption happens on the client side. At no time does the cloud storage service or any other third party (such as an ISP) see the data in the clear. Customers may upload client-side encrypted data using any client or tool that supports client-side encryption.
 
-## Encryption Key Management in Snowflake
-Tri-Secret Secure: Snowflake manages data encryption keys to protect customer data. This management occurs automatically without any need for customer intervention. Customers can use the key management service in the cloud platform that hosts their Snowflake account to maintain their own additional encryption key. When enabled, the combination of `a Snowflake-maintained key` and `a customer-managed key` creates `a composite master key` to protect the Snowflake data. This is called `Tri-Secret Secure`.
+### Encryption Key Management in Snowflake
+Tri-Secret Secure (business critical feature): Snowflake manages data encryption keys to protect customer data. This management occurs automatically without any need for customer intervention. Customers can use the key management service in the cloud platform that hosts their Snowflake account to maintain their own additional encryption key. When enabled, the combination of `a Snowflake-maintained key` and `a customer-managed key` creates `a composite master key` to protect the Snowflake data. This dual-key encryption model, together with Snowflake’s built-in user authentication, enables the three levels of data protection offered by `Tri-Secret Secure`.
 
 Snowflake uses strong `AES 256-bit encryption` with a `hierarchical key model` rooted in a hardware security module. A hierarchical key model provides a framework for Snowflake’s encryption key management. The hierarchy is composed of several layers of keys in which `each higher layer of keys (parent keys) encrypts the layer below (child keys`). Snowflake’s hierarchical key model consists of four levels of keys: The root key, Account master keys, Table master keys, File keys. 
 
 <img src="images/hierarchical-key-model.png" style="width: 70%">
 
 ### Encryption Key Rotation
+All Snowflake-managed keys are automatically rotated when they are more than 30 days old. When active, a key is used to encrypt data and is available for usage by the customer. When retired, the key is used solely to decrypt data and is only available for accessing the data. Regular key rotation limits the life cycle for the keys to a limited period of time.
+
+### Periodic Rekeying (Enterprise edition feature)
+While key rotation ensures that a key is transferred from its active state to a retired state, rekeying ensures that a key is transferred from its retired state to being destroyed. If periodic rekeying is enabled, then when the retired encryption key for a table is older than one year, Snowflake automatically creates a new encryption key and re-encrypts all data previously protected by the retired key using the new key. The new key is used to decrypt the table data going forward.
+
+## Governance
+
+
+### Column-level Security
+### Row Access Policies
+### Object Tagging
+### Tag-based Masking Policies
+### Data Classification
+### Access History
+### Object Dependencies
+
+## Managing Cost
+
+## Developing Apps
+
 
 
 
