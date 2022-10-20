@@ -66,16 +66,36 @@ All Snowflake-managed keys are automatically rotated when they are more than 30 
 ### Periodic Rekeying (Enterprise edition feature)
 While key rotation ensures that a key is transferred from its active state to a retired state, rekeying ensures that a key is transferred from its retired state to being destroyed. If periodic rekeying is enabled, then when the retired encryption key for a table is older than one year, Snowflake automatically creates a new encryption key and re-encrypts all data previously protected by the retired key using the new key. The new key is used to decrypt the table data going forward.
 
-## Governance
+## 🏷  Governance
+### Column-level Security （enterprise edition feature)
+Allows for masking a column within a table or view. Contains two features:
+- Dynamic Data Masking: Uses masking policies to selectively mask plain-text data in table and view columns at query time. The masking policy conditions determine whether unauthorized users see masked, partially masked, obfuscated, or tokenized data. 
+- External Tokenization: tokenize data (remove sensitive data by replacing it with an undecipherable token) before loading it into Snowflake and detokenize the data at query runtime.
+
+One masking policy can be applied to many tables and views. Masking policies support `segregation of duties (SoD)` through the role separation of policy administrators from object owners. Secure views do not have SoD, which is a profound limitation to their utility. With masking policy, object owners cannot unset masking policies, and cannot view the masked columns. 
 
 
-### Column-level Security
+
+
+
 ### Row Access Policies
+
+
 ### Object Tagging
+
+
 ### Tag-based Masking Policies
+
+
 ### Data Classification
+
+
 ### Access History
+
+
 ### Object Dependencies
+
+
 
 ## Managing Cost
 
