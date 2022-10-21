@@ -74,9 +74,12 @@ Allows for masking a column within a table or view. Contains two features:
 
 One masking policy can be applied to many tables and views. Masking policies support `segregation of duties (SoD)` through the role separation of policy administrators from object owners. Secure views do not have SoD, which is a profound limitation to their utility. With masking policy, object owners cannot unset masking policies, and cannot view the masked columns. 
 
+Conditional masking uses a masking policy to selectively protect the column data in a table or view based on the values (such as visibility) in other column(s).
 
-
-
+Best practices for using masking policy:
+- Use caution when apply masking policies to columns.
+- Query the masked columns before making tables and views available to users.
+- Note target columns in additional tables and views where the data in the source column may appear.
 
 ### Row Access Policies
 
