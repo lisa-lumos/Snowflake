@@ -81,7 +81,15 @@ Best practices for using masking policy:
 - Query the masked columns before making tables and views available to users.
 - Note target columns in additional tables and views where the data in the source column may appear.
 
+Snowflake allows setting a masking policy on a materialized view column. 
+
+A masking policy that is directly assigned to a column takes precedence over a tag-based masking policy.
+
+Executing a CREATE TABLE ... AS SELECT (CTAS) statement applies any masking policies on columns included in the statement before the data is populated in the new table. To copy unmasked data, use a role authorized for protected data to run the CTAS statement. 
+
 ### Row Access Policies
+A given table/view column can be specified in either a masking policy or a row access policy - a column cannot be specified in masking policy and row access policy at the same time.
+
 
 
 ### Object Tagging
