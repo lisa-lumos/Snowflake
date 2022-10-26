@@ -1,5 +1,5 @@
 # Snowflake Summary
-This document will be updated daily until complete. 
+I am summing up Snowflake features after using it for more than a year (since Sep 2021). This document will be updated daily until complete. 
 
 ## 🏷  RBAC best practices
 RBAC is a journey - as the company grows, existing RBAC might need modifications. 
@@ -86,6 +86,17 @@ Snowflake allows setting a masking policy on a materialized view column.
 A masking policy that is directly assigned to a column takes precedence over a tag-based masking policy.
 
 Executing a CREATE TABLE ... AS SELECT (CTAS) statement applies any masking policies on columns included in the statement before the data is populated in the new table. To copy unmasked data, use a role authorized for protected data to run the CTAS statement. 
+
+Masking policies and their assignments can be replicated using database replication and replication groups.
+
+Managing Column-level Security: Consider whether your approach to masking data in columns should follow a centralized security approach, a decentralized approach, or a hybrid of each of these two approaches.
+
+Centralized management: Security officer create and apply policies. 
+Decentralized management: Individual teams create and apply policies.
+Hybrid Management: Security officer create policies, individual teams apply them. 
+
+DDLs to manage column-level masking policy: 
+
 
 ### Row Access Policies
 A given table/view column can be specified in either a masking policy or a row access policy - a column cannot be specified in masking policy and row access policy at the same time.
