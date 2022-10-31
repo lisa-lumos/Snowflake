@@ -96,6 +96,11 @@ Decentralized management: Individual teams create and apply policies.
 Hybrid Management: Security officer create policies, individual teams apply them. 
 
 DDLs to manage column-level masking policy: 
+- CREATE MASKING POLICY
+- ALTER MASKING POLICY 
+- DROP MASKING POLICY
+- SHOW MASKING POLICIES
+- DESCRIBE MASKING POLICY
 
 
 ### Row Access Policies
