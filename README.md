@@ -1,5 +1,5 @@
 # Snowflake Summary
-I am summing up Snowflake features after using it for more than a year (since Sep 2021). This document will be updated daily until complete. 
+I am summing up Snowflake features after using it for more than a year (since Sep 2021). This document will be updated regularly until complete. 
 
 ## 🏷  RBAC best practices
 RBAC is a journey - as the company grows, existing RBAC might need modifications. 
@@ -104,9 +104,11 @@ DDLs to manage column-level masking policy:
 
 
 ### Row Access Policies
-A given table/view column can be specified in either a masking policy or a row access policy - a column cannot be specified in masking policy and row access policy at the same time.
+A given table/view column cannot be specified in masking policy and row access policy at the same time.
 
+A row access policy is a schema-level object that determines whether a given row in a table or view can be viewed from the following types of statements: SELECT statements, and rows selected by UPDATE, DELETE, and MERGE statements. A single policy can be set on different tables and views at the same time.
 
+A row access policy condition can reference a mapping table to filter the query result set, however using mapping tables may result in decreased performance compared to the more simple example.``
 
 ### Object Tagging
 
