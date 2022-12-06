@@ -37,13 +37,17 @@ Data Loading: Snowflake supports loading data from files staged in Internal stag
 HITRUST CSF Certification: Enhances Snowflake’s security posture in regulatory compliance and risk management. Applicable to Snowflake editions that are Business Critical (or higher). 
 
 ## Supported Cloud Regions
+Each Snowflake account is hosted in a single region. If you wish to use Snowflake across multiple regions, you must maintain a Snowflake account in each of the desired regions. There are `differences` in unit costs for credits and data storage between regions.
 
+If `latency` is a concern, you should choose the available region with the closest geographic proximity to your end users; however, this may have cost implications.
 
+If you are a government agency or a commercial organization that must comply with specific privacy and security requirements of the US government, you can choose between two `dedicated government regions` provided by Snowflake.
 
+Snowflake supports two formats to use as the account identifier in your hostname:
+- Account name (preferred)
+- Account locator
 
-
-
-
+## Snowflake Editions
 
 
 
