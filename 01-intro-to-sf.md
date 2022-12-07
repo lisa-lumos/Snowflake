@@ -48,6 +48,20 @@ Snowflake supports two formats to use as the account identifier in your hostname
 - Account locator
 
 ## Snowflake Editions
+Each successive edition builds on the previous edition, adding edition-specific features and/or higher levels of service. Changing editions is easy.
+
+The Snowflake Edition that your organization chooses affects the unit costs for credits and storage. 
+
+Features for different editions: (`https://docs.snowflake.com/en/user-guide/intro-editions.html`)
+
+
+
+
+
+
+
+
+
 
 
 
