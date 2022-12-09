@@ -54,8 +54,8 @@ The Snowflake Edition that your organization chooses affects the unit costs for 
 
 Features for different editions: (`https://docs.snowflake.com/en/user-guide/intro-editions.html`)
 
-
-
+## Snowflake Releases
+The new release deployments happen weekly and transparently in the background.
 
 
 
