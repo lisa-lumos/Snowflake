@@ -57,6 +57,23 @@ Features for different editions: (`https://docs.snowflake.com/en/user-guide/intr
 ## Snowflake Releases
 The new release deployments happen weekly and transparently in the background.
 
+## Overview of Key Features
+`https://docs.snowflake.com/en/user-guide/intro-supported-features.html`
+
+## Overview of the Data Lifecycle
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
