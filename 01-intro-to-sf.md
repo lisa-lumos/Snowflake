@@ -61,7 +61,15 @@ The new release deployments happen weekly and transparently in the background.
 `https://docs.snowflake.com/en/user-guide/intro-supported-features.html`
 
 ## Overview of the Data Lifecycle
+DDL, DML. 
 
+## Continuous Data Protection
+Help protect data stored in Snowflake against human error, malicious acts, and software failure: 
+- Network policies
+- MFA, federated Authentication, SSO
+- RBAC
+- Data encryption
+- Time travel and fail-safe. 
 
 
 
