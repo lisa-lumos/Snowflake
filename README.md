@@ -3,4 +3,4 @@ I am summing up Snowflake features after using it for more than a year. This doc
 
 ## 1. Introduction to Snowflake
 
-## 2. 
+## 2. Connecting to Snowflake
