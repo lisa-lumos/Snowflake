@@ -6,6 +6,7 @@ alter user lisa set default_warehouse = compute_wh;
 
 -- SnowSQL
 > snowsql
+> !set prompt_format=[#FF0000][user].[role].[#00FF00][database].[schema].[#0000FF][warehouse]>
 > !q
 ```
 
