@@ -5,6 +5,7 @@ I am summing up Snowflake features after using it for more than a year. This doc
 
 ## 2. Connecting to Snowflake
 
+## 3. Loading data to Snowflake
 
 
 
