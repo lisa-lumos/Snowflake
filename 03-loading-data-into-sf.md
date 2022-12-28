@@ -19,6 +19,7 @@ You can include paths in a stage definition; you can also use put command to put
 - Unless bulk loading >= 100s or 1000s of files concurrently, a smaller warehouse (Small, Medium, Large) is generally sufficient.
 - Partition the data into logical paths that with identifiers such as geographical location and date.
 - When loading staged data, narrow the path to the most granular level, such as using pattern options or use common prefix of the files
+- After staged files are loaded, consider removing them
 
 Semi-structured:
 - The VARIANT data type imposes a 16 MB size limit on individual rows. 
