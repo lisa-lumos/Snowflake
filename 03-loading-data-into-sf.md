@@ -1,4 +1,5 @@
 # 3. Loading data into SF
+Snowflake supports the following types of internal stages: User, Table, Named. 
 
 Snowflake supports following data transformations while loading it into a table:
 - Column reordering

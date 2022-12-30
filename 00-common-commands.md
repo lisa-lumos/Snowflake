@@ -3,26 +3,63 @@
 describe user lisa; 
 
 
--- loading data ------------------------------------------------------------
+-- staging files ------------------------------------------------------------
+create or replace stage my_stage -- create a internal named stage, associate stage with named file format
+file_format = my_csv_format;
+
+create or replace stage my_stage -- create a named stage, associate stage with anonymous file format
+file_format = (type = 'CSV' field_delimiter = '|' skip_header = 1);
+
 create stage my_stage url='s3://mybucket/US/California/san_diego/' credentials=(aws_key_id='1a2b3c' aws_secret_key='4x5y6z');
 
-copy into t1 -- copy files with filename that has mydata as prefix in the path into table
-from @%t1/US/california/san_diego/2016/06/01/11/mydata;
+-- (Linux/Unix)
+put file:///data/data.csv @~/staged; -- put local file in the /data dir into user stage in specified folder named "staged" 
+put file:///data/data.csv @%mytable; -- ... into table stage
+put file:///data/data.csv @my_stage; -- ... into named stage
 
-copy into t1 -- copy files with specified filenames in the path into table
-from @%t1/US/california/san_diego/2016/06/01/11/
+-- (Windows OS), to do the same as above
+put file://c:\data\data.csv @~/staged; 
+put file://c:\data\data.csv @%mytable;
+put file://c:\data\data.csv @my_stage;
+
+list @~;        -- list files in user stage
+list @%mytable; -- list files in table stage
+list @my_stage; -- list files in named stage
+
+-- bulk loading files ------------------------------------------------------------
+-- this requires a warehouse
+copy into mytable -- from files with filename that has mydata as prefix
+from @%mytable/US/california/san_diego/2016/06/01/11/mydata;
+
+copy into mytable -- from files specified in the path
+from @%mytable/US/california/san_diego/2016/06/01/11/
 files=('mydata1.csv', 'mydata1.csv');
 
-copy into t1 -- copy files with matched filenames in the path into table, delete files after copied successfully
-from @%t1/US/california/san_diego/2016/06/01/11/
+copy into mytable -- from files with matched filenames in the path, delete files after copied successfully
+from @%mytable/US/california/san_diego/2016/06/01/11/
 pattern='.*mydata[^[0-9]{1,3}$$].csv'
 purge = true;
+
+copy into mytable -- from all files in specified path in user stage
+from @~/staged 
+file_format = (format_name = 'my_csv_format');
+
+copy into mytable -- from all files from the table stage (from clause omitted)
+file_format = (type = csv field_delimiter = '|' skip_header = 1);
+
+copy into mytable -- from all files in named stage, using file format associated with this stage
+from @my_stage;
+
+copy into mytable -- use validation before loading
+from @my_stage
+validation_mode = 'RETURN_ALL_ERRORS';
 
 copy into mytable -- ignore the space before opening quotes before values
 from @%mytable
 file_format = (type = csv trim_space=true field_optionally_enclosed_by = '0x22');
 
-copy into table1 from @~/test1.json -- load each array elem into its own row
+copy into mytable -- load each array elem into its own row
+from @~/test1.json 
 file_format = (type = 'JSON' strip_outer_array = true strip_null_values = true);
 
 -- remove staged files
