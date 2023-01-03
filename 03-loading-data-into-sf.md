@@ -15,6 +15,11 @@ You can include paths in a stage definition; you can also use put command to put
 
 File format priority: COPY INTO TABLE statement > Stage definition > Table definition. File format options are not cumulative, while copy options are. 
 
+Bulk loads are always performed in a single transaction.
+
+Snowpipe uses SF-supplied WHs, while bulk load requires user-specified WH. 
+
+
 ## Best practices for data loading
 - Data files >= 100-250 MB compressed. 
 - Do not load large files (>= 100GB).

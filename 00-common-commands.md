@@ -10,7 +10,9 @@ file_format = my_csv_format;
 create or replace stage my_stage -- create a named stage, associate stage with anonymous file format
 file_format = (type = 'CSV' field_delimiter = '|' skip_header = 1);
 
-create stage my_stage url='s3://mybucket/US/California/san_diego/' credentials=(aws_key_id='1a2b3c' aws_secret_key='4x5y6z');
+create stage my_stage 
+url='s3://mybucket/US/California/san_diego/' 
+credentials=(aws_key_id='1a2b3c' aws_secret_key='4x5y6z');
 
 -- (Linux/Unix)
 put file:///data/data.csv @~/staged; -- put local file in the /data dir into user stage in specified folder named "staged" 
@@ -65,6 +67,12 @@ file_format = (type = 'JSON' strip_outer_array = true strip_null_values = true);
 -- remove staged files
 remove @mystage/path1/subpath2; -- rmv all files under this path
 
+select * -- check copy history for a table
+from table(information_schema.copy_history(
+  table_name=>'MYTABLE', 
+  start_time=> dateadd(hours, -1, current_timestamp())
+  )
+);
 
 
 
