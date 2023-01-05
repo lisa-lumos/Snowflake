@@ -19,6 +19,8 @@ Bulk loads are always performed in a single transaction.
 
 Snowpipe uses SF-supplied WHs, while bulk load requires user-specified WH. 
 
+The Web Interface for loading data (combines put and copy command into one operation) is only intended for loading small numbers of files of limited size (up to 50 MB). 
+
 
 ## Best practices for data loading
 - Data files >= 100-250 MB compressed. 

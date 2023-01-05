@@ -74,10 +74,21 @@ from table(information_schema.copy_history(
   )
 );
 
+-- query staged files ------------------------------------------------------------
+create or replace file format myformat  -- create a named file format
+type = 'csv' 
+field_delimiter = '|';
 
+select t.$1, t.$2 -- select first and second column based on file format
+from @mystage1 (file_format => 'myformat', pattern=>'.*data.*[.]csv.gz') t;
 
+select ascii(t.$1), ascii(t.$2) -- get ASCII code for the first char for each col
+from @mystage1 (file_format => myformat) t;
 
+create or replace file format my_json_format -- create a named file format
+type = 'json';
 
+select parse_json($1):a.b from @mystage2/data1.json.gz; -- select x1 and x2 from JSON: {"a": {"b": "x1","c": "y1"}}, {"a": {"b": "x2","c": "y2"}}
 
 -- SnowSQL ------------------------------------------------------------
 > snowsql
