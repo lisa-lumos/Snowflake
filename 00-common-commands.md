@@ -90,6 +90,28 @@ type = 'json';
 
 select parse_json($1):a.b from @mystage2/data1.json.gz; -- select x1 and x2 from JSON: {"a": {"b": "x1","c": "y1"}}, {"a": {"b": "x2","c": "y2"}}
 
+-- query metadata of staged files ------------------------------------------------------------
+select metadata$filename, metadata$file_row_number, t.$1, t.$2 
+from @mystage1 (file_format => myformat) t;
+
+select metadata$filename, metadata$file_row_number, parse_json($1) 
+from @mystage2/data1.json.gz;
+
+create or replace table table1 ( -- create a table with first 2 cols to store metadata
+  filename varchar,
+  file_row_number varchar,
+  col1 varchar,
+  col2 varchar
+);
+
+copy into table1(filename, file_row_number, col1, col2) -- put metadata cols into table
+  from (
+    select metadata$filename, metadata$file_row_number, t.$1, t.$2 
+    from @mystage1/data1.csv.gz (file_format => myformat) t
+  );
+
+
+
 -- SnowSQL ------------------------------------------------------------
 > snowsql
 > !set prompt_format=[#FF0000][user].[role].[#00FF00][database].[schema].[#0000FF][warehouse]>

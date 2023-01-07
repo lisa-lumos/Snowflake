@@ -21,6 +21,10 @@ Snowpipe uses SF-supplied WHs, while bulk load requires user-specified WH.
 
 The Web Interface for loading data (combines put and copy command into one operation) is only intended for loading small numbers of files of limited size (up to 50 MB). 
 
+The COPY command supports:
+- Column reordering, column omission, and casts 
+- The ENFORCE_LENGTH | TRUNCATECOLUMNS option can truncate text strings that exceed the target column length.
+
 
 ## Best practices for data loading
 - Data files >= 100-250 MB compressed. 
