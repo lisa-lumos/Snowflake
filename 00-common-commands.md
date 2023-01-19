@@ -2,6 +2,47 @@
 ```sql
 describe user lisa; 
 
+-- grants ------------------------------------------------------------
+grant usage on database mydb to role analyst;
+
+grant usage, create file format, create stage, create table on schema mydb.public to role analyst;
+
+grant operate, usage on warehouse mywh to role analyst;
+
+-- create/drop objects ------------------------------------------------------------
+create or replace database mydatabase;
+create or replace temporary table mycsvtable (
+  id integer,
+  last_name string,
+  first_name string);
+
+create or replace temporary table myjsontable (
+  json_data variant);
+
+create or replace warehouse mywarehouse with
+  warehouse_size='X-SMALL'
+  auto_suspend = 120
+  auto_resume = true
+  initially_suspended=true;
+
+create or replace file format mycsvformat
+  type = 'CSV'
+  field_delimiter = '|'
+  skip_header = 1;
+
+create or replace file format myjsonformat
+  type = 'JSON'
+  strip_outer_array = true;
+
+create or replace stage my_csv_stage
+  file_format = mycsvformat;
+
+create or replace stage my_json_stage
+  file_format = myjsonformat;
+
+drop database if exists mydatabase;
+drop warehouse if exists mywarehouse;
+
 
 -- staging files ------------------------------------------------------------
 create or replace stage my_stage -- create a internal named stage, associate stage with named file format
@@ -18,11 +59,15 @@ credentials=(aws_key_id='1a2b3c' aws_secret_key='4x5y6z');
 put file:///data/data.csv @~/staged; -- put local file in the /data dir into user stage in specified folder named "staged" 
 put file:///data/data.csv @%mytable; -- ... into table stage
 put file:///data/data.csv @my_stage; -- ... into named stage
+put file:///tmp/load/contacts*.csv @my_csv_stage auto_compress=true;
+put file:///tmp/load/contacts.json @my_json_stage auto_compress=true;
 
 -- (Windows OS), to do the same as above
 put file://c:\data\data.csv @~/staged; 
 put file://c:\data\data.csv @%mytable;
 put file://c:\data\data.csv @my_stage;
+put file://c:\temp\load\contacts*.csv @my_csv_stage auto_compress=true;
+put file://c:\temp\load\contacts.json @my_json_stage auto_compress=true;
 
 list @~;        -- list files in user stage
 list @%mytable; -- list files in table stage
@@ -52,6 +97,41 @@ file_format = (type = csv field_delimiter = '|' skip_header = 1);
 copy into mytable -- from all files in named stage, using file format associated with this stage
 from @my_stage;
 
+copy into mycsvtable
+from @my_csv_stage/contacts1.csv.gz
+file_format = (format_name = mycsvformat)
+on_error = 'skip_file';
+
+copy into mycsvtable
+from @my_csv_stage
+file_format = (format_name = mycsvformat)
+pattern='.*contacts[1-5].csv.gz'
+on_error = 'skip_file';
+
+copy into mytable(c2) -- copy the first column in the file to c2 column in table
+from (select t.$1 from @mystage/myfile.csv.gz t);
+
+copy into home_sales(city, zip, sale_date, price) -- skip columns when loading
+from (select t.$1, t.$2, t.$6, t.$7 from @mystage/sales.csv.gz t)
+file_format = (format_name = mycsvformat);
+
+copy into home_sales(city, zip, sale_date, price) -- use substr when loading
+from (select substr(t.$2,4), t.$1, t.$5, t.$4 from @mystage t)
+file_format = (format_name = mycsvformat);
+
+copy into casttb(col1, col2, col3) -- convert data types (casting) when loading
+from (
+  select to_binary(t.$1, 'utf-8'),to_decimal(t.$2, '99.9', 9, 5),to_timestamp_ntz(t.$3)
+  from @~/datafile.csv.gz t
+)
+file_format = (type = csv);
+
+copy into mytable (col1, col2, col3) -- include sequence val as col1 when loading
+from (
+  select seq1.nextval, $1, $2
+  from @~/myfile.csv.gz t
+)
+
 copy into mytable -- use validation before loading
 from @my_stage
 validation_mode = 'RETURN_ALL_ERRORS';
@@ -60,12 +140,57 @@ copy into mytable -- ignore the space before opening quotes before values
 from @%mytable
 file_format = (type = csv trim_space=true field_optionally_enclosed_by = '0x22');
 
-copy into mytable -- load each array elem into its own row
+copy into myjsontable
+from @my_json_stage/contacts.json.gz
+file_format = (format_name = myjsonformat)
+on_error = 'skip_file';
+
+copy into mytable -- load each array elem in JSON file into its own row as variant
 from @~/test1.json 
 file_format = (type = 'JSON' strip_outer_array = true strip_null_values = true);
 
+copy into home_sales(city, postal_code, sq_ft, sale_date, price) -- load JSON file with transformation into different columns
+from (
+  select
+    $1:location.city::varchar,
+    $1:location.zip::varchar,
+    $1:dimensions.sq_ft::number,
+    $1:sale_date::date,
+    $1:price::number
+  from @mystage/sales.json.gz t
+);
+
+create or replace table flattened_source -- load JSON file via flatten table function
+(seq string, key string, path string, index string, value variant, element variant)
+as select
+  seq::string, 
+  key::string, 
+  path::string, 
+  index::string, 
+  value::variant, 
+  this::variant
+from @mystage/sales.json.gz, table(flatten(input => parse_json($1)));
+
+copy into splitjson(col1, col2) -- split ip address into arrays of 4 elements
+from (
+  select split($1:ip_address.router1, '.'),split($1:ip_address.router2, '.')
+  from @mystage/ipaddress.json.gz t
+);
+
+copy into parquet_col -- load parquet via transformation into different cols
+from (
+  select
+    $1:o_custkey::number,
+    $1:o_orderdate::date,
+    $1:o_orderstatus::varchar,
+    $1:o_totalprice::varchar
+  from @mystage/mydata.parquet
+);
+
 -- remove staged files
 remove @mystage/path1/subpath2; -- rmv all files under this path
+remove @my_csv_stage pattern='.*.csv.gz';
+remove @my_json_stage pattern='.*.json.gz';
 
 select * -- check copy history for a table
 from table(information_schema.copy_history(
@@ -110,7 +235,11 @@ copy into table1(filename, file_row_number, col1, col2) -- put metadata cols int
     from @mystage1/data1.csv.gz (file_format => myformat) t
   );
 
+-- retrieve errors
+create or replace table save_copy_errors 
+as select * from table(validate(mycsvtable, job_id=>'<query_id>'));
 
+select * from save_copy_errors;
 
 -- SnowSQL ------------------------------------------------------------
 > snowsql
