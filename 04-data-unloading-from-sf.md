@@ -3,7 +3,7 @@ Snowflake supports bulk export (unloading) of data from a database table into fl
 
 Snowflake supports specifying a SELECT statement (instead of a table) in the COPY INTO command, the query results are written into one or more files (SINGLE = FALSE is default, MAX_FILE_SIZE determines maximum file size, PARTITION BY for partitioning) in the specified loc.
 
-
+(updated to https://docs.snowflake.com/en/user-guide/data-unload-considerations.html), will update this chapter later. 
 
 
 
