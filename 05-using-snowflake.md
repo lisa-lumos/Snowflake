@@ -13,16 +13,17 @@ Using Snowsight, you can:
 - share worksheets/folders with other users in the account (they can view/run)
 
 With a worksheet, you can: 
-- edit and run query
+- edit and run query, view, filter results and its statistics
 - choose current database and schema (context/namespace)
-- choose role and warehouse for this worksheet
+- choose role and warehouse for this worksheet, resume and resize warehouses
 - view previous versions of this worksheet
-- filter the results of a query
-- see, download, and share query results to other users that has the same role with this worksheet
+- download, and share query results to other users that has the same role with this worksheet
 - see query details
 - view database objects, place their names in the worksheet
 - add columns of view/table into worksheets
 - view object definition
+
+Results for queries executed in worksheets are cached for up to 1 year. This cache is included in the data storage usage for your account.
 
 ## Classic Web Interface
 
