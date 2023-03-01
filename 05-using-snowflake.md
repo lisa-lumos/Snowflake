@@ -25,6 +25,8 @@ With a worksheet, you can:
 
 Results for queries executed in worksheets are cached for up to 1 year. This cache is included in the data storage usage for your account.
 
+Custom filters let you change the results of a query or visualization without directly editing the query. An account admin must grant each role (including itself) the permission to create custom filters.
+
 ## Classic Web Interface
 
 ## Virtual Warehouse
