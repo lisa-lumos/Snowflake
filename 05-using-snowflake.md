@@ -40,6 +40,11 @@ Here, you can:
 - run dashboard queries
 
 ### Managing data
+The Databases area includes the following pages to drill down: Database, Schema, Table, View, Stage, Pipe, Stream, Task, Function, Procedure Details. 
+
+Database Details page: edit db name, clone, drop db, transfer ownership of db, enable replication of db to another account. Create schema in this db. View, grand and revoke privileges on the db. 
+
+
 
 ### Monitoring Activity
 
