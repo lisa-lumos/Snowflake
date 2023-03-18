@@ -42,9 +42,11 @@ Here, you can:
 ### Managing data
 The Databases area includes the following pages to drill down: Database, Schema, Table, View, Stage, Pipe, Stream, Task, Function, Procedure Details. 
 
-Database Details page: edit db name, clone, drop db, transfer ownership of db, enable replication of db to another account. Create schema in this db. View, grand and revoke privileges on the db. 
+Database Details page: edit db name, clone, drop db, transfer ownership of db, enable replication of db to another account. Create schema in this db. View, grant and revoke privileges on the db. 
 
+Schema Details page: edit schema name, clone, drop, transfer ownership of schema. Create objects in schema, and opens its template sql in a worksheet. View, grant and revoke privileges on the schema. 
 
+Table Details page: view columns, data preview, copy history of both manual and pipe loads. edit table name, clone, drop, transfer ownership of table. View, grant and revoke privileges on the schema. See table definition. View, grant and revoke privileges on the table. 
 
 ### Monitoring Activity
 
