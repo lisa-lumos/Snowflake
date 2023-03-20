@@ -48,6 +48,10 @@ Schema Details page: edit schema name, clone, drop, transfer ownership of schema
 
 Table Details page: view columns, data preview, copy history of both manual and pipe loads. edit table name, clone, drop, transfer ownership of table. View, grant and revoke privileges on the schema. See table definition. View, grant and revoke privileges on the table. 
 
+View/Stage/Pipe/Stream/Task/... Details page: similar to above. 
+
+Private Sharing area: view inbound and outbound shares. Review share requests, manage data exchanges. Manage reader accounts. 
+
 ### Monitoring Activity
 
 
