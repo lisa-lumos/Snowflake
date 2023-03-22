@@ -39,7 +39,7 @@ Here, you can:
 - share a dashboard to users
 - run dashboard queries
 
-### Managing data
+### Data Tab
 The Databases area includes the following pages to drill down: Database, Schema, Table, View, Stage, Pipe, Stream, Task, Function, Procedure Details. 
 
 Database Details page: edit db name, clone, drop db, transfer ownership of db, enable replication of db to another account. Create schema in this db. View, grant and revoke privileges on the db. 
@@ -52,13 +52,15 @@ View/Stage/Pipe/Stream/Task/... Details page: similar to above.
 
 Private Sharing area: view inbound and outbound shares. Review share requests, manage data exchanges. Manage reader accounts. 
 
-### Monitoring Activity
+### Activity Tab
+Shows Query history of past 14 days, copy history and task history. 
+
+Query profile show the query execution plan, which help with spotting mistakes in sql query and identifying performance improvement opportunities. 
+
+View Task History: 
 
 
-### View Task History
-
-
-### Administering
+### Admin Tab
 
 
 ## Classic Web Interface
