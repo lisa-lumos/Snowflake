@@ -55,10 +55,11 @@ Private Sharing area: view inbound and outbound shares. Review share requests, m
 ### Activity Tab
 Shows Query history of past 14 days, copy history and task history. 
 
-Query profile show the query execution plan, which help with spotting mistakes in sql query and identifying performance improvement opportunities. 
+Query profile show the query execution plan, which help with spotting mistakes in sql query and identifying performance improvement opportunities. A common mistake is to use UNION when the UNION ALL semantics are sufficient. UNION ALL simply concatenates inputs, while UNION also performs duplicate elimination.
 
-View Task History: 
+Copy history page shows data loading activity happened over the last year, for all tables. It includes bulk data loading, and continuous loading with snowpipe. 
 
+Task history page shows the execution history of all tasks. 
 
 ### Admin Tab
 
