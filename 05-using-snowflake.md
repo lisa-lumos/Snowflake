@@ -62,7 +62,16 @@ Copy history page shows data loading activity happened over the last year, for a
 Task history page shows the execution history of all tasks. 
 
 ### Admin Tab
-
+The Admin tab can: 
+- show snowflake usage (compute credits, storage in bytes, data transfer bytes; requires a warehouse to view these)
+- manage warehouses
+- setup and view resource monitors
+- create and manage users & roles, grant privileges
+- manage network policies and session activity
+- setup payment method, accept Anaconda Python packages and SF marketplace terms. 
+- set email addresses to receive security, privacy, and product notifications.
+- manage account in your organization
+- connect with 3rd party partner tools/services
 
 ## Classic Web Interface
 Legacy UI, skipped. 
