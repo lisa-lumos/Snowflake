@@ -124,7 +124,9 @@ lisa#COMPUTE_WH@TEST_DB.TEST_SC>
 ```
 
 ## VS Code SQL Extension
+Snowflake provides an extension for VS Code to enable Snowflake users to `write and execute Snowflake SQL statements` directly in VS Code. 
 
+In public preview as of 03/2023. 
 
 
 
