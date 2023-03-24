@@ -73,10 +73,19 @@ The Admin tab can:
 - manage account in your organization
 - connect with 3rd party partner tools/services
 
+## Help & Support Tab
+Create support cases, view, update, escalate cases, adding users as watchers to cases. 
+
+### Profile page in username icon
+- enroll MFA (disable MFA cannot be done via clicking buttons in the UI, need account admin to run a sql command)
+- verify email address to receive resource monitor email notifications
+
 ## Classic Web Interface
 Legacy UI, skipped. 
 
 ## Virtual Warehouse
+
+
 
 ## Databases, Tables & Views
 
