@@ -241,6 +241,10 @@ as select * from table(validate(mycsvtable, job_id=>'<query_id>'));
 
 select * from save_copy_errors;
 
+-- warehouse ------------------------------------------------------------
+alter warehouse mywh set SCALING_POLICY = 'ECONOMY';
+
+
 -- SnowSQL ------------------------------------------------------------
 > snowsql
 > !set prompt_format=[#FF0000][user].[role].[#00FF00][database].[schema].[#0000FF][warehouse]>
