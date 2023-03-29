@@ -40,6 +40,30 @@ If a multi-cluster warehouse is resized, the new size applies to all the cluster
 You can increase or decrease the number of clusters for a warehouse at any time, even while running. 
 
 ## Considerations
+Query performance factors:
+- The size of the tables has more impact than the num of rows.
+- filtering, joins, num of tables
+- cache of running wh can be reused for latter queries. The larger the wh, the larger the cache. Cache is dropped when wh is suspended. Consider the trade-off between saving credits by [suspending a wh] versus [maintaining the cache from prev queries to improve performance].
+
+warehouse size:
+- for data loading, size should match number and size of files
+- smaller wh for testing, larger wh for production
+
+If you enable auto-suspend, recommend setting it to a low value (5 or 10 min or less) to save cost.
+
+Consider disabling auto-suspend for a warehouse if you:
+- have a heavy, steady workload.
+- require it to be available with no delay. Provision new wh costs a few secs, but may be longer.  
+ 
+To disable auto-suspend, explicitly select Never in the web UI, or specify 0 or NULL in SQL.
+
+If wish to control costs or user access, disable auto-resume and manually resume the wh only when needed. 
+
+Scaling Up vs Scaling Out
+- Scale up by resizing a warehouse.
+- Scale out by adding clusters to a multi-cluster warehouse
+
+If you are using Snowflake Enterprise Edition or higher, all your wh should be configured as multi-cluster.
 
 ## Working with warehouses
 
