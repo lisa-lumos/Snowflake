@@ -1,4 +1,4 @@
-# 3. Data Warehouses
+# 3. Virtual Warehouses
 A virtual warehouse is a cluster of compute resources in Snowflake. Provides CPU, memory, temporary storage to execute SQL select, DML queries, and data loading and unloading. 
 
 Available in two types:

@@ -1,3 +1,36 @@
+# 12. Data governance
+
+## Data sensitivity & Access visibility
+
+### Object Tagging
+
+### Data Classification
+
+## Data access policies
+
+### Masking Policies
+
+### Row Access Policies
+
+## Data lineage & Dependencies
+
+### Access History
+
+### Object Dependencies
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 🏷  RBAC best practices
 RBAC is a journey - as the company grows, existing RBAC might need modifications. 
 
