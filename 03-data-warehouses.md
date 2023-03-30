@@ -66,8 +66,37 @@ Scaling Up vs Scaling Out
 If you are using Snowflake Enterprise Edition or higher, all your wh should be configured as multi-cluster.
 
 ## Working with warehouses
+A Snowflake session can only have one current warehouse at a time, which can be specified/changed at any time with the USE WAREHOUSE command.
 
-## Query acceleration service
+## Query acceleration service (starts from Enterprise Edition)
+Can be enabled for a warehouse. Can accelerate query or its sub-queries, by offloading parts of the work in parallel to serverless compute resources provided by the service. Reduces the impact of outlier queries. 
+
+To identify the queries that might benefit from this service
+- use the SYSTEM$ESTIMATE_QUERY_ACCELERATION function to check a specific query
+- query the QUERY_ACCELERATION_ELIGIBLE View. It identifies the queries and warehouses that might benefit the most from the service. 
+
+The service does not accelerate queries on tables that have search optimization enabled.
+
+Enable the service by specifying ENABLE_QUERY_ACCELERATION = TRUE for a warehouse. 
+
+supports the following SQL commands:
+- SELECT
+- INSERT when it contains a SELECT
+- CREATE TABLE AS SELECT
+
+The service may increase the cost rate of a warehouse - limited by the maximum scale factor of the wh, it can be set (default is 8, setting it to 0 removes the upper bound limit). E.g.: set the scale factor to 5 for a  warehouse means it can lease compute resources up to 5 times the size/cost of itself. The amount it actually uses depends on how much it needs.  
+
+The is billed by the second only when the service is in use. These credits are billed separately from warehouse usage.
+
+This service usage can be seen in query profile, under Query Acceleration section. Can also been seen in the query_history view:
+- QUERY_ACCELERATION_BYTES_SCANNED
+- QUERY_ACCELERATION_PARTITIONS_SCANNED
+- QUERY_ACCELERATION_UPPER_LIMIT_SCALE_FACTOR
+
+This service's cost is billed as a serverless feature. Can be seen in 
+- the UI for the warehouse, 
+- the query_acceleration_history view, 
+- query_acceleration_history function 
 
 ## Monitoring load
 

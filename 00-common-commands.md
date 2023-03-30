@@ -244,6 +244,36 @@ select * from save_copy_errors;
 -- warehouse ------------------------------------------------------------
 alter warehouse mywh set SCALING_POLICY = 'ECONOMY';
 
+-- query optimization service ------------------------------------------------------------
+select parse_json(system$estimate_query_acceleration('8cd54bf0-1651-5b1c-ac9c-6a9582ebd20f')); -- for a specific query
+
+-- for queries that benefit the most from the service
+SELECT query_id, eligible_query_acceleration_time
+FROM snowflake.account_usage.query_acceleration_eligible
+ORDER BY eligible_query_acceleration_time DESC;
+
+-- ... for a specific wh
+SELECT query_id, eligible_query_acceleration_time
+FROM snowflake.account_usage.query_acceleration_eligible
+WHERE warehouse_name = 'mywh'
+ORDER BY eligible_query_acceleration_time DESC;
+
+-- for warehouses that benefit the most from the service
+SELECT warehouse_name, SUM(eligible_query_acceleration_time) AS total_eligible_time
+FROM snowflake.account_usage.query_acceleration_eligible
+GROUP BY warehouse_name
+ORDER BY total_eligible_time DESC;
+
+-- enable the query acceleration service with a maximum scale factor of 0
+alter warehouse my_wh set
+  ENABLE_QUERY_ACCELERATION = true
+  QUERY_ACCELERATION_MAX_SCALE_FACTOR = 0;
+
+SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY
+WHERE QUERY_ACCELERATION_PARTITIONS_SCANNED > 0
+AND start_time >= DATEADD(hour, -24, CURRENT_TIMESTAMP())
+ORDER BY QUERY_ACCELERATION_BYTES_SCANNED DESC;
+
 
 -- SnowSQL ------------------------------------------------------------
 > snowsql
