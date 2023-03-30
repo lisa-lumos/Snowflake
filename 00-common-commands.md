@@ -244,6 +244,11 @@ select * from save_copy_errors;
 -- warehouse ------------------------------------------------------------
 alter warehouse mywh set SCALING_POLICY = 'ECONOMY';
 
+-- snowpark-optimized wh
+CREATE OR REPLACE WAREHOUSE snowpark_opt_wh WITH
+  WAREHOUSE_SIZE = 'MEDIUM'
+  WAREHOUSE_TYPE = 'SNOWPARK-OPTIMIZED';
+
 -- query optimization service ------------------------------------------------------------
 select parse_json(system$estimate_query_acceleration('8cd54bf0-1651-5b1c-ac9c-6a9582ebd20f')); -- for a specific query
 
