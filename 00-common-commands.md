@@ -280,6 +280,34 @@ AND start_time >= DATEADD(hour, -24, CURRENT_TIMESTAMP())
 ORDER BY QUERY_ACCELERATION_BYTES_SCANNED DESC;
 
 
+-- clustering ------------------------------------------------------------
+-- cluster by base columns
+CREATE OR REPLACE TABLE t1 (c1 DATE, c2 STRING, c3 NUMBER) CLUSTER BY (c1, c2);
+
+-- cluster by expressions
+CREATE OR REPLACE TABLE t2 (c1 timestamp, c2 STRING, c3 NUMBER) CLUSTER BY (TO_DATE(C1), substring(c2, 0, 10));
+
+-- cluster by paths in variant columns
+CREATE OR REPLACE TABLE T3 (t timestamp, v variant) cluster by (v:"Data":id::number);
+
+-- cluster by base columns
+ALTER TABLE t1 CLUSTER BY (c1, c3);
+
+ALTER TABLE t1 DROP CLUSTERING KEY;
+
+ALTER TABLE t1 SUSPEND RECLUSTER;
+ALTER TABLE t1 RESUME RECLUSTER;
+
+SELECT TO_DATE(start_time) AS date,
+  database_name,
+  schema_name,
+  table_name,
+  SUM(credits_used) AS credits_used
+FROM snowflake.account_usage.automatic_clustering_history
+WHERE start_time >= DATEADD(month,-1,CURRENT_TIMESTAMP())
+GROUP BY 1,2,3,4
+ORDER BY 5 DESC;
+
 -- SnowSQL ------------------------------------------------------------
 > snowsql
 > !set prompt_format=[#FF0000][user].[role].[#00FF00][database].[schema].[#0000FF][warehouse]>
