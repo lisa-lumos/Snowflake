@@ -6,7 +6,7 @@ Database can have one or more schemas (logical groupings of db objects, such as 
 Snowflake do not limit the number of databases, schemas, or objects you can create.
 
 ## Table structures
-All data in Snowflake is stored in database tables. 
+All data in Snowflake is stored in database tables. Permanent tables have time trave period of 0 or 1 (default) day for standard edition, and 0 to 90 days of time travel for enterprise edition and above. Fail-safe is always 7 days. 
 
 ### Micro-Partitions & Data Clustering
 Data in Snowflake tables is automatically divided into compressed micro-partitions, each contains 50-500 MB of data before compression. Each partition contains multiple rows of the table stored column by column (columnar), and metadata about these rows (value range of each cols, num of distinct vals, ...). 
@@ -71,8 +71,20 @@ View cost by:
   - AUTOMATIC_CLUSTERING_HISTORY table function
   - AUTOMATIC_CLUSTERING_HISTORY View
 
-## Temporary and Transient tables
+## Temporary and Transient tables/stages
+### Temporary tables
+Lives in the session only. Not visible to other users or sessions, and when the session ends, it is gone forever. You pay for the storage for its duration, can manually drop when it is no longer needed to save cost. It cannot be changed to other table types. 
 
+Have 0 or 1 (default) day of time travel as long as the session is alive, otherwise gone forever. Do not have fail-safe. 
+
+Temporary table can have same name with a permanent table in the same location, but it is not recommended to do so. 
+
+### Transient tables/databases/schemas
+Lives until you manually drop it. Visible to all users with right privileges. You pay for the storage for its duration. 
+
+Have 0 or 1 (default) day of time travel. Do not have fail-safe. 
+
+All tables created in a transient schema, as well as all schemas created in a transient database, are transient by definition. It cannot be changed to other table types. 
 
 ## External Tables
 

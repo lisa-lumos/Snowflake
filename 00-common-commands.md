@@ -308,6 +308,12 @@ WHERE start_time >= DATEADD(month,-1,CURRENT_TIMESTAMP())
 GROUP BY 1,2,3,4
 ORDER BY 5 DESC;
 
+-- tables, views ------------------------------------------------------------
+CREATE TEMPORARY TABLE mytemptable (id NUMBER, creation_date DATE);
+CREATE TRANSIENT TABLE mytranstable (id NUMBER, creation_date DATE);
+
+
+
 -- SnowSQL ------------------------------------------------------------
 > snowsql
 > !set prompt_format=[#FF0000][user].[role].[#00FF00][database].[schema].[#0000FF][warehouse]>
