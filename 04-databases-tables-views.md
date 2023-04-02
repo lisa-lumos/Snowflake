@@ -104,8 +104,34 @@ Recommend external tables to be partitioned to improve query performance.
 
 Similar to tables, the query results for external tables persist for 24 hours, as long as metadata is not refreshed. 
 
-## Search Optimization service
+## Search Optimization service (Enterprise edition and higher)
+Applies to a whole table or columns in a table. Can significantly improve the performance of certain types of queries that
+- returns small num of distinct rows (with highly selective filters like equal to)
+- does substr and regex searches (like, etc)
+- uses variant, object, array fields with filters
+- uses geospatial functions with geography vals
 
+A background maintenance service creates and maintains the search access path. Has storage and compute cost. 
+
+The search optimization can improve the performance of views (including secure views).
+
+The search optimization can improve query performance for tables with masking policies and row access policies.
+
+The search optimization service does not support:
+- External tables.
+- Materialized views.
+- Columns defined with a COLLATE clause.
+- Column concatenation.
+- Analytical expressions.
+- Casts on table columns (except for fixed-point numbers cast to strings).
+
+If you clone a table, schema, or database, the SEARCH OPTIMIZATION property and search access paths of each table are also cloned. 
+
+If a table in the primary database has the SEARCH OPTIMIZATION property enabled, the property is replicated to the corresponding table in the secondary database. Search access paths in the secondary database are not replicated but are instead rebuilt automatically. 
+
+If a table has a high churn rate, enabling automatic clustering and configuring search optimization for the table can result in higher maintenance costs than if the table is just configured for search optimization.
+
+To estimate the cost of search optimization, use the SYSTEM$ESTIMATE_SEARCH_OPTIMIZATION_COSTS function.
 
 ## Views
 

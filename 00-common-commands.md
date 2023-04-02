@@ -312,6 +312,11 @@ ORDER BY 5 DESC;
 CREATE TEMPORARY TABLE mytemptable (id NUMBER, creation_date DATE);
 CREATE TRANSIENT TABLE mytranstable (id NUMBER, creation_date DATE);
 
+ALTER TABLE t1 ADD SEARCH OPTIMIZATION ON EQUALITY(c1, c2, c3);
+alter table test_table add search optimization;
+DESCRIBE SEARCH OPTIMIZATION ON t1;
+ALTER TABLE t1 DROP SEARCH OPTIMIZATION ON SUBSTRING(c2);
+alter table test_table drop search optimization;
 
 
 -- SnowSQL ------------------------------------------------------------
