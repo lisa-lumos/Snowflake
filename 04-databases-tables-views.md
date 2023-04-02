@@ -87,7 +87,22 @@ Have 0 or 1 (default) day of time travel. Do not have fail-safe.
 All tables created in a transient schema, as well as all schemas created in a transient database, are transient by definition. It cannot be changed to other table types. 
 
 ## External Tables
+The data in an external table is stored in files in an external stage. It stores metadata about the data files (filename, version identifier, ...), so you can query a file in an external stage as if it were inside a database. Can access data supported by COPY INTO statements.
 
+This metadata can be manually refreshed (charged as cloud services), or configured to auto-refresh using event notifications from your cloud service (within snowpipe charges). AUTO_REFRESH_REGISTRATION_HISTORY table function, EXTERNAL_TABLES View, etc shows history of metadata and credits consumption. 
+
+External tables are read-only. Views/materialized views can be created based on them.
+
+All external tables include the following columns:
+- VALUE - A VARIANT col of one row in the external file; select * returns this col
+- METADATA$FILENAME - A pseudo col of path_in_stage/filename for each file
+- METADATA$FILE_ROW_NUMBER - A pseudo col of row number for each row.
+
+You can create additional virtual cols as expressions using the VALUE cols and/or the 2 pseudo cols. 
+
+Recommend external tables to be partitioned to improve query performance. 
+
+Similar to tables, the query results for external tables persist for 24 hours, as long as metadata is not refreshed. 
 
 ## Search Optimization service
 
