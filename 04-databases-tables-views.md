@@ -72,6 +72,7 @@ View cost by:
   - AUTOMATIC_CLUSTERING_HISTORY View
 
 ## Temporary and Transient tables/stages
+Permanent table cannot be changed to other table types. 
 ### Temporary tables
 Lives in the session only. Not visible to other users or sessions, and when the session ends, it is gone forever. You pay for the storage for its duration, can manually drop when it is no longer needed to save cost. It cannot be changed to other table types. 
 
@@ -134,52 +135,93 @@ If a table has a high churn rate, enabling automatic clustering and configuring 
 To estimate the cost of search optimization, use the SYSTEM$ESTIMATE_SEARCH_OPTIMIZATION_COSTS function.
 
 ## Views
-
+A regular view is a named definition of a query, and can be recursive. Views can be used for combining, segregating, and protecting data (by granting privileges on a view, instead of on the underlying tables). Can be used for writing modular code and increase code re-use. 
 
 ## Secure views
+Both non-materialized and materialized views can be secure. Secure views have improved data privacy and data sharing; however, they have performance impacts.
 
+Secure view is for data privacy: 
+- will not use internal optimizations (so will not expose underlying data by re-ordering predicates, etc)
+- will not expose view definition
 
-## Materialized views
+Views can be set as secure after creation. 
 
+Secure view's definition is visible to its owner role. In Query Profile, the internals of a secure view are not exposed even for the owner, because non-owners might have access to an owner’s Query Profile.
+
+View security can be integrated with Snowflake users and roles using the CURRENT_ROLE and CURRENT_USER context functions.
+
+When using secure views with Secure Data Sharing, use the CURRENT_ACCOUNT function to authorize users from an account.
+
+## Materialized views (Enterprise edition and plus)
+Goal is to improve performance. A materialized view’s results are stored, but requires storage and compute cost to maintain it. 
+
+Materialized views support clustering, so you can create multiple materialized views on the same table, with each view clustered on a different column, so that different queries can run on the view best for that query. You don’t need to specify a materialized view in a query in order for the view to be used - the query optimizer can automatically decide to use it.
+
+Materialized views are particularly useful when:
+- Query results contain a small num of rows
+- Query require significant processing, and used often
+- The query is on an external table
+- The base table does not change frequently.
+
+Limitations:
+- can query only one table
+- cannot have join, having, order by, limit, nor group by cols not in the view. 
+
+MATERIALIZED_VIEW_REFRESH_HISTORY table function and view shows costs. 
+
+You cannot use Time Travel to query historical data for materialized views.
+
+Recommend batching DML operations on the base table to minimize costs. 
+
+You can suspend a materialized view to defer maintenance costs. 
+
+You can create a materialized view on data shared to you. You pay for its charges. 
+
+You can share a materialized view. 
 
 ## Table design
+When defining cols of dates/timestamps, recommend use date/timestamp data type rather than VARCHAR. This improves query performance.
 
+Referential integrity constraints in SF are informational (not enforced), except for NOT NULL. 
+
+There is no storage/performance difference between a col with a max length declaration like VARCHAR(16777216), and a smaller precision. But using appropriate col length is recommended for easy debugging and convenience for 3rd party tools. 
+
+If unsure what operations to perform on semi-structured data, recommend storing it in a VARIANT column for now. 
 
 ## Cloning
+When a db or schema got cloned, privileges of all its child objects are copied, but the container itself's privileges do not get copied. Use "copy grants" clause to copy container's privileges (except ownership). 
 
+Cloned objects get object parameters that were set on the source object.
 
-## Data storage
+Automatic clustering is suspended for the new table by default. 
 
+Individual external named stages can be cloned. Internal stages cannot be cloned. 
 
+When a container is cloned, any pipes inside that uses an internal stage are not cloned, while those that uses external stages are cloned. A cloned pipe is paused by default.
 
+When a container is cloned, the cloned streams inside becomes empty.
 
+When a container is cloned, the cloned tasks inside are suspended by default.
 
+Cloning a schema results in the cloning of all policies within the schema.
 
+A explicitly cloned table maps to the same policies as the source table.
 
+You can use Time Travel to clone objects at a specific time point in the past. 
 
+Clones can be cloned. 
 
+## Data storage considerations
+Storage charged for data in the Active, Time Travel, and Fail-safe state. 
 
+TABLE_STORAGE_METRICS view includes a breakdown of the physical storage (in bytes) for table data in the 3 states of the CDP life-cycle. 
 
+Data files staged in Snowflake internal stages have no Time Travel and Fail-safe cost, but they have standard data storage costs. 
 
+Zero-copy clone is useful for creating instant backups that do not have any additional costs,until changes are made to the cloned object.
 
+High-churn dimension tables can be identified by calculating the ratio of FAILSAFE_BYTES divided by ACTIVE_BYTES in the TABLE_STORAGE_METRICS view. Any table with a large ratio is a high-churn table. 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+For large, high-churn dimension tables that incur overly-excessive CDP costs, the solution is to create these tables as transient with 0 Time Travel retention, and then copy these tables periodically (at least once a day) into a permanent table. This creates a full backup of these tables. When a new backup is created, the old one can be deleted and protected by CDP.
 
 

@@ -318,6 +318,53 @@ DESCRIBE SEARCH OPTIMIZATION ON t1;
 ALTER TABLE t1 DROP SEARCH OPTIMIZATION ON SUBSTRING(c2);
 alter table test_table drop search optimization;
 
+CREATE VIEW doctor_view AS
+    SELECT patient_ID, patient_name, diagnosis, treatment FROM hospital_table;
+
+CREATE OR REPLACE SECURE VIEW widgets_view AS
+    SELECT w.*
+        FROM widgets AS w
+        WHERE w.id IN (SELECT widget_id
+                           FROM widget_access_rules AS a
+                           WHERE upper(role_name) = CURRENT_ROLE()
+                      )
+    ;
+
+-- Example of a materialized view with a range filter
+create materialized view v1 as
+    select * from table1 where column_1 between 100 and 400;
+
+ALTER MATERIALIZED VIEW vulnerable_pipes CLUSTER BY (installation_year);
+
+SELECT * FROM TABLE(INFORMATION_SCHEMA.MATERIALIZED_VIEW_REFRESH_HISTORY());
+
+CREATE TRANSIENT TABLE my_new_table LIKE my_old_table COPY GRANTS;
+INSERT INTO my_new_table SELECT * FROM my_old_table;
+
+CREATE TRANSIENT TABLE my_transient_table AS SELECT * FROM mytable;
+
+CREATE TRANSIENT TABLE foo CLONE bar COPY GRANTS;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- SnowSQL ------------------------------------------------------------
 > snowsql
