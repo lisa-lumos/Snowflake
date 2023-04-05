@@ -346,13 +346,60 @@ CREATE TRANSIENT TABLE my_transient_table AS SELECT * FROM mytable;
 CREATE TRANSIENT TABLE foo CLONE bar COPY GRANTS;
 
 
+-- data types ------------------------------------------------------------
+CREATE TABLE my_table (my_variant_column VARIANT);
+COPY INTO my_table ... FILE FORMAT = (TYPE = 'JSON') ...
 
+INSERT INTO my_table (my_variant_column) SELECT PARSE_JSON('{...}');
 
+-- Operators : and . and [] return VARIANT values containing strings
+SELECT src:dealership -- <column>:<level1_element>
+-- src is case insensitive, but dealership is
+FROM car_sales
+ORDER BY 1;
 
+SELECT src:"company name" FROM partners; -- use "" for attribute names with spaces etc
+SELECT zipcode_info:"94987" FROM addresses;
+SELECT measurements:"#sPerSquareInch" FROM english_metrics;
 
+SELECT src:salesperson.name -- <column>:<level1_element>.<level2_element>.<level3_element>
+FROM car_sales
+ORDER BY 1;
 
+SELECT src:customer[0].name, src:vehicle[0] -- customer field is an array
+FROM car_sales
+ORDER BY 1;
 
+SELECT src:vehicle[0].price::NUMBER * 0.10 AS tax -- use :: to cast vals
+FROM car_sales
+ORDER BY tax;
 
+SELECT src:dealership, src:dealership::VARCHAR
+FROM car_sales
+ORDER BY 2;
+
+SELECT
+  value:name::string as "Customer Name",
+  value:address::string as "Address"
+FROM
+  car_sales
+, LATERAL FLATTEN(INPUT => SRC:customer); -- flatten table function to parse arrays
+
+-- +--------------------+-------------------+
+-- | Customer Name      | Address           |
+-- |--------------------+-------------------|
+-- | Joyce Ridgely      | San Francisco, CA |
+-- | Bradley Greenbloom | New York, NY      |
+-- +--------------------+-------------------+
+
+SELECT 'The First Employee Record is '|| -- select from a staged json file
+    S.$1:root[0].employees[0].firstName||
+    ' '||S.$1:root[0].employees[0].lastName
+FROM @%customers/contacts.json.gz (file_format => 'my_json_format') as S;
+
+COPY INTO <table>
+FROM @~/<file>.json
+FILE_FORMAT = (TYPE = 'JSON' STRIP_OUTER_ARRAY = true);
 
 
 

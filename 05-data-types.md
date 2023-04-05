@@ -27,17 +27,66 @@ DATE_FORMAT, TIME_FORMAT, TIMESTAMP_FORMAT file format option can be used for ex
 
 ## Semi-structured data 
 ### Intro
+Semi-structured data:
+- does not require a prior definition of a schema and can constantly evolve.
+- entities within the same class may have different attributes, the order of the attributes is not important.
+- can contain N-level hierarchies of nested information. 
+
+An OBJECT contains key-value pairs like a Java HashMap. An ARRAY contains a list of things like a Java ArrayList. VARIANT is used to build and store hierarchical data, can also contain ARRAY and OBJECT.
+
+Snowflake can import semi-structured data from JSON, Avro, ORC, Parquet, and XML formats. 
+
+When loading semi-structured data, you can
+- if the data is key-value pairs, you can load it into a col of type OBJECT.
+- if the data is is an array, you can load it into a column of type ARRAY.
+- if the data is hierarchical, you can split the data across diff columns, or store it in one col as VARIANT. 
 
 ### Supported formats
+JSON, Avro, ORC, Parquet, XML. 
 
-### Querying
+### Querying VARIANT
+Refer to chapter 0. 
 
-### Considerations
+### Considerations for VARIANT
+The VARIANT data type imposes a 16 MB size limit on individual rows. If the data exceeds 16 MB, enable the STRIP_OUTER_ARRAY file format option for the COPY INTO command to remove the outer array brackets and load the records inside into separate table rows. 
+
+To convert a VARIANT "null" value to SQL NULL, cast it as a string.
+
+To improve query performance, recommend to extract semi-structured data elements containing “null” values into relational columns before loading them. Or, if the “null” values in your files simply mean missing values, recommend setting the file format option STRIP_NULL_VALUES to TRUE when loading the semi-structured data files. 
+
+When working with unfamiliar semi-structured data, you might not know the key names in an OBJECT. You can use the FLATTEN function with the RECURSIVE argument to return the list of distinct key names in all nested elements in an OBJECT. You can also use this to retrieve all keys and paths in an OBJECT.
 
 ## Unstructured data
 ### Intro
+Includes form responses, social media conversations, images, video, audio, industry-specific file types such as VCF (genomics), KDF (semiconductors), or HDF5 (aeronautics).
+
+Snowflake supports:
+- Securely access data files located in cloud storage.
+- Share file access URLs with collaborators and partners.
+- Load file access URLs and other file metadata into Snowflake tables.
+
+Both external and internal stages support unstructured data.
+
+Types of URLs to access files: 
+- Scoped URL: encoded, temp access of 24 hrs, need role privileges. Good for custom apps that provides files to other accounts via a share, for download for ad hoc analysis
+- File URL: identifies permanent full path of the files, need role privileges. Good for custom apps with authorization token. 
+- Pre-signed URL: a https url for web browser, anyone can access, configurable expiration time. Good for BI tools to display the file contents. Need stages with server-side encryption, NOT client-side encryption (because other users need the encryption key to read the files). 
 
 ### Directory tables
+Directory tables store file-level metadata about the files in a stage. Roles with sufficient privileges can get file URLs & metadata from them.
+
+A directory table can be added explicitly to a stage at any time. It is an implicit object layered on a stage. 
+
+The metadata for a directory table can be refreshed manually or automatically using the event notification service for your cloud storage service. The overhead charge for event notification management appears as Snowpipe charges in your billing statement.
+
+
+
+
+
+
+
+
+
 
 ### REST API
 
