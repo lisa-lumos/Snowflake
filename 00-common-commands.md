@@ -401,13 +401,18 @@ COPY INTO <table>
 FROM @~/<file>.json
 FILE_FORMAT = (TYPE = 'JSON' STRIP_OUTER_ARRAY = true);
 
+-- enable directory tables for a stage
+CREATE STAGE mystage
+  DIRECTORY = (ENABLE = TRUE)
+  FILE_FORMAT = myformat;
 
+CREATE STAGE mystage
+  URL='s3://load/files/'
+  STORAGE_INTEGRATION = my_storage_int
+  DIRECTORY = (ENABLE = TRUE);
 
-
-
-
-
-
+ALTER STAGE mystage REFRESH;
+SELECT * FROM DIRECTORY(@mystage);
 
 
 

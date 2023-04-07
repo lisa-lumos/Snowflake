@@ -68,9 +68,9 @@ Snowflake supports:
 Both external and internal stages support unstructured data.
 
 Types of URLs to access files: 
-- Scoped URL: encoded, temp access of 24 hrs, need role privileges. Good for custom apps that provides files to other accounts via a share, for download for ad hoc analysis
-- File URL: identifies permanent full path of the files, need role privileges. Good for custom apps with authorization token. 
-- Pre-signed URL: a https url for web browser, anyone can access, configurable expiration time. Good for BI tools to display the file contents. Need stages with server-side encryption, NOT client-side encryption (because other users need the encryption key to read the files). 
+- **Scoped URL**: encoded, temp access of 24 hrs, need role privileges. Good for custom apps that provides files to other accounts via a `share`, for download for ad hoc analysis
+- **File URL**: identifies permanent full path of the files, need role privileges. Good for custom apps with authorization token. Format: `https://<account_identifier>/api/files/<db_name>.<schema_name>.<stage_name>/<relative_path>`
+- **Pre-signed URL**: a https url for web browser, anyone can access, configurable expiration time. Good for BI tools to display the file contents. Need stages with server-side encryption, NOT client-side encryption (because other users need the encryption key to read the files). 
 
 ### Directory tables
 Directory tables store file-level metadata about the files in a stage. Roles with sufficient privileges can get file URLs & metadata from them.
@@ -79,54 +79,79 @@ A directory table can be added explicitly to a stage at any time. It is an impli
 
 The metadata for a directory table can be refreshed manually or automatically using the event notification service for your cloud storage service. The overhead charge for event notification management appears as Snowpipe charges in your billing statement.
 
+Automatic refresh the metadata is not available for:
+- internal stages
+- external stages that refers Google Cloud Storage buckets
 
-
-
-
-
-
-
-
+You can use streams on a directory table to track added/dropped files in the referenced cloud storage location.
 
 ### REST API
+`GET /api/files/`
 
-### Processing with Java UDFs or UDTFs
+Python example:
+```py
+import requests
+response = requests.get(url,
+    headers={
+      "User-Agent": "reg-tests",
+      "Accept": "*/*",
+      "X-Snowflake-Authorization-Token-Type": "OAUTH",
+      "Authorization": """Bearer {}""".format(token)
+      },
+    allow_redirects=True)
+print(response.status_code)
+print(response.content)
+```
 
-### Sharing
+### Processing with Java UDFs or UDTFs (preview)
+To make your code resilient to file injection attacks, always use a scoped URL when passing a file’s location to a UDF. 
+
+example:
+```java
+CREATE FUNCTION process_pdf(file string)
+RETURNS string
+LANGUAGE java
+RUNTIME_VERSION = 11
+IMPORTS = ('@jars_stage/pdfbox-app-2.0.27.jar')
+HANDLER = 'PdfParser.readFile'
+as
+$$
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.text.PDFTextStripperByArea;
+import com.snowflake.snowpark_java.types.SnowflakeFile;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+public class PdfParser {
+    public static String readFile(String fileURL) throws IOException {
+        SnowflakeFile file = SnowflakeFile.newInstance(fileURL);
+        try (PDDocument document = PDDocument.load(file.getInputStream())) {
+            document.getClass();
+            if (!document.isEncrypted()) {
+                PDFTextStripperByArea stripper = new PDFTextStripperByArea();
+                stripper.setSortByPosition(true);
+                PDFTextStripper tStripper = new PDFTextStripper();
+                String pdfFileInText = tStripper.getText(document);
+                return pdfFileInText;
+            }
+        }
+        return null;
+    }
+}
+$$;
+```
+```sql
+-- Input a scoped URL.
+SELECT process_pdf(build_scoped_file_url('@data_stage', '/myfile.pdf'));
+```
+
+### Sharing unstructured data
+Data providers can use Secure Data Sharing to share unstructured data files with data consumers.
+
+Create secure views that allow data consumers to retrieve scoped/pre-signed URLs for unstructured data files.
 
 ### Troubleshooting
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Make sure to use Server Side Encryption (SSE). 
