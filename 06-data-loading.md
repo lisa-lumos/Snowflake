@@ -196,17 +196,24 @@ Query either of the following:
 - PIPE_USAGE_HISTORY View
 
 ## Snowpipe Streaming Overview (preview)
-Calling the Snowpipe Streaming API prompts low-latency loads of streaming data rows using the Snowflake Ingest SDK and your application code. The API writes rows of data to Snowflake tables directly, without staged files in the middle. This architecture results in lower load latencies and lower costs, which makes it a powerful tool for handling real-time data streams.
+Calling the Streaming API from your `Java application code` to `insert` rows of data to Snowflake tables directly, without staged files in the middle. This architecture results in lower load latencies and costs, which makes it great for real-time data streams. Do not require and pipe objects. 
+
+The API ingests rows via one or more channels. Each channel points to only one table, but a table can have multiple channels pointing to it. 
 
 ## Snowpipe Streaming Configuring
+API calls rely on key pair authentication with JSON Web Token (JWT).
 
 ## Snowpipe Streaming Recommendations
+Recommend calling the API with fewer clients that write more data per second.
 
 ## Snowpipe Streaming Costs
+Similar to other serverless features. 
 
 ## Snowpipe Streaming Kafka Connector with Snowpipe Streaming
+Optionally replace Snowpipe with Snowpipe Streaming in your data loading chain from Kafka. Low latency and low cost. 
 
-## Amazon S3-compatible Storage
+## Amazon S3-compatible Storage (Preview)
+The industry-standard Amazon S3 REST API enables programmatic access to storage buckets and objects. To access storage outside of the public cloud, you can create external stages in Snowflake that store the S3-compliant API endpoint, bucket name/path/credentials. Then you can load and unload data from and to the storage locations.
 
 ## Querying Data in Staged Files
 
