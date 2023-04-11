@@ -70,7 +70,7 @@ put file://c:\temp\load\contacts*.csv @my_csv_stage auto_compress=true;
 put file://c:\temp\load\contacts.json @my_json_stage auto_compress=true;
 
 list @~;        -- list files in user stage
-list @%mytable; -- list files in table stage
+list @%my_table; -- list files in table stage
 list @my_stage; -- list files in named stage
 
 -- bulk loading files ------------------------------------------------------------
