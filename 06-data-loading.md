@@ -12,8 +12,7 @@ You can do bulk loading and continuous loading.
 Bulk loading uses user-provided virtual warehouses, specified in the COPY statement. 
 
 Data transformations supported in COPY INTO command:
-- Column reordering & omission
-- Casts
+- Column reordering & omission & casts
 - Truncating text strings that exceed the target column length
 
 Continuous loading using snowpipe:
@@ -85,7 +84,7 @@ Snowflake maintains data loading metadata for each table, this metadata lives in
 - Last load timestamp for each file
 - Loading error info for the file
 
-This metadata is used to prevent data duplication during loading for the target table. It expires after 64 days. For files with unknown status, they are skipped by default. 
+This metadata is used to prevent data duplication during loading for the target table. It expires after 64 days for bulk loading. For files with unknown status, they are skipped by default. 
 
 When loading staged data, narrow the path to the most granular level, such as using pattern options or use common prefix of the files. 
 
@@ -216,10 +215,24 @@ Optionally replace Snowpipe with Snowpipe Streaming in your data loading chain f
 The industry-standard Amazon S3 REST API enables programmatic access to storage buckets and objects. To access storage outside of the public cloud, you can create external stages in Snowflake that store the S3-compliant API endpoint, bucket name/path/credentials. Then you can load and unload data from and to the storage locations.
 
 ## Querying Data in Staged Files
+sf supports using SQL to query data files in an internal stage or named external (S3 etc) stage. Useful for inspecting the file content before loading / after unloading.
 
 ## Querying Metadata for Staged Files
+Snowflake automatically generates metadata for files in stages. This metadata is “stored” in virtual columns that can be:
+- Queried using a standard SELECT statement.
+- Loaded into a table, along with the regular data columns, using COPY INTO (can only insert new rows, cannot modify existing row).
+
+The metadata columns are: 
+- METADATA$FILENAME: current row's file path
+- METADATA$FILE_ROW_NUMBER: row num for each row
+- METADATA$FILE_CONTENT_KEY: checksum of file for cur row
+- METADATA$FILE_LAST_MODIFIED: cur row's file's last modified timestamp in NTZ
+- METADATA$START_SCAN_TIME: cur row's start to scan time in LTZ
 
 ## Transforming Data During Load
+All file formats supported by COPY INTO can use transformations, except JSON has to be "Newline delimited JSON" standard format. 
+
+The VALIDATION_MODE param does not support transforming data during a load.
 
 ## Continuous data pipelines Overview
 
