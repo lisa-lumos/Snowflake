@@ -21,7 +21,7 @@ Continuous loading using snowpipe:
 - uses serverless compute resources, so automatically resized & scaled
 - can be used in data pipelines with streams and tasks, for complex transformations
 
-The Snowflake Connector for Kafka let users to connect to an Apache Kafka server, read data from topics, and load data into Snowflake tables.
+The Snowflake Connector for Kafka can connect to an Apache Kafka server, load data from topics into an internal stage, and load data files into tables (manual or pipe).
 
 For semi-structured data (Apache Parquet, Apache Avro, and ORC files), snowflake supports auto detection of schema, which retrieves the column definitions (names, data types, and ordering of columns in the files). Use function INFER_SCHEMA and GENERATE_COLUMN_DESCRIPTION. Create tables with the column definitions derived from a set of staged files using the CREATE TABLE ... USING TEMPLATE. 
 
@@ -235,18 +235,33 @@ All file formats supported by COPY INTO can use transformations, except JSON has
 The VALIDATION_MODE param does not support transforming data during a load.
 
 ## Continuous data pipelines Overview
+It automates many manual steps in transforming and optimizing continuous data loads. Usually, the raw data files are first loaded temporarily into a staging table, then transformed using SQL statements, then inserted into the destination reporting tables. The efficient way is to transform only new/modified data. 
+
+A stream object records the delta (inserts etc, DML) of CDC info for a table - allows querying/consuming the changes at the row level, between two transactional points of time.
+
+A task object defines a recurring schedule for executing a SQL statement (and SP calls) - can be chained together for successive execution of complex periodic processing. Can use streams by calling SYSTEM$STREAM_HAS_DATA. Users can define a tree-like structure of tasks to process/move data.
 
 ## Continuous data pipelines Streams
-Managing
-Examples
+
+
+
+
+
+
+### Managing streams
+
+### Examples of streams
+
 ## Continuous data pipelines Tasks
-Enabling Error Notifications
+
+### Enabling Error Notifications for tasks
 Enabling Error Notifications using AWS SNS
 Enabling Error Notifications using MS Azure Grid Events
 Enabling Error Notifications for Tasks using Google Pub/Sub
 Integrating Task Error Notifications with Tasks
 Task Error Payload Example
-Troubleshooting
+### Troubleshooting tasks
+
 ## Continuous data pipelines Examples
 
 
