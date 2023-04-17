@@ -3,11 +3,11 @@
 The location of data files in cloud storage called a stage. A named external stage is a database object that lives in a schema. 
 
 Snowflake supports 3 types of internal stages: 
-- User: belong to a single user, cannot be dropped. `@~`
-- Table: belong to a table, cannot be dropped. `@%table_name`
-- Named:  a db object lives inside a schema. Most flexible. `@stage_name`
+- User: belong to a single user, cannot be dropped, do not support file format options because it may need to handle any file format. User need insert privilege on target table. `@~`
+- Table: belong to a table, cannot be dropped. Do not support transform while loading. Only table owner can use it. `@%table_name`
+- Named:  a db object lives inside a schema. Most flexible. Privileges can be granted/revoked, ownership can be transferred. `@stage_name`
 
-You can do bulk loading and continuous loading. 
+You can do bulk loading and continuous loading from any sort of stages to tables. You can directly load from S3 bucket without using an external stage.  
 
 Bulk loading uses user-provided virtual warehouses, specified in the COPY statement. 
 
@@ -32,9 +32,9 @@ You can create external stages/tables on software and devices, on premises or in
 ## Feature Summary
 For files to load to SF, the default encoding character set is UTF-8. 
 
-gzip is the default compression format for uncompressed files to be loaded to SF stage. For already compressed files, gzip, bzip2, deflate, raw_deflate are supported, and can be auto-detected. Auto-detection is not yet supported for Brotli, you need to specify it during staging and loading. 
+gzip is the default compression format for uncompressed files to be loaded to SF stage. For already compressed files, `gzip, bzip2, deflate, raw_deflate` are supported, and can be auto-detected. Auto-detection is not yet supported for `Brotli and Zstandard`, you need to specify it during staging and loading. 
 
-The files sits in the SF stage are encrypted using 128-bit keys by default, if the files came unencrypted at the beginning. If they are already encrypted, you will need the encryption key. 
+The files sits in the SF stage are encrypted using `128-bit keys by default`, if the files came unencrypted at the beginning. If they are already encrypted, you will need the encryption key. 
 
 ## Considerations
 ### Preparing Your Data Files
@@ -46,7 +46,7 @@ File sizing (for both bulk and pipe loading):
 - Can use split command in Linux to partition large files
 
 Semi-structured:
-- Supported semi-structured data formats: JSON, Avro, ORC, Parquet, XML
+- Supported semi-structured data formats: JSON, Avro, ORC, Parquet, XML (preview)
 - The VARIANT data type imposes a 16 MB size limit on individual rows. 
 - Use the STRIP_OUTER_ARRAY file format option for the COPY INTO command to load the records into separate table rows. 
 - Extract semi-structured data elements containing “null” values into relational columns before loading them; or, set the file format option STRIP_NULL_VALUES to TRUE when loading it.
@@ -94,9 +94,15 @@ After staged files are loaded, consider removing them (PURGE copy option or the 
 ## Preparing to Load Data
 If you regularly load similarly-formatted data, recommend named file formats. 
 
-File format priority: COPY INTO TABLE statement > Stage definition > Table definition. 
+File format / copy options priority: COPY INTO statement > Stage definition > Table definition. 
 
-File format options are not cumulative, while copy options are. 
+File format options are `not cumulative`, while copy options `are cumulative`. 
+
+COMPRESSION file format option describes how your data files are already compressed in the stage. Set it by 2 ways:
+- As a file format option in COPY INTO.
+- As a file format option inside a named file format or a stage, which can be referred in COPY INTO.
+
+Copy options determine the error handling behavior, maximum data size etc. 
 
 ## Loading Using the Web Interface (Limited)
 The Web Interface (classic console) for loading data (combines put and copy command into one operation) is only intended for loading small numbers of files of limited size (up to 50 MB). 
@@ -156,6 +162,8 @@ Calling the public REST endpoints to load data. Calls to the public Snowpipe RES
 
 Your client app / aws Lambda function calls a public REST endpoint with a list of data filenames and a referenced pipe name. If new data files matching the list exists, they are queued for loading. 
 
+Use case: if files are constantly being loaded into an internal stage (using Python or Java), and we want snowpipe to pick up these files and load in to tables in snowflake. The problem is, internal stage do not have event notification feature, to still be able to use snowpipe, we need to call its REST API from the code. 
+
 ### Preparing to Load Data
 The Snowpipe service requires the Java/Python(3.6+) SDK. 
 
@@ -187,12 +195,14 @@ Snowflake uses file loading metadata (which lives in the pipes) to prevent reloa
 ## Snowpipe Managing
 Pipe does not support the PURGE copy option. To remove staged files that you no longer need, recommend periodically executing the REMOVE command to delete the files. Alternatively, configure any lifecycle management features provided by your cloud storage service provider.
 
-ALTER PIPE … REFRESH statement checks the load history for both the target table and the pipe to ensure the same files are not loaded twice.
+ALTER PIPE ... REFRESH statement checks the load history for both the target table and the pipe to ensure the same files are not loaded twice.
 
 ## Snowpipe Costs
 Query either of the following:
 - PIPE_USAGE_HISTORY table function (in the Snowflake Information Schema).
 - PIPE_USAGE_HISTORY View
+
+Managed service, with additional cost of 0.06 credit/1k files being loaded. 
 
 ## Snowpipe Streaming Overview (preview)
 Calling the Streaming API from your `Java application code` to `insert` rows of data to Snowflake tables directly, without staged files in the middle. This architecture results in lower load latencies and costs, which makes it great for real-time data streams. Do not require and pipe objects. 
