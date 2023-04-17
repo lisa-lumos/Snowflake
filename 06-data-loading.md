@@ -29,6 +29,9 @@ Instead of loading data into sf table, you can query then directly in the stage 
 
 You can create external stages/tables on software and devices, on premises or in a private cloud, that is highly compliant with Amazon S3 API (Amazon S3-compatible Storage). 
 
+Note:
+- metadata for pipe and manual bulk load lives in different places, if pipe already loaded the files, and you run copy into command manually on these files, you will get duplicated records in the table. 
+
 ## Feature Summary
 For files to load to SF, the default encoding character set is UTF-8. 
 
@@ -49,7 +52,7 @@ Semi-structured:
 - Supported semi-structured data formats: JSON, Avro, ORC, Parquet, XML (preview)
 - The VARIANT data type imposes a 16 MB size limit on individual rows. 
 - Use the STRIP_OUTER_ARRAY file format option for the COPY INTO command to load the records into separate table rows. 
-- Extract semi-structured data elements containing “null” values into relational columns before loading them; or, set the file format option STRIP_NULL_VALUES to TRUE when loading it.
+- Extract semi-structured data elements containing "null" values into relational columns before loading them; or, set the file format option STRIP_NULL_VALUES to TRUE when loading it.
 
 Snowpipe:
 - Snowpipe is designed to load new data within a minute after a file notification is sent. 
@@ -151,6 +154,8 @@ CURRENT_TIMESTAMP is evaluated when the load statement is compiled, rather than 
 Cross-cloud support is currently only available to accounts hosted on AWS.
 ## Snowpipe Auto Ingest
 Event notifications received while a pipe is paused are retained for only a limited period of time (14 days). 
+
+auto_ingest parameter should be set to true. 
 ### Automating for Amazon S3
 skipped
 ### Automating for Google Cloud Storage
@@ -161,6 +166,8 @@ skipped
 Calling the public REST endpoints to load data. Calls to the public Snowpipe REST endpoints use key-based authentication, not the typical username/password authentication, because the ingestion service does not maintain client sessions.
 
 Your client app / aws Lambda function calls a public REST endpoint with a list of data filenames and a referenced pipe name. If new data files matching the list exists, they are queued for loading. 
+
+auto_ingest param should be set to false. 
 
 Use case: if files are constantly being loaded into an internal stage (using Python or Java), and we want snowpipe to pick up these files and load in to tables in snowflake. The problem is, internal stage do not have event notification feature, to still be able to use snowpipe, we need to call its REST API from the code. 
 
@@ -195,7 +202,8 @@ Snowflake uses file loading metadata (which lives in the pipes) to prevent reloa
 ## Snowpipe Managing
 Pipe does not support the PURGE copy option. To remove staged files that you no longer need, recommend periodically executing the REMOVE command to delete the files. Alternatively, configure any lifecycle management features provided by your cloud storage service provider.
 
-ALTER PIPE ... REFRESH statement checks the load history for both the target table and the pipe to ensure the same files are not loaded twice.
+ALTER PIPE ... REFRESH statement loads the files that are staged within the past 7 days, and checks the load history for both the target table and the pipe to ensure the same files are not loaded twice.
+
 
 ## Snowpipe Costs
 Query either of the following:
@@ -228,7 +236,7 @@ The industry-standard Amazon S3 REST API enables programmatic access to storage 
 sf supports using SQL to query data files in an internal stage or named external (S3 etc) stage. Useful for inspecting the file content before loading / after unloading.
 
 ## Querying Metadata for Staged Files
-Snowflake automatically generates metadata for files in stages. This metadata is “stored” in virtual columns that can be:
+Snowflake automatically generates metadata for files in stages. This metadata is "stored" in virtual columns that can be:
 - Queried using a standard SELECT statement.
 - Loaded into a table, along with the regular data columns, using COPY INTO (can only insert new rows, cannot modify existing row).
 
@@ -251,18 +259,76 @@ A stream object records the delta (inserts etc, DML) of CDC info for a table - a
 
 A task object defines a recurring schedule for executing a SQL statement (and SP calls) - can be chained together for successive execution of complex periodic processing. Can use streams by calling SYSTEM$STREAM_HAS_DATA. Users can define a tree-like structure of tasks to process/move data.
 
-## Continuous data pipelines Streams
+## Continuous data pipelines - Streams
+A stream itself does not contain any table data - it only stores source object's offset and returns CDC records, using the source's versioning history. The stream rely on both the offset and the change tracking metadata stored in the table (several hidden cols created when stream for the table was first created, or when ALTER TABLE ... CHANGE_TRACKING = TRUE is executed).
 
+For streams on views, change tracking must be enabled explicitly for the view & underlying tables to add the hidden columns to these tables.
 
+A stream provides the minimal set of changes from its current offset to the current version of the table. Multiple queries can independently consume the same change data from a stream without changing the offset. A stream advances the offset only when it is used in a DML transaction. 
 
+When you query a stream within a transaction, it follows repeatable read isolation transaction isolation level. When DML transaction completes successfully, the stream offset advances. To ensure multiple statements access the same change records in the stream (lock the stream), surround them with an explicit transaction statement (BEGIN .. COMMIT). 
 
+Stream differs from the read committed mode supported for tables, in which statements see any changes made by previous statements executed within the same transaction, even though those changes are not yet committed.
 
+Stream has 3 additional cols:
+- METADATA$ACTION: the DML operation INSERT/DELETE.
+- METADATA$ISUPDATE: in the stream, updates are represented as a pair of DELETE and INSERT records with  METADATA$ISUPDATE = TRUE. Because streams record the differences between two offsets, so if a row is added and then updated, the delta change is a new row. The METADATA$ISUPDATE row records a FALSE value.
+- METADATA$ROW_ID: the unique and immutable ID for the row.
+
+3 stream types:
+- Standard. tracks all DML changes (insert/update/delete). Support tables, directory tables, views. Do not work with geospatial data - recommend creating append-only streams on them.
+- Append-only. tracks row inserts only. Support standard tables, directory tables, views. 
+- Insert-only. tracks row inserts only. Support external tables only. Overwritten/appended files are handled as new files - the stream does not record the diff of the old and new file versions.
+
+A stream (unconsumed records inside it) becomes stale (gone) when its offset is outside of the effective data retention period for its source table, or the underlying tables for a source view. To track new change records for the table, recreate the stream. If the data retention period for a table is < 14d, and a stream has not been consumed, Snowflake extends to 14d by default (MAX_DATA_EXTENSION_TIME_IN_DAYS param), aka effective data retention time for this stream, regardless of the Snowflake edition. This could incur storage costs. 
+
+To view the current staleness status of a stream, execute DESCRIBE STREAM / SHOW STREAMS. 
+
+Recreating an object drops its history, which makes any stream relies on it go stale. 
+
+If a table and its stream are cloned, the cloned stream offset is when it was cloned. 
+
+Renaming a source obj does not break its stream (references are used instead of obj names).
+
+Recommend to create a separate stream for each DML consumer (task, script, ... that consumes the same change data) for an obj.
+
+Streams works for local views and shared secure views, but NOT for materialized views. Underlying tables must be native tables with change tracking enabled (using ALTER TABLE ... CHANGE_TRACKING = TRUE), and the view may only have projections, filters, inner/cross joins, union all, system scalar functions (group by, qualify, limit, etc are not supported). 
+
+The CHANGES clause in SELECT enables querying change tracking metadata between two points in time, without having a stream. Using a stream is sufficient for most use cases, CHANGES clause is useful in infrequent cases when you need to manage the offset for arbitrary periods of time. 
+
+The main cost associated with a stream is the processing time used by a virtual warehouse to query the stream. These charges appear on your bill as familiar Snowflake credits.
 
 ### Managing streams
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Examples of streams
 
-## Continuous data pipelines Tasks
+## Continuous data pipelines - Tasks
 
 ### Enabling Error Notifications for tasks
 Enabling Error Notifications using AWS SNS
@@ -272,7 +338,7 @@ Integrating Task Error Notifications with Tasks
 Task Error Payload Example
 ### Troubleshooting tasks
 
-## Continuous data pipelines Examples
+## Continuous data pipelines - Examples
 
 
 
