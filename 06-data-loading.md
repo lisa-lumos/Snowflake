@@ -272,7 +272,7 @@ Stream differs from the read committed mode supported for tables, in which state
 
 Stream has 3 additional cols:
 - METADATA$ACTION: the DML operation INSERT/DELETE.
-- METADATA$ISUPDATE: in the stream, updates are represented as a pair of DELETE and INSERT records with  METADATA$ISUPDATE = TRUE. Because streams record the differences between two offsets, so if a row is added and then updated, the delta change is a new row. The METADATA$ISUPDATE row records a FALSE value.
+- METADATA$ISUPDATE: in the stream, updates are represented as a pair of DELETE and INSERT records with  METADATA$ISUPDATE = TRUE. Because streams record the overall differences between two offsets, so if a row is added and then updated, the delta change is a new row. The METADATA$ISUPDATE row records a FALSE value.
 - METADATA$ROW_ID: the unique and immutable ID for the row.
 
 3 stream types:
@@ -299,36 +299,58 @@ The CHANGES clause in SELECT enables querying change tracking metadata between t
 The main cost associated with a stream is the processing time used by a virtual warehouse to query the stream. These charges appear on your bill as familiar Snowflake credits.
 
 ### Managing streams
+Only the object owner role of a view or underlying tables can enable change tracking.
 
+Creating a stream on the view you own enables change tracking on the view, and all its underlying tables you own. If you don't own a underlying table, the owner must explicitly enable change tracking for it. 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+During the enabling operation of CDC for a table, the table is locked for writes until the command finishes running. 
 
 ### Examples of streams
+Read, skip. 
 
 ## Continuous data pipelines - Tasks
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Enabling Error Notifications for tasks
 Enabling Error Notifications using AWS SNS

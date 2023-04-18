@@ -242,148 +242,148 @@ as select * from table(validate(mycsvtable, job_id=>'<query_id>'));
 select * from save_copy_errors;
 
 -- warehouse ------------------------------------------------------------
-alter warehouse mywh set SCALING_POLICY = 'ECONOMY';
+alter warehouse mywh set scaling_policy = 'economy';
 
 -- snowpark-optimized wh
-CREATE OR REPLACE WAREHOUSE snowpark_opt_wh WITH
-  WAREHOUSE_SIZE = 'MEDIUM'
-  WAREHOUSE_TYPE = 'SNOWPARK-OPTIMIZED';
+create or replace warehouse snowpark_opt_wh with
+  warehouse_size = 'medium'
+  warehouse_type = 'snowpark-optimized';
 
 -- query optimization service ------------------------------------------------------------
 select parse_json(system$estimate_query_acceleration('8cd54bf0-1651-5b1c-ac9c-6a9582ebd20f')); -- for a specific query
 
 -- for queries that benefit the most from the service
-SELECT query_id, eligible_query_acceleration_time
-FROM snowflake.account_usage.query_acceleration_eligible
-ORDER BY eligible_query_acceleration_time DESC;
+select query_id, eligible_query_acceleration_time
+from snowflake.account_usage.query_acceleration_eligible
+order by eligible_query_acceleration_time desc;
 
 -- ... for a specific wh
-SELECT query_id, eligible_query_acceleration_time
-FROM snowflake.account_usage.query_acceleration_eligible
-WHERE warehouse_name = 'mywh'
-ORDER BY eligible_query_acceleration_time DESC;
+select query_id, eligible_query_acceleration_time
+from snowflake.account_usage.query_acceleration_eligible
+where warehouse_name = 'mywh'
+order by eligible_query_acceleration_time desc;
 
 -- for warehouses that benefit the most from the service
-SELECT warehouse_name, SUM(eligible_query_acceleration_time) AS total_eligible_time
-FROM snowflake.account_usage.query_acceleration_eligible
-GROUP BY warehouse_name
-ORDER BY total_eligible_time DESC;
+select warehouse_name, sum(eligible_query_acceleration_time) as total_eligible_time
+from snowflake.account_usage.query_acceleration_eligible
+group by warehouse_name
+order by total_eligible_time desc;
 
 -- enable the query acceleration service with a maximum scale factor of 0
 alter warehouse my_wh set
-  ENABLE_QUERY_ACCELERATION = true
-  QUERY_ACCELERATION_MAX_SCALE_FACTOR = 0;
+  enable_query_acceleration = true
+  query_acceleration_max_scale_factor = 0;
 
-SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY
-WHERE QUERY_ACCELERATION_PARTITIONS_SCANNED > 0
-AND start_time >= DATEADD(hour, -24, CURRENT_TIMESTAMP())
-ORDER BY QUERY_ACCELERATION_BYTES_SCANNED DESC;
+select * from snowflake.account_usage.query_history
+where query_acceleration_partitions_scanned > 0
+and start_time >= dateadd(hour, -24, current_timestamp())
+order by query_acceleration_bytes_scanned desc;
 
 
 -- clustering ------------------------------------------------------------
 -- cluster by base columns
-CREATE OR REPLACE TABLE t1 (c1 DATE, c2 STRING, c3 NUMBER) CLUSTER BY (c1, c2);
+create or replace table t1 (c1 date, c2 string, c3 number) cluster by (c1, c2);
 
 -- cluster by expressions
-CREATE OR REPLACE TABLE t2 (c1 timestamp, c2 STRING, c3 NUMBER) CLUSTER BY (TO_DATE(C1), substring(c2, 0, 10));
+create or replace table t2 (c1 timestamp, c2 string, c3 number) cluster by (to_date(c1), substring(c2, 0, 10));
 
 -- cluster by paths in variant columns
-CREATE OR REPLACE TABLE T3 (t timestamp, v variant) cluster by (v:"Data":id::number);
+create or replace table t3 (t timestamp, v variant) cluster by (v:"Data":id::number);
 
 -- cluster by base columns
-ALTER TABLE t1 CLUSTER BY (c1, c3);
+alter table t1 cluster by (c1, c3);
 
-ALTER TABLE t1 DROP CLUSTERING KEY;
+alter table t1 drop clustering key;
 
-ALTER TABLE t1 SUSPEND RECLUSTER;
-ALTER TABLE t1 RESUME RECLUSTER;
+alter table t1 suspend recluster;
+alter table t1 resume recluster;
 
-SELECT TO_DATE(start_time) AS date,
+select to_date(start_time) as date,
   database_name,
   schema_name,
   table_name,
-  SUM(credits_used) AS credits_used
-FROM snowflake.account_usage.automatic_clustering_history
-WHERE start_time >= DATEADD(month,-1,CURRENT_TIMESTAMP())
-GROUP BY 1,2,3,4
-ORDER BY 5 DESC;
+  sum(credits_used) as credits_used
+from snowflake.account_usage.automatic_clustering_history
+where start_time >= dateadd(month,-1,current_timestamp())
+group by 1,2,3,4
+order by 5 desc;
 
 -- tables, views ------------------------------------------------------------
-CREATE TEMPORARY TABLE mytemptable (id NUMBER, creation_date DATE);
-CREATE TRANSIENT TABLE mytranstable (id NUMBER, creation_date DATE);
+create temporary table mytemptable (id number, creation_date date);
+create transient table mytranstable (id number, creation_date date);
 
-ALTER TABLE t1 ADD SEARCH OPTIMIZATION ON EQUALITY(c1, c2, c3);
+alter table t1 add search optimization on equality(c1, c2, c3);
 alter table test_table add search optimization;
-DESCRIBE SEARCH OPTIMIZATION ON t1;
-ALTER TABLE t1 DROP SEARCH OPTIMIZATION ON SUBSTRING(c2);
+describe search optimization on t1;
+alter table t1 drop search optimization on substring(c2);
 alter table test_table drop search optimization;
 
-CREATE VIEW doctor_view AS
-    SELECT patient_ID, patient_name, diagnosis, treatment FROM hospital_table;
+create view doctor_view as
+    select patient_id, patient_name, diagnosis, treatment from hospital_table;
 
-CREATE OR REPLACE SECURE VIEW widgets_view AS
-    SELECT w.*
-        FROM widgets AS w
-        WHERE w.id IN (SELECT widget_id
-                           FROM widget_access_rules AS a
-                           WHERE upper(role_name) = CURRENT_ROLE()
+create or replace secure view widgets_view as
+    select w.*
+        from widgets as w
+        where w.id in (select widget_id
+                           from widget_access_rules as a
+                           where upper(role_name) = current_role()
                       )
     ;
 
--- Example of a materialized view with a range filter
+-- example of a materialized view with a range filter
 create materialized view v1 as
     select * from table1 where column_1 between 100 and 400;
 
-ALTER MATERIALIZED VIEW vulnerable_pipes CLUSTER BY (installation_year);
+alter materialized view vulnerable_pipes cluster by (installation_year);
 
-SELECT * FROM TABLE(INFORMATION_SCHEMA.MATERIALIZED_VIEW_REFRESH_HISTORY());
+select * from table(information_schema.materialized_view_refresh_history());
 
-CREATE TRANSIENT TABLE my_new_table LIKE my_old_table COPY GRANTS;
-INSERT INTO my_new_table SELECT * FROM my_old_table;
+create transient table my_new_table like my_old_table copy grants;
+insert into my_new_table select * from my_old_table;
 
-CREATE TRANSIENT TABLE my_transient_table AS SELECT * FROM mytable;
+create transient table my_transient_table as select * from mytable;
 
-CREATE TRANSIENT TABLE foo CLONE bar COPY GRANTS;
+create transient table foo clone bar copy grants;
 
 
 -- data types ------------------------------------------------------------
-CREATE TABLE my_table (my_variant_column VARIANT);
-COPY INTO my_table ... FILE FORMAT = (TYPE = 'JSON') ...
+create table my_table (my_variant_column variant);
+copy into my_table ... file format = (type = 'json') ...
 
-INSERT INTO my_table (my_variant_column) SELECT PARSE_JSON('{...}');
+insert into my_table (my_variant_column) select parse_json('{...}');
 
 -- Operators : and . and [] return VARIANT values containing strings
-SELECT src:dealership -- <column>:<level1_element>
+select src:dealership -- <column>:<level1_element>
 -- src is case insensitive, but dealership is
-FROM car_sales
-ORDER BY 1;
+from car_sales
+order by 1;
 
-SELECT src:"company name" FROM partners; -- use "" for attribute names with spaces etc
-SELECT zipcode_info:"94987" FROM addresses;
-SELECT measurements:"#sPerSquareInch" FROM english_metrics;
+select src:"company name" from partners; -- use "" for attribute names with spaces etc
+select zipcode_info:"94987" from addresses;
+select measurements:"#sPerSquareInch" from english_metrics;
 
-SELECT src:salesperson.name -- <column>:<level1_element>.<level2_element>.<level3_element>
-FROM car_sales
-ORDER BY 1;
+select src:salesperson.name -- <column>:<level1_element>.<level2_element>.<level3_element>
+from car_sales
+order by 1;
 
-SELECT src:customer[0].name, src:vehicle[0] -- customer field is an array
-FROM car_sales
-ORDER BY 1;
+select src:customer[0].name, src:vehicle[0] -- customer field is an array
+from car_sales
+order by 1;
 
-SELECT src:vehicle[0].price::NUMBER * 0.10 AS tax -- use :: to cast vals
-FROM car_sales
-ORDER BY tax;
+select src:vehicle[0].price::number * 0.10 as tax -- use :: to cast vals
+from car_sales
+order by tax;
 
-SELECT src:dealership, src:dealership::VARCHAR
-FROM car_sales
-ORDER BY 2;
+select src:dealership, src:dealership::varchar
+from car_sales
+order by 2;
 
-SELECT
-  value:name::string as "Customer Name",
-  value:address::string as "Address"
-FROM
+select
+  value:name::string as "customer name",
+  value:address::string as "address"
+from
   car_sales
-, LATERAL FLATTEN(INPUT => SRC:customer); -- flatten table function to parse arrays
+, lateral flatten(input => src:customer); -- flatten table function to parse arrays
 
 -- +--------------------+-------------------+
 -- | Customer Name      | Address           |
@@ -392,27 +392,27 @@ FROM
 -- | Bradley Greenbloom | New York, NY      |
 -- +--------------------+-------------------+
 
-SELECT 'The First Employee Record is '|| -- select from a staged json file
-    S.$1:root[0].employees[0].firstName||
-    ' '||S.$1:root[0].employees[0].lastName
-FROM @%customers/contacts.json.gz (file_format => 'my_json_format') as S;
+select 'The First Employee Record is '|| -- select from a staged json file
+    s.$1:root[0].employees[0].firstname||
+    ' '||s.$1:root[0].employees[0].lastname
+from @%customers/contacts.json.gz (file_format => 'my_json_format') as s;
 
-COPY INTO <table>
-FROM @~/<file>.json
-FILE_FORMAT = (TYPE = 'JSON' STRIP_OUTER_ARRAY = true);
+copy into <table>
+from @~/<file>.json
+file_format = (type = 'json' strip_outer_array = true);
 
 -- enable directory tables for a stage
-CREATE STAGE mystage
-  DIRECTORY = (ENABLE = TRUE)
-  FILE_FORMAT = myformat;
+create stage mystage
+  directory = (enable = true)
+  file_format = myformat;
 
-CREATE STAGE mystage
-  URL='s3://load/files/'
-  STORAGE_INTEGRATION = my_storage_int
-  DIRECTORY = (ENABLE = TRUE);
+create stage mystage
+  url='s3://load/files/'
+  storage_integration = my_storage_int
+  directory = (enable = true);
 
-ALTER STAGE mystage REFRESH;
-SELECT * FROM DIRECTORY(@mystage);
+alter stage mystage refresh;
+select * from directory(@mystage);
 
 
 
@@ -447,10 +447,11 @@ show parameters in warehouse wh1; -- show object parameters for this wh
 show parameters in account; -- show all account, session and object parameters
 show parameters like 'time%' in account; -- show all params start with "time"
 
-
-
-
-
+-- CDC ------------------------------------------------------------
+create secure view v change_tracking = true as select col1, col2 from t;
+alter view v2 set change_tracking = true;
+create table t (col1 string, col2 number) change_tracking = true;
+alter table t1 set change_tracking = true;
 
 
 
