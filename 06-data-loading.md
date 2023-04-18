@@ -278,7 +278,7 @@ Stream has 3 additional cols:
 3 stream types:
 - Standard. tracks all DML changes (insert/update/delete). Support tables, directory tables, views. Do not work with geospatial data - recommend creating append-only streams on them.
 - Append-only. tracks row inserts only. Support standard tables, directory tables, views. 
-- Insert-only. tracks row inserts only. Support external tables only. Overwritten/appended files are handled as new files - the stream does not record the diff of the old and new file versions.
+- Insert-only. tracks row inserts only. Support `external tables` only. Overwritten/appended files are handled as new files - the stream does not record the diff of the old and new file versions.
 
 A stream (unconsumed records inside it) becomes stale (gone) when its offset is outside of the effective data retention period for its source table, or the underlying tables for a source view. To track new change records for the table, recreate the stream. If the data retention period for a table is < 14d, and a stream has not been consumed, Snowflake extends to 14d by default (MAX_DATA_EXTENSION_TIME_IN_DAYS param), aka effective data retention time for this stream, regardless of the Snowflake edition. This could incur storage costs. 
 
