@@ -21,7 +21,7 @@ Continuous loading using snowpipe:
 - uses serverless compute resources, so automatically resized & scaled
 - can be used in data pipelines with streams and tasks, for complex transformations
 
-The Snowflake Connector for Kafka can connect to an Apache Kafka server, load data from topics into an internal stage, and load data files into tables (manual or pipe).
+The Snowflake Connector for Kafka can connect to an Apache Kafka server, load data from topics into an internal stage, and load data files into tables (manual or pipe). Example: a Kafka topic has 3 partitions, and each partition loads files into their respective folder in a internal stage, then the REST API for snowpipe is called, and the 3 pipes would load data into one table concurrently, from their respective folder. 
 
 For semi-structured data (Apache Parquet, Apache Avro, and ORC files), snowflake supports auto detection of schema, which retrieves the column definitions (names, data types, and ordering of columns in the files). Use function INFER_SCHEMA and GENERATE_COLUMN_DESCRIPTION. Create tables with the column definitions derived from a set of staged files using the CREATE TABLE ... USING TEMPLATE. 
 
