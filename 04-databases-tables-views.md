@@ -90,7 +90,7 @@ All tables created in a transient schema, as well as all schemas created in a tr
 ## External Tables
 The data in an external table is stored in files in an external stage. It stores metadata about the data files (filename, version identifier, ...), so you can query a file in an external stage as if it were inside a database. Can access data supported by COPY INTO statements.
 
-This metadata can be manually refreshed (charged as cloud services), or configured to auto-refresh using event notifications from your cloud service (within snowpipe charges). AUTO_REFRESH_REGISTRATION_HISTORY table function, EXTERNAL_TABLES View, etc shows history of metadata and credits consumption. 
+This metadata can be manually refreshed (charged as cloud services), or configured to auto-refresh using event notifications (cloud messaging) from your cloud service (within snowpipe charges). AUTO_REFRESH_REGISTRATION_HISTORY table function, EXTERNAL_TABLES View, etc shows history of metadata and credits consumption. 
 
 External tables are read-only. Views/materialized views can be created based on them.
 
@@ -101,9 +101,13 @@ All external tables include the following columns:
 
 You can create additional virtual cols as expressions using the VALUE cols and/or the 2 pseudo cols. 
 
-Recommend external tables to be partitioned to improve query performance. 
+Performance is slower compared with regular tables, but saves cost. Recommend external tables to be partitioned to improve query performance. 
+
+Partition example: Suppose you have order data from different years S3, with each file contain a particular year of data, and the external table points to all these files. Without partition, if you only need the orders data from a particular year, the query needs to scan all files (of all years), then do the filtering to return only data for that year. With partitioning, you will have one data file in each folder named by year, and the query only retrieves the data in that file. You declare partition by year in the external table definition, and select year as extract year from METADATA$FILENAME. 
 
 Similar to tables, the query results for external tables persist for 24 hours, as long as metadata is not refreshed. 
+
+Use case: in a S3 bucket, you have weather data of each city in a country that is uploaded daily into the bucket. But your customer has a manufacture business in city A, so they are only interested in visualizing the weather data of this city (only a subset of your massive data). 
 
 ## Search Optimization service (Enterprise edition and higher)
 Applies to a whole table or columns in a table. Can significantly improve the performance of certain types of queries that
@@ -137,8 +141,10 @@ To estimate the cost of search optimization, use the SYSTEM$ESTIMATE_SEARCH_OPTI
 ## Views
 A regular view is a named definition of a query, and can be recursive. Views can be used for combining, segregating, and protecting data (by granting privileges on a view, instead of on the underlying tables). Can be used for writing modular code and increase code re-use. 
 
+User who have access to standard view can see its definition in show view / query profile. 
+
 ## Secure views
-Both non-materialized and materialized views can be secure. Secure views have improved data privacy and data sharing; however, they have performance impacts.
+Both non-materialized and materialized views can be secure. Secure views have improved data privacy, can be used for data sharing (standard view cannot be shared); however, they have performance impacts.
 
 Secure view is for data privacy: 
 - will not use internal optimizations (so will not expose underlying data by re-ordering predicates, etc)
@@ -146,16 +152,16 @@ Secure view is for data privacy:
 
 Views can be set as secure after creation. 
 
-Secure view's definition is visible to its owner role. In Query Profile, the internals of a secure view are not exposed even for the owner, because non-owners might have access to an owner’s Query Profile.
+Secure view's definition is visible to its owner role. In Query Profile, the internals of a secure view are not exposed even for the owner, because non-owners might have access to an owner's Query Profile.
 
 View security can be integrated with Snowflake users and roles using the CURRENT_ROLE and CURRENT_USER context functions.
 
 When using secure views with Secure Data Sharing, use the CURRENT_ACCOUNT function to authorize users from an account.
 
 ## Materialized views (Enterprise edition and plus)
-Goal is to improve performance. A materialized view’s results are stored, but requires storage and compute cost to maintain it. 
+Goal is to improve performance. A materialized view's results are stored, but requires storage and compute cost to maintain it. 
 
-Materialized views support clustering, so you can create multiple materialized views on the same table, with each view clustered on a different column, so that different queries can run on the view best for that query. You don’t need to specify a materialized view in a query in order for the view to be used - the query optimizer can automatically decide to use it.
+Materialized views support clustering, so you can create multiple materialized views on the same table, with each view clustered on a different column, so that different queries can run on the view best for that query. You don't need to specify a materialized view in a query in order for the view to be used - the query optimizer can automatically decide to use it.
 
 Materialized views are particularly useful when:
 - Query results contain a small num of rows
@@ -178,6 +184,8 @@ You can suspend a materialized view to defer maintenance costs.
 You can create a materialized view on data shared to you. You pay for its charges. 
 
 You can share a materialized view. 
+
+You can create a materialized view on external tables. 
 
 ## Table design
 When defining cols of dates/timestamps, recommend use date/timestamp data type rather than VARCHAR. This improves query performance.
