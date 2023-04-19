@@ -5,6 +5,8 @@ Snowflake supports specifying a SELECT statement (instead of a table) in the COP
 
 (updated to https://docs.snowflake.com/en/user-guide/data-unload-considerations.html), will update this chapter later. 
 
+Use case: after a lot of processing in snowflake, you obtain the curated data which can be directly used for analysis. If you want to use this data offline, you can copy it out of snowflake.  
+
 
 
 
