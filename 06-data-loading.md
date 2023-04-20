@@ -309,29 +309,42 @@ During the enabling operation of CDC for a table, the table is locked for writes
 Read, skip. 
 
 ## Continuous data pipelines - Tasks
+A task can execute following types of SQL code:
+- Single SQL statement
+- Call to a stored procedure
+- Procedural logic using Snowflake Scripting
 
+Can be combined with streams for continuous ELT workflows.
 
+Can also be used independently to do periodic work, such as for periodic reports by inserting/merging rows into a report table.
 
+Tasks require compute resources to execute SQL code. Individual tasks can have either of these:
+- Serverless/managed tasks using snowflake-managed resources. Snowflake determines the size of the compute resources for a run based on the previous runs of this task. Max size is 2xl, can be used in parallel by diff tasks. Omit the WAREHOUSE parameter when CREATE TASK (the role needs EXECUTE MANAGED TASK privilege). Cannot work for UDFs with Java/Python inside, or SPs in Scala. 
+- User-managed tasks using user-specified virtual warehouse. Specify the WAREHOUSE parameter when CREATE TASK. 
 
+Query the TASK_HISTORY Account Usage view to find the average run time of a task (avg difference between scheduled and completed time). The warehouse size you choose should be large enough to run multiple child tasks that are triggered simultaneously by predecessor tasks. Choose an appropriate warehouse size for task to complete its workload within the defined schedule interval.
 
+serverless or user-managed task, which one to choose:
+- Choose serverless tasks if: you have too few tasks to run concurrently; tasks runtime < 1min; tasks with stable runtime; need to fully adhere to the schedule
+- Choose user-managed tasks if: you can fully utilize one warehouse; have unpredictable runtime/loads; no need to fully adhere to the schedule
 
+A standalone task or the root task in a DAG generally runs on a schedule. You can define the schedule when creating a task (using CREATE TASK) or later (using ALTER TASK). If a task is still running when it is already the next scheduled execution time, then that scheduled run is skipped.
 
+The cron expression in a task definition supports specifying a time zone (daylight saving time is included in some timezones, need to be careful with this). Easiest way to avoid DST confusion is to use a timezone that do not use DST, such as UTC. 
 
+A `Directed Acyclic Graph (DAG)` is a series of tasks with a single root task, organized by their dependencies. DAGs flow in a single direction. Each task (not the root) can have multiple predecessor tasks (dependencies); and each task can have multiple subsequent/child tasks that depend on it. A task runs only after all of its predecessor tasks have successfully completed.
 
+The root task have a schedule that starts a run of the DAG. 
 
+Specify the predecessor tasks when creating a new task (using CREATE TASK ... AFTER) or later (using ALTER TASK ... ADD AFTER).
 
+A DAG is limited to a max of 1000 tasks. A single task can have a max of 100 predecessor tasks and 100 child tasks.
 
+You can include a conclude task in a DAG calling an external function to trigger a remote messaging service to send a notification that all prev tasks have successfully completed.
 
+All tasks in a DAG must have the same task owner and be stored in the same db and schema.
 
-
-
-
-
-
-
-
-
-
+Transferring ownership of a task severs the dependency between this task and any predecessor and child tasks, unless all tasks ownership is transferred all at once (by dropping the old owner role so the tasks are transferred to the dropper, or by GRANT OWNERSHIP on all tasks in a schema to a diff role). 
 
 
 
