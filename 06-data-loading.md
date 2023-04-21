@@ -325,7 +325,7 @@ Tasks require compute resources to execute SQL code. Individual tasks can have e
 Query the TASK_HISTORY Account Usage view to find the average run time of a task (avg difference between scheduled and completed time). The warehouse size you choose should be large enough to run multiple child tasks that are triggered simultaneously by predecessor tasks. Choose an appropriate warehouse size for task to complete its workload within the defined schedule interval.
 
 serverless or user-managed task, which one to choose:
-- Choose serverless tasks if: you have too few tasks to run concurrently; tasks runtime < 1min; tasks with stable runtime; need to fully adhere to the schedule
+- Choose serverless tasks if: you have too few tasks to run concurrently; tasks runtime < 1min; tasks with stable runtime; need to fully adhere to the schedule (has no queue period)
 - Choose user-managed tasks if: you can fully utilize one warehouse; have unpredictable runtime/loads; no need to fully adhere to the schedule
 
 A standalone task or the root task in a DAG generally runs on a schedule. You can define the schedule when creating a task (using CREATE TASK) or later (using ALTER TASK). If a task is still running when it is already the next scheduled execution time, then that scheduled run is skipped.
@@ -346,29 +346,67 @@ All tasks in a DAG must have the same task owner and be stored in the same db an
 
 Transferring ownership of a task severs the dependency between this task and any predecessor and child tasks, unless all tasks ownership is transferred all at once (by dropping the old owner role so the tasks are transferred to the dropper, or by GRANT OWNERSHIP on all tasks in a schema to a diff role). 
 
+By default, Snowflake allow only one instance of a DAG to run at a time. The next run of a root task is scheduled only after the whole DAG have finished running. This is controlled by ALLOW_OVERLAPPING_EXECUTION parameter on the root task. Overlapping runs are fine when overlapping runs of a DAG do not produce incorrect/duplicate data. 
 
+TASK_DEPENDENTS table function shows all dependents of a task in a DAG. 
 
+When a DAG runs with some suspended child tasks, the run ignores those sleeping tasks. A child task with many predecessors runs as long as all its resumed predecessors successfully completes.
 
+To recursively resume all tasks in a DAG, query the `system$task_dependents_enable` function rather than resuming each task individually (using ALTER TASK ... RESUME).
 
+To modify/recreate any task in a DAG, the root task must first be suspended (using ALTER TASK ... SUSPEND).
 
+If the SP definition called by a task changes during a DAG run, the new code can be used in current run.
 
+To retrieve the history of task versions, query TASK_VERSIONS Account Usage view. 
 
+A task supports all session parameters. You can set them for a task. A task does not support account or user params.
 
+You can configure a task or DAG to auto suspend after n consecutive failed/timeout runs. Set the SUSPEND_TASK_AFTER_FAILURES param on a [standalone task] or [the DAG root task to be effective if one task in DAG meets this condition]. 
 
+Root task can also be manually triggered (good for testing), its successful run triggers the rest of the DAG. 
 
+Any 3rd-party services that can authenticate into your Snowflake account and authorize SQL actions can execute the EXECUTE TASK command to run tasks.
 
+Ways to view task history:
+- TASK_HISTORY table function in information schema
+- CURRENT_TASK_GRAPHS table function in information schema
+- COMPLETE_TASK_GRAPHS table function in information schema
+- COMPLETE_TASK_GRAPHS View in Account Usage
 
+To recover the management costs of Snowflake-provided compute resources, 1.5x multiplier to resource consumption is applided. Note that the serverless compute model could still reduce compute costs over user-managed warehouses; in some cases significantly.
 
+To retrieve credit usage for a task, use the SERVERLESS_TASK_HISTORY table function in info schema, or SERVERLESS_TASK_HISTORY view in Account Usage.
 
+Tasks run with the privileges of the task owner whether [scheduled] or [run manually by EXECUTE TASK by another role with OPERATE privilege].
 
+In addition to the task owner, a role that has the OPERATE privilege on the task can suspend/resume the task.
 
+Recommend to create a custom role (e.g. taskadmin) and grant the EXECUTE TASK privilege to this role. Then this role can be granted to any task owner role so they can alter their own tasks. To no longer allow the task owner role to execute the task, just revoke taskadmin role from the task owner role. 
 
-
+Make sure the SQL statement that you use in a task works as expected before you create the task. Tasks are intended to automate SQL statements or SPs that have already been tested thoroughly.
 
 ### Enabling Error Notifications for tasks
-Enabling Error Notifications using AWS SNS
-Enabling Error Notifications using MS Azure Grid Events
-Enabling Error Notifications for Tasks using Google Pub/Sub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+You can enable error notifications using:
+- AWS SNS
+- MS Azure Grid Events
+- Google Pub/Sub
+
 Integrating Task Error Notifications with Tasks
 Task Error Payload Example
 ### Troubleshooting tasks
