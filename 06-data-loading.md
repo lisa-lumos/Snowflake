@@ -387,36 +387,21 @@ Recommend to create a custom role (e.g. taskadmin) and grant the EXECUTE TASK pr
 Make sure the SQL statement that you use in a task works as expected before you create the task. Tasks are intended to automate SQL statements or SPs that have already been tested thoroughly.
 
 ### Enabling Error Notifications for tasks
+A task can push error notifications to a cloud messaging service, using:
+- Amazon SNS
+- Microsoft Azure Event Grid
+- Google Pub/Sub 
 
+To enable a task to send error notifications, you must associate the task with a notification integration: CREATE TASK ... ERROR_INTEGRATION = ... as ..., or ALTER TASK ... SET ...
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-You can enable error notifications using:
-- AWS SNS
-- MS Azure Grid Events
-- Google Pub/Sub
-
-Integrating Task Error Notifications with Tasks
-Task Error Payload Example
 ### Troubleshooting tasks
+1. verify that the task indeed did not run using TASK_HISTORY table function
+2. verify that the task is RESUMED
+3. verify that the task owner has sufficient permissions
+4. verify the conditions for the task to run, like streams actually has data. Historical data for a stream can be queried using an AT | BEFORE clause.
+
+There is a 60 min default limit on one run of a task. Increase the wh size accordingly if it exceeds this limit, or, increase this timeout limit param for this task using ALTER TASK ... SET USER_TASK_TIMEOUT_MS = .... 
 
 ## Continuous data pipelines - Examples
-
-
-
-
-
-
-
+read & skipped.
 
