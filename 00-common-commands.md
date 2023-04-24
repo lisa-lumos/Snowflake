@@ -241,6 +241,34 @@ as select * from table(validate(mycsvtable, job_id=>'<query_id>'));
 
 select * from save_copy_errors;
 
+-- bulk unloading data ------------------------------------------------------------
+copy into @mystage/myfile.csv.gz from mytable
+file_format = (type=csv compression='gzip')
+single=true
+max_file_size=4900000000;
+
+copy into @mystage
+from null_empty1
+  file_format = (format_name = 'my_csv_format');
+
+copy into @mystage
+from (select object_construct('id', id, 'first_name', first_name, 'last_name', last_name, 'city', city, 'state', state) from mytable)
+file_format = (type = json);
+
+copy into @mystage/myfile.parquet 
+from (select id, name, start_date from mytable)
+file_format=(type='parquet')
+header = true;
+
+copy into @mystage
+from (select cast(c1 as tinyint) ,
+             cast(c2 as smallint) ,
+             cast(c3 as int),
+             cast(c4 as bigint) from mytable)
+file_format=(type=parquet);
+
+
+
 -- warehouse ------------------------------------------------------------
 alter warehouse mywh set scaling_policy = 'economy';
 
