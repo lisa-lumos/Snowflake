@@ -482,7 +482,19 @@ create table t (col1 string, col2 number) change_tracking = true;
 alter table t1 set change_tracking = true;
 
 
-
+-- queries ------------------------------------------------------------
+-- joins
+select 
+  p.project_id, 
+  project_name, 
+  employee_id, 
+  employee_name, 
+  e.project_id
+from 
+  projects as p 
+  join employees as e
+  on e.project_id = p.project_id
+order by p.project_id, e.employee_id;
 
 
 

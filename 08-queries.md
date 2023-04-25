@@ -1,10 +1,21 @@
 # 8. Queries
 ## Joins
+Snowflake supports the following types of joins:
+- inner join (only return matched rows)
+- outer join (= left/right/full-outer join. return all rows, including those without a match)
+- cross join (return Cartesian product, rarely used)
+- natural join (= inner join without on clause, so it implicitly use same-named cols from two tables, can be risky to use)
 
+### Eliminate Redundant Joins
+If you have UNIQUE, PRIMARY KEY, FOREIGN KEY constraints defined on tables, and your data does comply with these constraints, then if you specify `rely` on these constraints, sf can use them to eliminate unnecessary joins (where the data in the joined table is not actually used in what you select in the SELECT, or, even if used, could get the same result without a join). 
 
 ## Subqueries
 
+
+
+
 ## Querying hierarchical data
+
 
 ## CTEs
 
