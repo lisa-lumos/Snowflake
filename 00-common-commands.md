@@ -496,8 +496,38 @@ from
   on e.project_id = p.project_id
 order by p.project_id, e.employee_id;
 
+-- recursive CTEs
+with recursive 
+managers(indent, employee_id, manager_id, employee_title)
+as (
+  select -- starting level
+    '' as indent, 
+    employee_id, 
+    manager_id, 
+    title as employee_title
+  from employees
+  where title = 'president'
 
+  union all
 
+  select -- the next level
+    indent || '--- ',
+    employees.employee_id, 
+    employees.manager_id, 
+    employees.title
+  from 
+    employees 
+    join 
+    managers
+    on employees.manager_id = managers.employee_id
+)
+select 
+  indent || employee_title as title, 
+  employee_id, 
+  manager_id
+from 
+  managers
+;
 
 
 
