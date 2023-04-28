@@ -529,6 +529,91 @@ from
   managers
 ;
 
+-- window functions
+select 
+  day, 
+  sales_today, 
+  rank() over (order by sales_today desc) as rank,
+  sum(sales_today) over (order by day rows between unbounded preceding and current row) as "sales so far",
+  sum(sales_today) over () as total_sales,
+  avg(sales_today) over (order by day rows between 2 preceding and current row) as "3-day moving average"
+from store_sales_2
+order by day;
+
+-- +-----+-------------+------+------------------------+-------------+----------------------+
+-- | DAY | SALES_TODAY | RANK | SALES SO FAR           | TOTAL_SALES | 3-DAY MOVING AVERAGE |
+-- |-----+-------------+------+------------------------+-------------+----------------------|
+-- |   1 |          10 |    5 |                     10 |          84 |               10.000 |
+-- |   2 |          14 |    3 |                     24 |          84 |               12.000 |
+-- |   3 |           6 |    6 |                     30 |          84 |               10.000 |
+-- |   4 |           6 |    6 |                     36 |          84 |                8.666 |
+-- |   5 |          14 |    3 |                     50 |          84 |                8.666 |
+-- |   6 |          16 |    2 |                     66 |          84 |               12.000 |
+-- |   7 |          18 |    1 |                     84 |          84 |               16.000 |
+-- +-----+-------------+------+------------------------+-------------+----------------------+
+
+select -- running sum for each month
+  month(sales_date) as month_num,
+  sum(quantity) over (partition by month(sales_date) order by sales_date) as monthly_cumulative_sum_quantity
+from sales
+order by sales_date;
+-- +-----------+---------------------------------+
+-- | MONTH_NUM | MONTHLY_CUMULATIVE_SUM_QUANTITY |
+-- |-----------+---------------------------------+
+-- |         1 |                               1 |  -- sum = 1
+-- |         1 |                               4 |  -- sum = 1 + 3
+-- |         1 |                               9 |  -- sum = 1 + 3 + 5
+-- |         2 |                               2 |  -- sum = 0 + 2 (new month)
+-- +-----------+---------------------------------+
+
+select -- sliding window of size 2, for each month
+  month(sales_date) as month_num,
+  quantity,
+  sum(quantity) over (partition by month(sales_date) 
+                      order by sales_date
+                      rows between 1 preceding and current row) as monthly_sliding_sum_quantity
+from sales
+order by sales_date;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

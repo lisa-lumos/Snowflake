@@ -40,16 +40,14 @@ If CTE has same name with a db object, then the CTE name takes precedence. But t
 Constructing a recursive CTE incorrectly can cause an infinite loop.
 
 ## Window functions
-
-
-
-
-
+read, skipped. Queries see Chapter 0. 
 
 ## Match recognize
 
-## Persisted query results
 
+
+
+## Persisted query results
 
 ## Distinct counts
 
@@ -60,7 +58,6 @@ Constructing a recursive CTE incorrectly can cause an infinite loop.
 ## Estimating percentile values
 
 ## Query profile
-
 
 ## Cancel statements
 
