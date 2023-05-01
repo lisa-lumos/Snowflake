@@ -43,7 +43,9 @@ Constructing a recursive CTE incorrectly can cause an infinite loop.
 read, skipped. Queries see Chapter 0. 
 
 ## Match recognize
+To identify sequences of rows that match a specific pattern, use the MATCH_RECOGNIZE subclause of the FROM clause. 
 
+You cannot use the MATCH_RECOGNIZE clause in a recursive common table expression (CTE).
 
 
 
