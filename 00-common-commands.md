@@ -658,8 +658,14 @@ select * from
     table(getnextval(contact_seq)) c_seq
 );
 
-
-
+-- persisted query results (result cache)
+show tables;
+select -- show the tables that are empty.
+  "schema_name", 
+  "name" as "table_name", 
+  "rows"
+from table(result_scan(last_query_id()))
+where "rows" = 0;
 
 
 
