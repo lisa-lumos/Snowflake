@@ -76,48 +76,31 @@ Post-processing Query Results use cases:
 Post-processing can be performed using the RESULT_SCAN table function, which returns the results of a previous query as a "table".
 
 ## Distinct counts
+Ways to get the num of rows with distinct values: 
+- count(distinct ...)
+- HyperLogLog functions such as approx_count_distinct for large inputs, can do trillions+ of rows
+- for hierarchical aggregations, you can improve performance by bitmaps or producing arrays with distinct vals. 
 
 ## Similarity estimation
+MinHash for efficiently estimating the similarity between two or more data sets. 
 
 ## Frequency estimation
+The Space-Saving algorithm is an efficient way of estimating frequent values in data sets. Aggregate functions include approx_top_k, etc. 
 
 ## Estimating percentile values
+The t-Digest algorithm is an efficient way of estimating percentile values in data sets. Aggregate functions include approx_percentile, etc. 
 
 ## Query profile
 
+
+
+
+
 ## Cancel statements
-
-
-
+Recommend to cancel a statement using the interface of the app in which the query is running (e.g. Worksheet in the SnowSight),  or the cancellation API of the Snowflake ODBC/JDBC driver. However, sometimes using sql is necessary. 
 
 ### Notes
 In query history, some queries do not have warehouse size, this is because they used cache, and never required a warehouse. If a client shows Go, it means this query started from SnowSight, because it was written in the Go language. If a query was initiated in the SnowSQL, it will show Python, because SnowSQL is written in python. If from Tableau, it will show JDBC. 
 
 As to query tag, if you are from IT team, and need to debug/optimize queries, you can tag these queries using alter session, and put ticket/Jira number in it, so the prod department know where these additional compute cost came from. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

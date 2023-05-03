@@ -667,11 +667,49 @@ select -- show the tables that are empty.
 from table(result_scan(last_query_id()))
 where "rows" = 0;
 
+-- distinct counts
+create or replace table 
+  daily_uniques
+as
+select
+  visitdate,
+  hll_export(hll_accumulate(sourceip)) as hll_sourceip
+from uservisits
+group by visitdate;
 
+select -- aggregation of the HLL structures is much faster than over the base data
+  extract(year from visitdate) as visit_year,
+  extract(month from visitdate) as visit_month,
+  hll_estimate(hll_combine(hll_import(hll_sourceip))) as distinct_ips
+from daily_uniques
+where visitdate between '2000-01-01' and '2000-12-31'
+group by 1,2
+order by 1,2;
 
+-- minhash
+create or replace table mhtab1(c1 number,c2 double,c3 text,c4 date);
+create or replace table mhtab2(c1 number,c2 double,c3 text,c4 date);
+insert into mhtab1 values
+    (1, 1.1, 'item 1', to_date('2016-11-30')),
+    (2, 2.31, 'item 2', to_date('2016-11-30')),
+    (3, 1.1, 'item 3', to_date('2016-11-29')),
+    (4, 44.4, 'item 4', to_date('2016-11-30'));
+insert into mhtab2 values
+    (1, 1.1, 'item 1', to_date('2016-11-30')),
+    (2, 2.31, 'item 2', to_date('2016-11-30')),
+    (3, 1.1, 'item 3', to_date('2016-11-29')),
+    (4, 44.4, 'item 4', to_date('2016-11-30')),
+    (6, 34.23, 'item 6', to_date('2016-11-29'));
+select approximate_similarity(mh) from
+    ((select minhash(100, *) as mh from mhtab1)
+    union all
+    (select minhash(100, *) as mh from mhtab2));
 
-
-
+-- +----------------------------+
+-- | APPROXIMATE_SIMILARITY(MH) |
+-- |----------------------------|
+-- |                       0.79 |
+-- +----------------------------+
 
 
 
