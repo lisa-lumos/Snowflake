@@ -91,10 +91,54 @@ The Space-Saving algorithm is an efficient way of estimating frequent values in 
 The t-Digest algorithm is an efficient way of estimating percentile values in data sets. Aggregate functions include approx_percentile, etc. 
 
 ## Query profile
+Provides execution details for a query - a graphical representation of the main components of the processing plan, statistics for each component, details and statistics for the overall query. 
 
+Helps to understand the performance/behavior of a particular query - spot mistakes in the query, identify performance bottlenecks and improvement opportunities.
 
+Operators are the functional building blocks of a query. Operator types:
+- data access and generation operators: TableScan, ValuesClause, Generator, ExternalScan, InternalObject. 
+- data processing operators:  Filter, Join, Aggregate, GroupingSets, WindowFunction, Sort, SortWithLimit, Flatten, JoinFilter, UnionAll, ExternalFunction. 
+- DML operators: Insert, Delete, Update, Merge, Unload
+- metadata operators: DDL and Transaction Commands, Table Creation Command, Query Result Reuse, Metadata-based Result
+- miscellaneous operators: Result
 
+Execution time can be broken down into:
+- Processing: time spent on data processing by the CPU.
+- Local Disk IO: time when the processing was blocked by local disk access.
+- Remote Disk IO: time when the processing was blocked by remote disk access.
+- Network Communication: time when the processing was waiting for the network data transfer.
+- Synchronization: various synchronization activities between participating processes.
+- Initialization: time spent setting up the query processing.
 
+Statistics: 
+- IO: 
+  - Scan progress: % of data scanned for a given table
+  - Bytes scanned
+  - Percentage scanned from cache: from the local disk cache
+  - Bytes written
+  - Bytes written to result
+  - Bytes read from result
+  - External bytes scanned: bytes read from an external object, e.g. a stage
+- DML: 
+  - Number of rows inserted
+  - Number of rows updated
+  - Number of rows deleted
+  - Number of rows unloaded
+- Pruning: 
+  - Partitions scanned
+  - Partitions total: total num of partitions the table
+- Spilling: disk usage where intermediate results do not fit in memory
+  - Bytes spilled to local storage: to local disk
+  - Bytes spilled to remote storage: to remote disk
+- Network: network communication
+  - Bytes sent over the network
+- External Functions: calls to external functions
+
+Common query problems identified by query profile:
+- exploding joins: did not provide join condition, resulting in a cartesian product
+- UNION without ALL: UNION does dup. Use UNION ALL when do not need to de-dup
+- queries too large to fit in memory: See data spilling to local disk then remote disk. Need to use a larger wh, or, process the data in smaller batches. 
+- inefficient pruning: "partitions scanned" almost equal to "partitions total". 
 
 ## Cancel statements
 Recommend to cancel a statement using the interface of the app in which the query is running (e.g. Worksheet in the SnowSight),  or the cancellation API of the Snowflake ODBC/JDBC driver. However, sometimes using sql is necessary. 
