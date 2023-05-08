@@ -711,15 +711,42 @@ select approximate_similarity(mh) from
 -- |                       0.79 |
 -- +----------------------------+
 
+-- shares ------------------------------------------------------------
+-- listing
+create secure view paid_v as -- return rows if customer paid
+  select *
+  from my_table
+  where system$is_listing_purchased() = true;
 
+create secure view paid_v as -- return rows that is_free or if consumer paid
+  select *
+  from my_table
+  where
+    is_free
+    or
+    system$is_listing_purchased() = true;
 
+create secure view paid_v as -- return rows within past 7 days or if consumer paid
+  select *
+  from my_table
+  where
+    (timestamp > current_timestamp() - interval '7 days')
+    or
+    system$is_listing_purchased() = true;
 
+execute using 
+  share_context(system$is_listing_purchased=>'false') -- test if share created properly
+as
+  select *
+  from example_db.example_sc.purchased_view
+;
 
-
-
-
-
-
+execute using 
+  share_context(system$is_listing_purchased=>'true')
+as
+  select *
+  from example_db.example_sc.purchased_view
+;
 
 
 
