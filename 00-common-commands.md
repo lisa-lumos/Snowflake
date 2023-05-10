@@ -712,6 +712,7 @@ select approximate_similarity(mh) from
 -- +----------------------------+
 
 -- shares ------------------------------------------------------------
+show shares;
 -- listing
 create secure view paid_v as -- return rows if customer paid
   select *
@@ -749,8 +750,182 @@ as
 ;
 
 -- use database roles in a share
+use role accountadmin;
 create database role d1.r1;
 create database role d1.r2;
+grant usage on schema d1.s1 to database role d1.r1;
+grant select on view d1.s1.v1 to database role d1.r1;
+grant usage on schema d1.s1 to database role d1.r2;
+grant select on view d1.s1.v2 to database role d1.r2;
+show grants to database role d1.r1;
+show grants to database role d1.r2;
+create share share1;
+grant usage on database d1 to share share1;
+grant database role d1.r1 to share share1;
+grant database role d1.r2 to share share1;
+alter share share1 add accounts = org1.consumer1,org1.consumer2;
+
+-- manage database roles
+alter database role d1.r1 rename to d1.r3;
+drop database role d1.r2;
+
+-- create a share by directly granting prilileges
+use role accountadmin;
+create share sales_s;
+grant usage on database sales_db to share sales_s;
+grant usage on schema sales_db.aggregates_eula to share sales_s;
+grant select on table sales_db.aggregates_eula.aggregate_1 to share sales_s;
+
+show grants to share sales_s; -- share has these privileges
+alter share sales_s add accounts=xy12345, yz23456;
+show grants of share sales_s; -- shared to these accounts
+
+-- for validating shared objects
+alter session set simulated_data_sharing_consumer = xy12345;
+
+-- to let consumer create their own streams
+alter table ... change_tracking = true
+
+-- revoke
+revoke select on view sales_db.aggregates_eula.agg_secure from share sales_s;
+
+-- share data from multiple databases
+-- sample database database1
+create database database1;
+create schema database1.sch;
+create table database1.sch.table1 (id int);
+create view database1.sch.view1 as select * from database1.sch.table1;
+-- sample database database2
+create database database2;
+create schema database2.sch;
+create table database2.sch.table2 (id int);
+-- sample database to be shared
+create database database3;
+create schema database3.sch;
+create table database3.sch.table3 (id int);
+create secure view database3.sch.view3 as -- sample view to be shared.
+select view1.id as view1id, table2.id as table2id, table3.id as table3id
+from database1.sch.view1 view1,
+     database2.sch.table2 table2,
+     database3.sch.table3 table3;
+create share share1;
+grant usage on database database3 to share share1;
+grant usage on schema database3.sch to share share1;
+grant reference_usage on database database1 to share share1;
+grant reference_usage on database database2 to share share1;
+grant select on view database3.sch.view3 to share share1;
+
+-- replicating shares across rgions/cloud-platforms
+-- in primary account:
+use role accountadmin;
+create role myrole;
+grant create replication group on account to role myrole;
+use role myrole;
+create replication group myrg
+    object_types = databases, shares
+    allowed_databases = db1, db2
+    allowed_shares = s1
+    allowed_accounts = myorg.myaccount2, myorg.myaccount3
+    replication_schedule = '10 minute';
+grant replicate on replication group myrg to role my_replication_role;
+show replication accounts;
+show replication groups;
+-- in secondary account:
+use role accountadmin;
+create role myrole;
+grant create replication group on account to role myrole;
+use role myrole;
+create replication group myrg as replica of myorg.myaccount1.myrg;
+grant replicate on replication group myrg to role my_replication_role;
+use role my_replication_role;
+alter replication group myrg refresh; -- manual refresh
+
+-- control data access in a share
+use role sysadmin;
+create or replace table mydb.private.sensitive_data (
+    name string,
+    date date,
+    time time(9),
+    bid_price float,
+    ask_price float,
+    bid_size int,
+    ask_size int,
+    access_id string /* granularity for access */ )
+    cluster by (date);
+insert into mydb.private.sensitive_data
+    values('AAPL',dateadd(day,  -1,current_date()), '10:00:00', 116.5, 116.6, 10, 10, 'STOCK_GROUP_1'),
+          ('AAPL',dateadd(month,-2,current_date()), '10:00:00', 116.5, 116.6, 10, 10, 'STOCK_GROUP_1'),
+          ('MSFT',dateadd(day,  -1,current_date()), '10:00:00',  58.0,  58.9, 20, 25, 'STOCK_GROUP_1'),
+          ('MSFT',dateadd(month,-2,current_date()), '10:00:00',  58.0,  58.9, 20, 25, 'STOCK_GROUP_1'),
+          ('IBM', dateadd(day,  -1,current_date()), '11:00:00', 175.2, 175.4, 30, 15, 'STOCK_GROUP_2'),
+          ('IBM', dateadd(month,-2,current_date()), '11:00:00', 175.2, 175.4, 30, 15, 'STOCK_GROUP_2');
+create or replace table mydb.private.sharing_access (
+  access_id string,
+  snowflake_account string
+);
+insert into mydb.private.sharing_access values('STOCK_GROUP_1', CURRENT_ACCOUNT());
+insert into mydb.private.sharing_access values('STOCK_GROUP_2' '<consumer_account>');
+create or replace secure view mydb.public.paid_sensitive_data as
+    select name, date, time, bid_price, ask_price, bid_size, ask_size
+    from mydb.private.sensitive_data sd
+    join mydb.private.sharing_access sa on sd.access_id = sa.access_id
+    and sa.snowflake_account = current_account();
+grant select on mydb.public.paid_sensitive_data to public; -- to public role
+
+select count(*) from mydb.private.sensitive_data;
+select * from mydb.private.sensitive_data;
+select count(*) from mydb.public.paid_sensitive_data;
+select * from mydb.public.paid_sensitive_data;
+select * from mydb.public.paid_sensitive_data where name = 'AAPL';
+alter session set simulated_data_sharing_consumer=<account_name>;
+select * from mydb.public.paid_sensitive_data;
+
+use role accountadmin;
+create or replace share mydb_shared
+  comment = 'Example of using Secure Data Sharing with secure views';
+show shares;
+/* Option 1: Create a database role */
+create database role mydb.dr1;
+grant usage on database mydb to database role mydb.dr1;
+grant usage on schema mydb.public to database role mydb.dr1;
+grant select on mydb.public.paid_sensitive_data to database role mydb.dr1;
+grant database role mydb.dr1 to share mydb_shared;
+/* Option 2: Grant privileges on the database objects to include in the share.  */
+grant usage on database mydb to share mydb_shared;
+grant usage on schema mydb.public to share mydb_shared;
+grant select on mydb.public.paid_sensitive_data to share mydb_shared;
+show grants to share mydb_shared;
+
+-- for consumers
+use role accountadmin;
+show shares;
+desc share <provider_account>.mydb_shared;
+create database mydb_shared1 from share <provider_account>.mydb_shared;
+/* Option 1 */
+grant database role mydb_shared1.db1 to role custom_role1;
+/* Option 2 */
+grant imported privileges on database mydb_shared1 to custom_role1;
+
+use role custom_role1;
+show views;
+use warehouse <warehouse_name>;
+select * from paid_sensitive_data;
+
+-- consume shared data
+show shares;
+desc share xy12345.sales_s;
+create database snow_sales from share xy12345.sales_s;
+
+
+
+
+
+
+
+
+
+
+
 
 
 

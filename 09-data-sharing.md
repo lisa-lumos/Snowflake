@@ -191,6 +191,8 @@ skipped
 ### Getting Started
 How to create a share. You can provide a share to consumers using Direct Shares, Listings, or Data Exchanges.
 
+Must need account admin role. 
+
 Two ways to share database objects:
 1. Grant "database roles" to a share. (In preview)
    - create many "database roles" in a database.
@@ -204,31 +206,78 @@ Two ways to share database objects:
 
 You can blend both options. 
 
-
-
-
-
-
-
-
-
-
+Notify any data consumers if the name of the database role was changed.
 
 ### Working with Shares
+VPS does not support Secure Data Sharing due to the current limitations against sharing data across regions.
+
+New and modified rows in tables in a share are available immediately to consumers.
+
+Create a separate schema for each table you wish to share.
+
+A new object created in a database is not automatically available to consumers - you need to explicitly grant it to the share. 
+
+If you decide to filter the data in table(s) based on certain conditions, you need to create secure views on the table(s).
+
+SIMULATED_DATA_SHARING_CONSUMER session parameter can be used to validate whether objects are configured correctly to display only what you want to. 
+
+Consumers can create streams in their own dbs on the shared tables/views. For consumers to create streams on shared tables/views, provider must enable change tracking on the shared tables or the underlying tables for a view.
+
+You remove an account from a share by setting a new list of accounts for it and leaving the desired account off the list. After removing an account from a share, you can add it back again to the share; however, they lose the database they created earlier from the share. They must create a new database from the share. This can have a significant impact on the business operations of the account. Similar thing happens if you drop a share. 
 
 ### Sharing Data from Multiple Databases
+Providers can share data that in different databases by using secure views. A secure view can reference objects such as schemas/tables/views from other databases.
 
-### Replicating Shares Across Regions and Cloud Platforms
+In addition to performing all the standard steps to share data, you must grant the REFERENCE_USAGE privilege on each database referenced by the secure view you want to share.
 
-### Sharing Data Across Regions and Cloud Platforms
+### Replicating Shares Across Regions and Cloud Platforms (using account replication)
+Account replication enables the objects replication from a source account to many target accounts in the same organization. Replicated objects are secondary objects and are replicas of the primary objects.
+
+A replication group is a collection of source objects that are replicated as a unit to many target accounts. Replication groups provide read-only access for the replicated objects. Replication groups provide point-in-time consistency for the objects.
+
+This is enabled by the Account Replication feature. The ORGADMIN role must enable replication for accounts in your organization. 
+
+When a secondary replication group is created in the target account, an initial refresh is automatically executed.
+
+In the target account, people who executes the `alter replication group ... refresh` command need a role with the REPLICATE privilege on the replication group. 
+
+Recommend to schedule automatic refreshes using the REPLICATION_SCHEDULE parameter. 
+
+### Sharing Data Across Regions and Cloud Platforms (using database replication)
+Database replication is now a part of Account Replication. 
+
+When sharing a view that references objects in many databases, each of these other databases must be replicated.
+
+skipped. 
 
 ### Using Secure Objects to Control Data Access
+Strongly recommend sharing secure views/UDFs instead of sharing tables.
+
+For optimal performance, especially with extremely large tables, recommend defining clustering keys on the base table(s).
+
+You can create a share with one of them:
+- the ACCOUNTADMIN role
+- OWNERSHIP on the shared database
+- USAGE privilege on the database WITH GRANT OPTION. 
 
 ## Data sharing for consumers
 ### Consuming Data Shared with You
+You must use the ACCOUNTADMIN role, or a role granted the IMPORT SHARE global privilege.
+
+Limitations for consumers:
+- Shared databases are read-only. Users can view/query data, but cannot insert/update data, nor create any objects in the database.
+- Not allowed: 
+  - Creating a clone of a shared object.
+  - Time Travel for a shared object.
+  - Editing the comments for a shared database.
+- Shared objects on consumer side cannot be re-shared with other accounts.
+- Shared databases cannot be replicated.
 
 ## General data sharing tasks
 ### Managing Reader Accounts
+
+
+
 ### Configuring Reader Accounts
 ### Enabling Non-Admins to Perform Sharing Tasks
 ### Granting Privileges to Other Roles
