@@ -748,7 +748,9 @@ as
   from example_db.example_sc.purchased_view
 ;
 
-
+-- use database roles in a share
+create database role d1.r1;
+create database role d1.r2;
 
 
 

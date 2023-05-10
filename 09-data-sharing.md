@@ -166,13 +166,53 @@ Paid listings' historical usage data:
 
 ## Using listings as a consumer
 ### Becoming a Consumer of Listings
+To access private listings or Snowflake Marketplace listings. 
+
+The ORGADMIN needs to accept the Snowflake Consumer Terms of Service for your org.
+
+To access a listing, you must be ACCOUNTADMIN or a role with the CREATE DATABASE and IMPORT SHARE privileges.
+
+The role with IMPORTED PRIVILEGES on the database created from the listing can use it. 
+
 ### Exploring Listings
+Data dictionaries allow you to preview the contents of a free/paid Marketplace listing before installing it in your account. 
+
 ### Accessing and Installing Listings as a Consumer
+skipped
+
 ### Paying for Listings
+skipped
+
 ### Review Your Usage of Paid Listings
+- MARKETPLACE_PAID_USAGE_DAILY View
+- MARKETPLACE_PAID_USAGE_DAILY View
 
 ## Data sharing for providers
 ### Getting Started
+How to create a share. You can provide a share to consumers using Direct Shares, Listings, or Data Exchanges.
+
+Two ways to share database objects:
+1. Grant "database roles" to a share. (In preview)
+   - create many "database roles" in a database.
+   - grant privileges on different of objects to each db role, then grant all these db roles to the share
+   - consumers can grant these db roles to their own roles in their account
+   - db roles live in one db
+2. Grant privileges on objects directly to a share. 
+   - consumer get a single privilege - IMPORTED PRIVILEGES. This allow their users to access all dbs and db objects in the share. 
+   - on consumer side, do not allow different user groups to access a subset of the shared objects - All or nothing. 
+   - can include objects from many dbs in a single share.
+
+You can blend both options. 
+
+
+
+
+
+
+
+
+
+
 
 ### Working with Shares
 
