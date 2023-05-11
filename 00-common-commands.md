@@ -916,17 +916,40 @@ show shares;
 desc share xy12345.sales_s;
 create database snow_sales from share xy12345.sales_s;
 
+-- reader accounts
+use role accountadmin;
+grant create account on account to role sysadmin; -- delegate to sysadmin
+use role accountadmin;
+create managed account reader_acct1
+admin_name = user1, 
+admin_password = 'sdfed43da!44' ,
+type = reader;
 
+use role accountadmin;
+drop managed account reader_acct1;
 
+use role accountadmin;
+show managed accounts; -- view all reader accounts
 
+alter user ra_user1 reset password; -- your user can login with the link
+alter user ra_user2 reset password;
 
+use role accountadmin;
+grant import share on account to sysadmin;
 
+-- data exchange
+use role accountadmin;
+grant imported privileges on data exchange mydataexchange to sysadmin;
 
+use role accountadmin;
+grant create data exchange listing on account to role sysadmin;
+grant create data exchange listing on account to sysadmin with grant option;
 
-
-
-
-
+-- override default share restrictions for business critical account
+use role accountadmin;
+grant override share restrictions on account to role sysadmin;
+use role sysadmin;
+alter share <share_name> add accounts = <consumer_account_name> SHARE_RESTRICTIONS=false;
 
 
 
