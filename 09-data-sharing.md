@@ -329,49 +329,49 @@ By default, Snowflake does not allow sharing data from a Business Critical to a 
 
 ## Data exchange
 ### About
+Data Exchange is a data hub for securely collaborating around data, with a group of members that you invite. It lets you (provider) publish data, which can then be discovered by the consumers in your exchange.
+
+You can manage membership, manage access to data, audit data usage, apply security controls to the data shared in the Data Exchange.
 
 ### Admin and Membership
+The account that hosts the Data Exchange is the Data Exchange Admin, who is responsible for configuring the Exchange and managing members. 
+
+ACCOUNTADMIN in the Data Exchange Admin can:
+- Set up the Data Exchange (currently performed by Snowflake)
+- Manage add/remove members
+- Designate members as providers/consumers/both
+- Define Data Exchange rules (coming soon).
+
+After joining the Data Exchange - 
+Providers can:
+- Create a listing / Define listing access (personalized/free) / Publish the listing.
+- Grant access to personalized listings or datasets from a different region from the consumer.
+
+Consumers can:
+- Discover/browse the exchange listings.
+- Switch between the Snowflake Marketplace and the Data Exchange.
+- Consume datasets (instantly/by-request).
 
 ### Accessing a Data Exchange
+To access a data exchange, your account must be added to the exchange by the Data Exchange Admin.
 
 ### Becoming a Data Provider
+When you join the Data Exchange as a provider, you must set up your provider profile, which is required for publishing a listing.
 
 ### Managing Data Listings
+- object identifiers for tables/columns/share names must be upper case and use only alphanumeric characters.
+- a share used in direct share can be added to a listing
+- share owner can attach the share to a listing
+- a share can only be attached to one listing, not more
+
+For free listings, you have an option to pre-associate a share with the listing in a remote region. This allows consumers to get the share instantly without submitting a request. 
+
+For personalized listings, you can replicate data upon consumer's request.
 
 ### Configuring and Using Data Exchanges
+You invite members using their Snowflake account name or account URL.
 
 ### Requesting a New Data Exchange
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+contact Snowflake Support, provide requested fields. 
 
 

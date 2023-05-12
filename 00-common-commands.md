@@ -970,29 +970,3 @@ alter share <share_name> add accounts = <consumer_account_name> SHARE_RESTRICTIO
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
