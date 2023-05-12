@@ -951,6 +951,83 @@ grant override share restrictions on account to role sysadmin;
 use role sysadmin;
 alter share <share_name> add accounts = <consumer_account_name> SHARE_RESTRICTIONS=false;
 
+-- alerts ------------------------------------------------------------
+use role accountadmin;
+create role my_alert_role;
+grant execute alert on account to role my_alert_role;
+grant role my_alert_role to user my_user;
+grant create alert on schema my_schema to role my_alert_role;
+grant usage on schema my_schema to role my_alert_role;
+grant usage on database my_database to role my_alert_role;
+grant usage on warehouse my_warehouse to role my_alert_role;
+create or replace alert myalert
+  warehouse = mywarehouse
+  schedule = '1 minute'
+  if( exists(
+    select gauge_value from gauge where gauge_value>200))
+  then
+    insert into gauge_value_exceeded_history values (current_timestamp());
+alter alert myalert resume;
+
+grant database role snowflake.alert_viewer to role alert_role;
+create or replace alert alert_new_rows -- sends an email if any new rows were added to my_table between the time [when the last successfully evaluated alert was scheduled] and the time [when the current alert has been scheduled]
+  warehouse = my_warehouse
+  schedule = '1 minute'
+  if (exists (
+      select *
+      from my_table
+      where row_timestamp between snowflake.alert.last_successful_scheduled_time()
+       and snowflake.alert.scheduled_time()
+  ))
+  then call system$send_email(...);
+
+alter alert myalert suspend;
+alter alert myalert resume;
+
+alter alert my_alert set warehouse = my_other_warehouse;
+alter alert my_alert set schedule = '2 minutes';
+alter alert my_alert modify condition exists (select gauge_value from gauge where gauge_value>300);
+alter alert my_alert modify action call my_procedure();
+
+drop alert myalert;
+
+show alerts; -- list the alerts that were created in the current schema
+desc alert myalert;
+
+select *
+from
+  table(
+    information_schema.alert_history(
+      scheduled_time_range_start => dateadd('hour',-1,current_timestamp())
+    )
+  )
+order by scheduled_time desc;
+
+-- email notifications ------------------------------------------------------------
+create notification integration my_email_int
+  type=email
+  enabled=true
+  allowed_recipients=('first.last@example.com','first2.last2@example.com');
+grant usage on integration my_email_int to role my_sp_owner_role;
+call system$send_email(
+    'my_email_int', -- notification integration name
+    'person1@example.com, person2@example.com',
+    'Email Alert: Task A has finished.',
+    'Task A has successfully finished.\nStart Time: 10:10:32\nEnd Time: 12:15:45\nTotal Records Processed: 115678'
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
