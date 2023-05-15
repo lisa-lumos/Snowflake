@@ -45,19 +45,51 @@ Snowflake supports the OAuth 2.0 protocol for authentication/authorization using
 
 ## Networking & Private connectivity
 ### Network Policies
+For managing network configurations to Snowflake. A network policy allow you to create 
+- an IP allowed list, 
+- an IP blocked list, if desired.
 
-### AWS VPC Interface Endpoints for Internal Stages
+A security admin or higher, or someone with global CREATE NETWORK POLICY privilege, can create a network policy to allow/deny access to a single IP address or a list of addresses.
 
-### Azure Private Endpoints for Internal Stages
+Currently support only IPv4 addresses.
 
-### AWS PrivateLink
+To activate a network policy, modify the account/user properties and assign the policy to the object. Only one network policy can be assigned to the account/one-user. Attaching a network policy to your account automatically replaces the existing network policy. 
 
-### Azure PrivateLink
+Security admin, or a higher role, or someone with the global ATTACH POLICY privilege can activate a network policy.
 
-### Google Cloud Private Service Connect
+A role that has been granted the global ATTACH POLICY privilege.
+
+Snowflake supports specifying ranges of IP addresses using CIDR notation. 
+
+It is possible to temporarily bypass a network policy for a set num of mins by configuring the user object property MINS_TO_BYPASS_NETWORK_POLICY. Contact Snowflake to set it. 
+
+When a network policy includes values in both the allowed and blocked IP address lists, blocked IP address list takes precedence.
+
+Do not add `0.0.0.0/0` to the blocked IP address list. This means "all IPv4 addresses on the local machine".
+
+Your current IP address must be included in the allowed IP addresses in the policy.
+
+Network policies can be managed through Snowsight, the Classic Console, or SQL. 
+
+Snowflake supports replication and failover/failback for network policies. 
+
+### AWS VPC Interface Endpoints for Internal Stages (business critical edition +)
+Connect to Snowflake internal stages via AWS VPC Interface Endpoints.
+
+### Azure Private Endpoints for Internal Stages (business critical edition +)
+Connect to Snowflake internal stages via Microsoft Azure Private Endpoints.
+
+### AWS PrivateLink (business critical edition +)
+Configure AWS PrivateLink to directly connect Snowflake to one or more AWS VPCs. 
+
+### Azure PrivateLink (business critical edition +)
+Configure Azure Private Link to connect your Azure VNet to the Snowflake VNet in Azure.
+
+### Google Cloud Private Service Connect (business critical edition +)
+Configure Google Cloud Private Service Connect to connect your Google Cloud VPC network subnet to your Snowflake account hosted on GCP without traversing the public Internet.
 
 ## Administration & Authorization
-### Sessions and Session Policies
+### Sessions and Session Policies (Enterprise edition +)
 
 ### SCIM
 
@@ -66,16 +98,6 @@ Snowflake supports the OAuth 2.0 protocol for authentication/authorization using
 ### End-to-End Encryption
 
 ### Encryption Key Management
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1016,9 +1016,9 @@ call system$send_email(
     'Task A has successfully finished.\nStart Time: 10:10:32\nEnd Time: 12:15:45\nTotal Records Processed: 115678'
 );
 
-
-
-
+-- network policies ------------------------------------------------------------
+show parameters like 'network_policy' in account;
+show parameters like 'network_policy' in user jsmith;
 
 
 
