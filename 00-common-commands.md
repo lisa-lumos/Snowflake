@@ -1020,15 +1020,46 @@ call system$send_email(
 show parameters like 'network_policy' in account;
 show parameters like 'network_policy' in user jsmith;
 
+-- session policies ------------------------------------------------------------
+select * -- return a row for each user assigned the session policy
+from table(
+  my_db.information_schema.policy_references(
+    policy_name => 'my_db.my_schema.session_policy_prod_1'
+  )
+);
 
+-- Access control ------------------------------------------------------------
+use role useradmin;
+create role db_hr_r;
+create role db_fin_r;
+create role db_fin_rw;
+create role accountant;
+create role analyst;
+use role securityadmin;
+-- grant read-only permissions on database hr to db_hr_r role.
+grant usage on database hr to role db_hr_r;
+grant usage on all schemas in database hr to role db_hr_r;
+grant select on all tables in database hr to role db_hr_r;
+-- grant read-only permissions on database fin to db_fin_r role.
+grant usage on database fin to role db_fin_r;
+grant usage on all schemas in database fin to role db_fin_r;
+grant select on all tables in database fin to role db_fin_r;
+-- grant read-write permissions on database fin to db_fin_rw role.
+grant usage on database fin to role db_fin_rw;
+grant usage on all schemas in database fin to role db_fin_rw;
+grant select,insert,update,delete on all tables in database fin to role db_fin_rw;
+grant role db_fin_rw to role accountant;
+grant role db_hr_r to role analyst;
+grant role db_fin_r to role analyst;
+grant role accountant,analyst to role sysadmin;
+grant role accountant to user user1;
+grant role analyst to user user2;
 
-
-
-
-
-
-
-
+grant select on future tables in schema s1 to role r1;
+grant select on future tables in schema s1 to role r2;
+grant select on all tables in schema s1 to role r2;
+revoke select on future tables in schema s1 from role r1;
+revoke select on all tables in schema s1 from role r1;
 
 
 
