@@ -192,8 +192,7 @@ Only the user who executed a query can access the query results - other users ca
 A cloned object is considered a new object in Snowflake. Any privileges granted on the source object do not transfer to the cloned object. However, a cloned container object (database/schema) retains any privileges granted on the objects contained in the source object. Eg, a cloned schema retains any privileges granted on the tables, views, UDFs, and other objects in the source schema.
 
 ### Access Control Privileges
-
-
+"https://docs.snowflake.com/en/user-guide/security-access-control-privileges". 
 
 ### Access Control Configuring
 
