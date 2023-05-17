@@ -1061,6 +1061,34 @@ grant select on all tables in schema s1 to role r2;
 revoke select on future tables in schema s1 from role r1;
 revoke select on all tables in schema s1 from role r1;
 
+-- view granted privileges
+show grants on schema database_a.schema_1;
+show grants to role r1;
+
+-- enabling non-account admins to monitor usage & billing history
+grant monitor usage on account to role custom;
+grant imported privileges on database snowflake to role custom;
+
+-- client side encryption ------------------------------------------------------------
+create stage encrypted_customer_stage -- stage with master key
+url='s3://customer-bucket/data/'
+credentials=(aws_key_id='ABCDEFGH' aws_secret_key='12345678')
+encryption=(master_key='eSxX...=');
+create table users (id bigint, name varchar(500), purchases int);
+copy into users from @encrypted_customer_stage/users; -- load
+create table most_purchases as select * from users order by purchases desc limit 10;
+copy into @encrypted_customer_stage/most_purchases from most_purchases; -- unload
+-- encryption key ------------------------------------------------------------
+alter account set periodic_data_rekeying = true;
+
+
+
+
+
+
+
+
+
 
 
 

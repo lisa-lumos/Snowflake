@@ -195,29 +195,58 @@ A cloned object is considered a new object in Snowflake. Any privileges granted 
 "https://docs.snowflake.com/en/user-guide/security-access-control-privileges". 
 
 ### Access Control Configuring
+Grants of privileges on a source object (i.e. database) are not copied to its clones, but privilege grants on all child objects (i.e. tables in the database) are copied to the clones.
 
+CREATE/ALTER SCHEMA statement with the WITH MANAGED ACCESS keywords will turn the schema into a managed access schema.
 
 ### End-to-End Encryption
+End-to-end encryption (E2EE) is a method to secure data that prevents 3rd parties from reading data while at-rest or in transit to and from Snowflake, and to minimize the attack surface.
+
+For data loading: 
+- For an external stage, the user can optionally encrypt the data files using client-side encryption, which Snowflake recommend. But if the data is not encrypted, Snowflake immediately encrypts the data when it is loaded into a table.
+- For an internal stage, data files are automatically encrypted by the Snowflake client on the user's local machine, before being transmitted to the internal stage.
+
+For data unloading, results are optionally encrypted using client-side encryption for external stage (then user downloads data files and decrypts it on the client side), and are automatically encrypted for internal stage.
+
+Client-side encryption: a client encrypts data before copying it into a cloud storage staging area.
+
+The client-side encryption protocol works as follows:
+- The customer creates a "secret master key", which is shared with Snowflake.
+- The client generates a "random encryption key" and encrypts the file before uploading it into cloud storage. The random encryption key is encrypted with the customer's master key, and becomes the "encrypted random key".
+- Both the encrypted file and the "encrypted random key" are uploaded to the cloud storage service. The "encrypted random key" is stored with the file's metadata.
+
+When downloading data, the client downloads both the encrypted file and the encrypted random key. The client decrypts the encrypted random key using the customer's master key. Next, the client decrypts the encrypted file using the now decrypted random key. This encryption and decryption happens on the client side.
+
+At no time does the cloud storage service, or any other 3rd party, see the data in the clear. Customers may upload client-side encrypted data using any client or tool that supports client-side encryption.
+
+When you create a stage with a master key associated to it, the master key is transmitted over HTTPS to Snowflake and is stored encrypted in metadata storage. A benefit of named stage objects is that they can be granted to other users without revealing access credentials or client-side encryption keys to those users. 
 
 ### Encryption Key Management
+Snowflake manages data encryption keys automatically to protect customer data. This management is transparent for customers.
 
+Customers can use the key management service in the cloud platform that hosts their Snowflake account to maintain their own additional encryption key. When enabled, the combination of a Snowflake-maintained key and a customer-managed key creates a composite master key to protect the Snowflake data. This is called `Tri-Secret Secure` (for Business Critical Edition +).
 
+Snowflake uses AES 256-bit encryption, with a hierarchical key model rooted in a `hardware security module`. Keys are automatically rotated every 30 days (new key encrypts new data files), and data can be automatically re-encrypted (rekeyed) on a regular basis (rekeying needs Enterprise Edition and +). 
 
+The hierarchy is composed of several layers of keys, each higher layer of keys (parent keys) encrypts the layer below (child keys). In security terminology, a parent key encrypting all child keys is known as `wrapping`.
 
+Snowflake's hierarchical key model consists of four levels of keys:
+- The root key
+- Account master keys
+- Table master keys
+- File keys
 
+In a multi-tenant cloud service like Snowflake, the hierarchical key model isolates every account with the use of separate account master keys. In addition to the access control model, the hierarchical key model provides another layer of account isolation. 
 
+If periodic rekeying is enabled, when the retired encryption key for a table is older than one year, Snowflake automatically creates a new encryption key and re-encrypts all data previously protected by the retired key using the new key. The new key is used to decrypt the table data going forward. The retired keys can then be destroyed. 
 
+Snowflake rekeys data files online, in the background, without any impact to currently running customer workloads. Data that is being rekeyed is always available to you.
 
+Snowflake customers are charged with additional storage for Fail-safe protection of data files that were rekeyed. For these files, 7 days of Fail-safe protection is charged. Eg, the data files with the old key on Amazon S3 are already protected by Fail-safe, and the data files with the new key on Amazon S3 are also added to Fail-safe, leading to a second charge, but only for the 7-day period.
 
+Snowflake does not support key rotation for customer-managed keys and does not recommend implementing an automatic key rotation policy on the customer-managed key.
 
-
-
-
-
-
-
-
-
+If the customer-managed key in the composite master key hierarchy is revoked, your data can no longer be decrypted by Snowflake, providing a level of security and control above Snowflake's standard encryption. 
 
 
 
