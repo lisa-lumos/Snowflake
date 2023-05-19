@@ -1,20 +1,55 @@
 # 12. Data governance
-
 ## Data sensitivity & Access visibility
+### Object Tagging (Enterprise Edition +)
+Tags enable data stewards to monitor sensitive data. A tag is a schema-level object that can be assigned to another Snowflake object.
 
-### Object Tagging
+A tag is a schema-level object that can be assigned to other Snowflake objects. A single tag can be assigned to different object types at the same time (e.g. warehouse and table simultaneously). At the time of assignment, the tag string value can be duplicated or remain unique. 
+
+For example, multiple tables can be assigned the cost_center tag and the tag can always have the string value be sales. Alternatively, the string value could be different (e.g. engineering, marketing, finance). After defining the tags and assigning the tags to Snowflake objects, tags can be queried to monitor usage on the objects. 
+
+Tags can be assigned to tables, views, and columns, setting a tag and then querying the tag enables the discovery of database objects and columns that contain sensitive information. 
+
+Assigning tags to warehouses enables accurate resource usage monitoring. Querying tags on resources allows for easy resource grouping by cost center or other organization units. The tag can also facilitate analyzing short-term business activities, such as projects, to provide a more granular insight into what, when, and how resources were used.
+
+The string value for each tag can be up to 256 characters, with the option to specify allowed values for a tag.
+
+Snowflake allows max 50 unique tags to be set on a single object directly. If the object is a table/view, additional 50 tags are allowed to set on its columns. 
+
+Dropped tag can be undropped within 1 day. 
+
+Tag inheritance: if a tag is applied to a table, the tag also applies to the columns in that table - also called `tag lineage`. Since tags are inherited, applying the tag to objects higher in the securable objects hierarchy results in the tag being applied to all child objects. You can override an inherited tag on a given object. For example, if a table column inherits the tag named cost_center with a string value called sales, the tag can be updated with a more specific tag string value such as sales_na, to specify the North America sales cost center. Additionally, a new tag can be applied to the table column.
+
+Tags can get replicated. 
+
+The max num of possible string values (ALLOWED_VALUES) for a single tag is 50.
+
+A masking policy directly assigned to a column takes precedence over a tag-based masking policy.
+
+With CREATE TABLE ... LIKE, tags assigned to the source table are assigned to the target table.
+
+Tag attached to the source object are cloned to the cloned objects. Tag objects that lives inside a container will also be cloned if the container got cloned. 
+
+Snowflake supports different permissions to create and set a tag on an object:
+1. centralized approach - tag_admin create tags, and apply tags
+2. hybrid approach - tag_admin create tags and assign other roles to apply tags
 
 ### Data Classification
 
-## Data access policies
 
+
+## Data access policies
 ### Masking Policies
+
+
 
 ### Row Access Policies
 
-## Data lineage & Dependencies
 
+
+## Data lineage & Dependencies
 ### Access History
+
+
 
 ### Object Dependencies
 

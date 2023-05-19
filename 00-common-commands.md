@@ -1078,8 +1078,91 @@ create table users (id bigint, name varchar(500), purchases int);
 copy into users from @encrypted_customer_stage/users; -- load
 create table most_purchases as select * from users order by purchases desc limit 10;
 copy into @encrypted_customer_stage/most_purchases from most_purchases; -- unload
+
 -- encryption key ------------------------------------------------------------
 alter account set periodic_data_rekeying = true;
+
+-- tag ------------------------------------------------------------
+create tag cost_center
+  allowed_values 'finance', 'engineering';
+select get_ddl('tag', 'cost_center');
+alter tag cost_center
+  add allowed_values 'marketing';
+alter tag cost_center
+  drop allowed_values 'engineering';
+select system$get_tag_allowed_values('governance.tags.cost_center');
+
+use role useradmin;
+create role tag_admin;
+use role accountadmin;
+grant create tag on schema mydb.mysch to role tag_admin;
+grant apply tag on account to role tag_admin;
+use role useradmin;
+grant role tag_admin to user jsmith;
+use role tag_admin;
+use schema mydb.mysch;
+create tag cost_center;
+use role tag_admin;
+create warehouse mywarehouse with tag (cost_center = 'sales');
+use role tag_admin;
+alter warehouse wh1 set tag cost_center = 'sales';
+alter table hr.tables.empl_info
+  modify column job_title
+  set tag visibility = 'public';
+
+select * from snowflake.account_usage.tags
+order by tag_name;
+select system$get_tag('cost_center', 'my_table', 'table');
+
+select * -- account level
+from table(
+  snowflake.account_usage.tag_references_with_lineage(
+    'my_db.my_schema.cost_center'
+  )
+);
+select * from snowflake.account_usage.tag_references -- account level
+order by tag_name, domain, object_id;
+select * -- database level
+from table(
+  my_db.information_schema.tag_references(
+    'my_table',
+    'table'
+  )
+);
+select * -- database level
+from table(
+  information_schema.tag_references_all_columns(
+    'my_table',
+    'table'
+  )
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
