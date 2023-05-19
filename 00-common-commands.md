@@ -1137,29 +1137,96 @@ from table(
   )
 );
 
+-- data classfication
+select system$get_tag_allowed_values('snowflake.core.semantic_category');
+select system$get_tag_allowed_values('snowflake.core.privacy_category');
+select extract_semantic_categories('hr_data'); -- returns variant in JSON
+select -- convert result to a table
+    f.key::varchar as column_name,
+    f.value:"privacy_category"::varchar as privacy_category,  
+    f.value:"semantic_category"::varchar as semantic_category,
+    f.value:"extra_info":"probability"::number(10,2) as probability,
+    f.value:"extra_info":"alternates"::variant as alternates
+  from
+  table(flatten(extract_semantic_categories('hr_data')::variant)) as f;
 
+use role accountadmin;
+grant database role snowflake.governance_admin to role data_engineer;
+grant apply tag on account to role data_engineer;
+use role data_engineer;
+alter table hr.tables.empl_info
+  modify column email
+  set tag snowflake.core.semantic_category = 'email';
 
+select * from snowflake.account_usage.tag_references
+    where tag_name = 'privacy_category'
+    order by object_database, object_schema, object_name, column_name;
+select * from
+  table(
+    my_db.information_schema.tag_references(
+      'my_db.my_schema.hr_data.fname',
+      'column'
+    )
+  )
+;
+select * from
+  table(
+    my_db.information_schema.tag_references_all_columns(
+      'my_db.my_schema.hr_data',
+      'table'
+    )
+  )
+;
+select system$get_tag(
+  'snowflake.core.privacy_category',
+  'hr_data.fname',
+  'COLUMN'
+  )
+;
 
+create table hr_data (
+    age integer,
+    email_address varchar,
+    fname varchar,
+    lname varchar
+);
+use role accountadmin;
+create role data_engineer;
+grant usage on database my_db to role data_engineer;
+grant usage on schema my_db.my_schema to role data_engineer;
+grant select, update on table my_db.my_schema.hr_data to role data_engineer;
+grant database role snowflake.governance_admin to role data_engineer;
+use role accountadmin;
+create role policy_admin;
+grant apply masking policy on account to role policy_admin;
+grant database role snowflake.governance_viewer to role policy_admin;
+use role data_engineer;
+select extract_semantic_categories('my_db.my_schema.hr_data');
+call associate_semantic_category_tags(
+   'my_db.my_schema.hr_data',
+    extract_semantic_categories('my_db.my_schema.hr_data')
+);
+use role data_engineer;
+alter table my_db.my_schema.hr_data
+  modify column fname
+  set tag snowflake.core.semantic_category='name';
+alter table my_db.my_schema.hr_data
+  modify column fname
+  set tag snowflake.core.privacy_category='identifier';
 
+use role policy_admin;
+select * from snowflake.account_usage.tag_references
+  where tag_name = 'privacy_category'
+  and tag_value = 'identifier';
+alter table my_db.my_schema.hr_data
+  modify column fname
+  set masking policy governance.policies.identifier_mask;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+use role securityadmin;
+select * from snowflake.account_usage.tag_references
+    where tag_name = 'privacy_category'
+    and tag_value= 'identifier';
+revoke select on table my_db.my_schema.hr_data from role analyst;
 
 
 

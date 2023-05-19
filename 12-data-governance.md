@@ -31,11 +31,22 @@ Tag attached to the source object are cloned to the cloned objects. Tag objects 
 
 Snowflake supports different permissions to create and set a tag on an object:
 1. centralized approach - tag_admin create tags, and apply tags
-2. hybrid approach - tag_admin create tags and assign other roles to apply tags
+2. hybrid approach - tag_admin create tags, and assign other roles to apply tags
 
-### Data Classification
+### Data Classification (Enterprise Edition +)
+Classification: a multi-step process that associates Snowflake-defined tags (system tags) to columns, by analyzing the cells and metadata for personal sensitive data, which can now be tracked by a data engineer, they then can protect it with a masking policy, or a row access policy.
 
+Classification simplifies to a three-step process: 
+1. analyze - The data engineer calls the EXTRACT_SEMANTIC_CATEGORIES(table_name) function, which analyzes table columns, and outputs the possible categories and their probabilities. 
+2. review - the data engineer manually reviews the category results, to ensure the results of the previous step make sense.
+3. apply - The data engineer manually set a system tag on a column, or call the ASSOCIATE_SEMANTIC_CATEGORY_TAGS SP. Then they can track the system tag, and protect the sensitive data with a masking policy, or a row access policy.
 
+You can classify table and view columns for all data types, except these 3:
+- GEOGRAPHY
+- BINARY
+- VARIANT
+
+The classification process requires compute resources. Recommend to use a larger warehouse size if the table has many many columns. 
 
 ## Data access policies
 ### Masking Policies
