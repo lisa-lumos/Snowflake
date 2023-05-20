@@ -1,6 +1,6 @@
 # 12. Data governance
 ## Data sensitivity & Access visibility
-### Object Tagging (Enterprise Edition +)
+### Object Tagging (Enterprise Edition &+)
 Tags enable data stewards to monitor sensitive data. A tag is a schema-level object that can be assigned to another Snowflake object.
 
 A tag is a schema-level object that can be assigned to other Snowflake objects. A single tag can be assigned to different object types at the same time (e.g. warehouse and table simultaneously). At the time of assignment, the tag string value can be duplicated or remain unique. 
@@ -33,7 +33,7 @@ Snowflake supports different permissions to create and set a tag on an object:
 1. centralized approach - tag_admin create tags, and apply tags
 2. hybrid approach - tag_admin create tags, and assign other roles to apply tags
 
-### Data Classification (Enterprise Edition +)
+### Data Classification (Enterprise Edition &+)
 Classification: a multi-step process that associates Snowflake-defined tags (system tags) to columns, by analyzing the cells and metadata for personal sensitive data, which can now be tracked by a data engineer, they then can protect it with a masking policy, or a row access policy.
 
 Classification simplifies to a three-step process: 
@@ -49,7 +49,7 @@ You can classify table and view columns for all data types, except these 3:
 The classification process requires compute resources. Recommend to use a larger warehouse size if the table has many many columns. 
 
 ## Data access policies
-### Masking Policies (Enterprise Edition +)
+### Masking Policies (Enterprise Edition &+)
 Column-level Security allows applying a masking policy to a table/view column. This includes:
 1. Dynamic Data Masking - uses masking policies to mask plain-text data in table and view columns at query time. 
 2. External Tokenization - allow accounts to tokenize data before loading it into Snowflake, and detokenize the data at query runtime. Uses masking policies with `external functions`.
@@ -100,12 +100,36 @@ The tag can support one masking policy for each supported Snowflake data type. F
 Assigning a tag-based masking policy to a table automatically applies the masking policy to any new table columns. This behavior is analogous to future grants.
 
 ### Row Access Policies
+Snowflake supports row-level security via row access policies, which determines which rows to return in the query result. The row access policy use simple row filtering allow one particular role to view rows, or include a mapping table in the policy definition to determine access to rows.
+
+A row access policy is a schema-level object, which determines whether a given row in a table/view can be viewed from Select or dml commands. It uses Conditional Expression Functions, and Context Functions, to determine which rows should be visible in a given context.
 
 
+Snowflake does not support attaching a row access policy to the stream object itself, but does apply the row access policy to the table when the stream accesses a table protected by a row access policy.
+
+IS_ROLE_IN_SESSION cannot be used with row access policies that contain mapping tables.
+
+When a database object has both a row access policy and masking policies, Snowflake evaluates the row access policy first.
+
+Simulate how a policy will work: call the POLICY_CONTEXT function. 
+
+You can create/apply an external table with a row access policy. Snowflake does not support using external tables as a "mapping table" in a row access policy.
+
+Snowflake supports adding a row access policy to a materialized view provided that a row access policy is not set on the underlying table or view.
+
+In the EXPLAIN command result and the query profile, Snowflake does not show users any row access policy information (i.e. policy name, policy signature, policy expression), nor the objects accessed by the policy.
+
+Row access policies and their assignments can be replicated using database replication and replication groups.
+
+You can also use a centralized, hybrid, or decentralized approach to manage row access policies. 
+
+You can replace existing row access policy subqueries with memoizable functions to increase query performance. (??? Need more investigation)
 
 ## Data lineage & Dependencies
-### Access History
+### Access History (Enterprise Edition &+)
+The user access history (Select or DML commands) can be found with the Account Usage ACCESS_HISTORY view.
 
+These records helps regulatory compliance auditing, and provide insights on popular (frequently accessed) tables/columns, since there is a direct link between the user, the query, the table or view, the column, and the data.
 
 
 ### Object Dependencies
@@ -121,7 +145,7 @@ Assigning a tag-based masking policy to a table automatically applies the maskin
 
 
 
-
+*** Note: below are from old docs. ***
 
 ## 🏷  RBAC best practices
 RBAC is a journey - as the company grows, existing RBAC might need modifications. 
@@ -231,33 +255,4 @@ A given table/view column cannot be specified in masking policy and row access p
 A row access policy is a schema-level object that determines whether a given row in a table or view can be viewed from the following types of statements: SELECT statements, and rows selected by UPDATE, DELETE, and MERGE statements. A single policy can be set on different tables and views at the same time.
 
 A row access policy condition can reference a mapping table to filter the query result set, however using mapping tables may result in decreased performance compared to the more simple example.``
-
-### Object Tagging
-
-
-### Tag-based Masking Policies
-
-
-### Data Classification
-
-
-### Access History
-
-
-### Object Dependencies
-
-
-
-## Managing Cost
-
-## Developing Apps
-
-
-
-
-
-
-
-
-
 

@@ -1294,12 +1294,87 @@ alter tag security unset masking policy ssn_mask;
 alter tag security set masking policy ssn_mask_2;
 alter tag security set masking policy ssn_mask_2 force;
 
+-- row access policy ------------------------------------------------------------
+create or replace row access policy rap_it
+as (empl_id varchar) returns boolean ->
+  'it_admin' = current_role()
+;
+
+create table sales ( -- table
+  customer   varchar,
+  product    varchar,
+  spend      decimal(20, 2),
+  sale_date  date,
+  region     varchar
+)
+with row access policy sales_policy on (region);
+create view sales_v -- view
+with row access policy sales_policy on (region)
+as select * from sales;
+alter table t1 add row access policy rap_t1 on (empl_id);
+alter view v1 add row access policy rap_v1 on (empl_id);
+
+CREATE TABLE sales ( -- table
+  customer   varchar,
+  product    varchar,
+  spend      decimal(20, 2),
+  sale_date  date,
+  region     varchar
+);
+CREATE TABLE security.salesmanagerregions ( -- mapping table (maps roles to their regions)
+  sales_manager varchar, -- role name
+  region        varchar  -- matching region for this role
+);
+use role securityadmin;
+create role mapping_role;
+grant select on table security.salesmanagerregions to role mapping_role;
+use role schema_owner_role;
+-- Users with the sales_executive_role role can view all rows.
+-- Users with the sales_manager roles can view rows based on the salesmanagerregions mapping table.
+create or replace row access policy security.sales_policy
+as (sales_region varchar) returns boolean ->
+  'sales_executive_role' = current_role()
+      or exists (
+            select 1 from salesmanagerregions
+              where sales_manager = current_role()
+                and region = sales_region
+          )
+;
+grant ownership on row access policy security.sales_policy to mapping_role;
+grant apply on row access policy security.sales_policy to role sales_analyst_role;
+use role securityadmin; -- applu policy on table
+alter table sales add row access policy security.sales_policy on (region);
+grant select on table sales to role sales_manager_role;
+use role sales_manager_role; -- test the policy
+select product, sum(spend)
+from sales
+where year(sale_date) = 2020
+group by product;
 
 
 
 
 
 
+
+
+select * from snowflake.account_usage.row_access_policies
+order by policy_name;
+select * from snowflake.account_usage.policy_references
+order by policy_name, ref_column_name;
+select *
+from table(
+  mydb.information_schema.policy_references(
+    policy_name=>'mydb.policies.rap1'
+  )
+);
+select *
+from table(
+  mydb.information_schema.policy_references(
+    ref_entity_name => 'mydb.tables.t1',
+    ref_entity_domain => 'table'
+  )
+);
 
 
 
