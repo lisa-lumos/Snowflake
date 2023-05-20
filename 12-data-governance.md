@@ -49,9 +49,55 @@ You can classify table and view columns for all data types, except these 3:
 The classification process requires compute resources. Recommend to use a larger warehouse size if the table has many many columns. 
 
 ## Data access policies
-### Masking Policies
+### Masking Policies (Enterprise Edition +)
+Column-level Security allows applying a masking policy to a table/view column. This includes:
+1. Dynamic Data Masking - uses masking policies to mask plain-text data in table and view columns at query time. 
+2. External Tokenization - allow accounts to tokenize data before loading it into Snowflake, and detokenize the data at query runtime. Uses masking policies with `external functions`.
 
+Masking policy is a schema-level object. 
 
+When users execute a query, the masking policy conditions determine whether the user see masked, partially masked, obfuscated, or tokenized data. Eg, masking policy admin can implement a masking policy such that analysts can only view the last 4 digits of a phone number and none of the social security number, while customer support representatives can view the entire phone number and social security number for customer verification use cases.
+
+You can apply a masking policy to one or more table/view columns.
+
+Snowflake supports nested masking policies, eg, a masking policy on a table, and a masking policy on a view that refers to that table.
+
+Since tokenization provides a unique value for a given set of characters, it is possible to group records by a tokenized value without revealing the sensitive information.
+
+For a table or view, the same column cannot be used in both masking policy and row access policy at the same time.
+
+Snowflake allows setting a masking policy on a materialized view column. 
+
+A masking policy cannot be set on a table column if a materialized view is already created from the underlying table.
+
+If a masking policy is set on an underlying table column and a materialized view is created from that table, the materialized view only contains columns that are not protected by a masking policy. 
+
+Hashing and cryptographic/checksum can be used in masking policies to mask sensitive data.
+
+You can apply the masking policy to the external table VALUE column using ALTER TABLE .. ALTER COLUMN on the external table. A policy cannot be set on any other external table column, including user-added virtual columns. If these columns need to be protected, create a view on the external table and apply a policy to the view column.
+
+Masking policies on columns in a table carry over to a stream on the same table.
+
+Cloning an individual policy object is not supported. Cloning a schema results in the cloning of all policies within the schema. A cloned table maps to the same policies as the source table.
+
+Executing a CREATE TABLE ... AS SELECT populates masked data in the new table. 
+
+You can use `count(distinct col_name)` on a view that refers to a table that uses this masked column. 
+
+A UDF can be passed into the masking policy conditions.
+
+Masking policies and their assignments can be replicated using database replication and replication groups.
+
+3 security approaches:
+1. centralized - security officer creates an applies policies
+2. hybrid - security officer creates policies, individual teams apply them
+3. decentralized - individual teams create and apply policies
+
+A `tag-based masking` policy combines the object tagging and masking policy, allows a masking policy to be set on a tag using an ALTER TAG command. 
+
+The tag can support one masking policy for each supported Snowflake data type. For example, if a tag already has a masking policy for the NUMBER data type, you cannot assign another masking policy with the NUMBER data type to the same tag.
+
+Assigning a tag-based masking policy to a table automatically applies the masking policy to any new table columns. This behavior is analogous to future grants.
 
 ### Row Access Policies
 

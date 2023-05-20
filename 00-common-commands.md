@@ -1228,15 +1228,71 @@ select * from snowflake.account_usage.tag_references
     and tag_value= 'identifier';
 revoke select on table my_db.my_schema.hr_data from role analyst;
 
+-- masking policy ------------------------------------------------------------
+-- dynamic data masking
+create masking policy employee_ssn_mask as (val string) returns string ->
+  case
+    when current_role() in ('payroll') then val
+    else '******'
+  end;
+create masking policy email_visibility as -- conditional masking, uses a conditional column that maps to visibitlity in the table
+(email varchar, visibility string) returns varchar ->
+  case
+    when current_role() = 'admin' then email
+    when visibility = 'public' then email
+    else '***masked***'
+  end;
 
+-- external tokenization
+create masking policy employee_ssn_detokenize as (val string) returns string ->
+  case
+    when current_role() in ('payroll') then ssn_unprotect(val) -- detokenize val
+    else val -- sees tokenized data
+  end;
 
+-- table
+create or replace table user_info (ssn string masking policy ssn_mask);
+alter table if exists user_info modify column ssn_number set masking policy ssn_mask;
+create or replace table user_info (email string masking policy email_visibility) using (email, visibility);
+alter table if exists user_info modify column email
+set masking policy email_visibility using (email, visibility);
+-- view
+create or replace view user_info_v (ssn masking policy ssn_mask_v) as select * from user_info;
+alter view user_info_v modify column ssn_number set masking policy ssn_mask_v;
+create or replace view user_info_v (email masking policy email_visibility) using (email, visibility) as select * from user_info;
+alter view user_info_v modify column email
+set masking policy email_visibility using (email, visibility);
 
+alter table t1 modify column c1 unset masking policy;
+alter table t1 modify column c1 set masking policy p2;
+alter table t1 modify column c1 set masking policy p2 force; -- auto replace old policy
+alter table t1 modify column c1 set masking policy policy1 using (c1, c3, c4) force;
 
+create or replace materialized view user_info_mv -- materialized view
+  (ssn_number masking policy ssn_mask)
+as select ssn_number from user_info;
 
+alter table t1 modify column value set masking policy p1; -- for an external tbl
 
+select * from snowflake.account_usage.masking_policies -- discover policies
+order by policy_name;
+select * from snowflake.account_usage.policy_references -- assignments
+order by policy_name, ref_column_name;
+select *
+from table(
+  my_db.information_schema.policy_references(
+    'my_table',
+    'table'
+  )
+);
 
-
-
+-- tag based masking
+use role securityadmin;
+grant apply masking policy on account to role tag_admin;
+alter tag security set masking policy ssn_mask;
+alter tag security unset masking policy ssn_mask;
+alter tag security set masking policy ssn_mask_2;
+alter tag security set masking policy ssn_mask_2 force;
 
 
 
