@@ -1391,9 +1391,11 @@ where
   and 
   referenced_object_domain = 'external table';
 
-
-
-
+-- parameter management ------------------------------------------------------------
+show parameters in account;
+alter account set date_output_format = 'dd/mm/yyyy';
+show parameters like 'date_output%' in account;
+alter account unset date_output_format;
 
 
 
