@@ -1397,34 +1397,56 @@ alter account set date_output_format = 'dd/mm/yyyy';
 show parameters like 'date_output%' in account;
 alter account unset date_output_format;
 
+-- user management ------------------------------------------------------------
+use role useradmin;
+create role policy_admin;
+use role securityadmin;
+grant usage on database security to role policy_admin;
+grant usage on schema security.policies to role policy_admin;
+grant create password policy on schema security.policies to role policy_admin;
+grant apply password policy on account to role policy_admin;
+grant apply password policy on user jsmith to role policy_admin; -- set policy for a user only
+use role securityadmin;
+grant role policy_admin to user jsmith;
+use role policy_admin;
+use schema security.policies;
+create password policy password_policy_prod_1
+    password_min_length = 12
+    password_max_length = 24
+    password_min_upper_case_chars = 2
+    password_min_lower_case_chars = 2
+    password_min_numeric_chars = 2
+    password_min_special_chars = 2
+    password_max_age_days = 999
+    password_max_retries = 3
+    password_lockout_time_mins = 30
+    comment = 'production account password policy';
+alter account set password policy security.policies.password_policy_prod_1;
+alter user jsmith set password policy security.policies.password_policy_user;
+alter account unset password policy;
+alter account set password policy security.policies.password_policy_prod_2;
+alter user jsmith set must_change_password = true;
 
+create user janesmith password = 'abc123' default_role = myrole must_change_password = true;
+grant role myrole to user janesmith;
+alter user janesmith set password = 'abc123' must_change_password = true;
+alter user janesmith reset password; -- generate a url to share to user
 
+alter user janesmith set disabled = true;
+alter user janesmith set disabled = false;
+alter user janesmith set mins_to_unlock= 0; -- reset min to unlock after 
 
+alter user janesmith set client_session_keep_alive = true;
+alter user janesmith set last_name = 'jones';
+alter user janesmith set default_warehouse = mywarehouse default_namespace = mydatabase.myschema default_role = myrole default_secondary_roles = ('all');
 
+desc user janeksmith;
+drop user janesmith;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- behavior change release management ------------------------------------------------------------
+select system$behavior_change_bundle_status('2021_02'); -- see whether enabled
+select system$enable_behavior_change_bundle('2021_02'); -- enable behavior change
+select system$disable_behavior_change_bundle('2021_02');
 
 
 
