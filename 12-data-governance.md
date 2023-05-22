@@ -130,10 +130,17 @@ You can replace existing row access policy subqueries with memoizable functions 
 The user access history (Select or DML commands) can be found with the Account Usage ACCESS_HISTORY view.
 
 These records helps regulatory compliance auditing, and provide insights on popular (frequently accessed) tables/columns, since there is a direct link between the user, the query, the table or view, the column, and the data.
-
+- query_id
+- query_start_time
+- user_name
+- direct_objects_accessed: read objects referred to directly in the query
+- base_objects_accessed: read objects referred by direct objects
+- objects_modified: modified objects in a query
+- object_modified_by_ddl
+- policies_referenced
 
 ### Object Dependencies
-
+Account Usage view OBJECT_DEPENDENCIES.
 
 
 

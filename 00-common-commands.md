@@ -1351,13 +1351,6 @@ from sales
 where year(sale_date) = 2020
 group by product;
 
-
-
-
-
-
-
-
 select * from snowflake.account_usage.row_access_policies
 order by policy_name;
 select * from snowflake.account_usage.policy_references
@@ -1376,14 +1369,65 @@ from table(
   )
 );
 
+-- access history ------------------------------------------------------------
+select user_name
+       , query_id
+       , query_start_time
+       , direct_objects_accessed
+       , base_objects_accessed
+from access_history -- in account usage schema
+order by 1, 3 desc
+;
+
+-- object dependencies ------------------------------------------------------------
+select 
+  referencing_object_name, 
+  referencing_object_domain, 
+  referenced_object_name, 
+  referenced_object_domain
+from snowflake.account_usage.object_dependencies
+where 
+  referenced_object_name = 'sales_staging_table' 
+  and 
+  referenced_object_domain = 'external table';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ```
-
-
-
-
-
-
-
 
