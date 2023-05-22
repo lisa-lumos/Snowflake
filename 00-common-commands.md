@@ -1448,6 +1448,72 @@ select system$behavior_change_bundle_status('2021_02'); -- see whether enabled
 select system$enable_behavior_change_bundle('2021_02'); -- enable behavior change
 select system$disable_behavior_change_bundle('2021_02');
 
+-- time travel ------------------------------------------------------------
+create table mytable(col1 number, col2 date) data_retention_time_in_days=90;
+alter table mytable set data_retention_time_in_days=30;
+
+select * from my_table at(timestamp => 'Fri, 01 May 2015 16:20:00 -0700'::timestamp_tz);
+select * from my_table at(offset => -60*5); -- in secs
+select * from my_table before(statement => '8e5d0ca9-005e-44e6-b858-a8f5b37c5726');
+
+create table restored_table clone my_table
+  at(timestamp => 'Sat, 09 May 2015 01:01:00 +0300'::timestamp_tz);
+create schema restored_schema clone my_schema at(offset => -3600);
+create database restored_db clone my_db
+  before(statement => '8e5d0ca9-005e-44e6-b858-a8f5b37c5726');
+
+-- list dropped objects
+show tables history like 'load%' in mytestdb.myschema;
+show schemas history in mytestdb;
+show databases history;
+
+undrop table mytable;
+undrop schema myschema;
+undrop database mydatabase;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
