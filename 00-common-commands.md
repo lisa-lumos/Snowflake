@@ -1471,22 +1471,50 @@ undrop table mytable;
 undrop schema myschema;
 undrop database mydatabase;
 
+-- performance optimization ------------------------------------------------------------
+select query_id, -- show to n longest-running queries
+  row_number() over(order by partitions_scanned desc) as query_id_int,
+  query_text,
+  total_elapsed_time/1000 as query_execution_time_seconds,
+  partitions_scanned,
+  partitions_total,
+from snowflake.account_usage.query_history q
+where warehouse_name = 'my_warehouse' and to_date(q.start_time) > dateadd(day,-1,to_date(current_timestamp()))
+  and total_elapsed_time > 0 --only get queries that actually used compute
+  and error_code is null
+  and partitions_scanned is not null
+order by total_elapsed_time desc
+limit 50;
 
+select to_date(start_time) as date, -- total warehouse load
+  warehouse_name,
+  sum(avg_running) as sum_running,
+  sum(avg_queued_load) as sum_queued
+from snowflake.account_usage.warehouse_load_history
+where to_date(start_time) >= dateadd(month,-1,current_timestamp())
+group by 1,2
+having sum(avg_queued_load) >0;
 
+select -- longest running tasks
+datediff(seconds, query_start_time,completed_time) as duration_seconds,*
+from snowflake.account_usage.task_history
+where state = 'succeeded'
+  and query_start_time >= dateadd (day, -1, current_timestamp())
+order by duration_seconds desc;
 
+-- change a wh to a snowpark-optimized wh
+alter warehouse suspend;
+alter warehouse my_analytics_wh set warehouse_type='snowpark-optimized';
 
+alter warehouse my_wh set warehouse_size = large;
 
+alter warehouse my_wh set
+  enable_query_acceleration = true
+  query_acceleration_max_scale_factor = 0;
 
+alter warehouse my_wh set auto_suspend = 600;
 
-
-
-
-
-
-
-
-
-
+alter warehouse my_wh set max_concurrency_level = 4;
 
 
 
