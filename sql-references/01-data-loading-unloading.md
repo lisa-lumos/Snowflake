@@ -200,31 +200,6 @@ copy into mytable validation_mode = 'return_2_rows';
 
 ```
 
-## copy_history()
-A table function inside information schema of any db. Show the data loading history (both bulk loading, and snowpipe) for a table within the past 14 days. 
-
-```sql
-copy_history(
-  table_name => '<string>'
-  , start_time => <constant_expr>
-  [, end_time => <constant_expr> ] 
-)
-```
-
-- For bulk data loads, this function returns results for a role that has MONITOR privilege on your Snowflake account, or a role with USAGE privilege on schema and database and any privilege on table.
-- For Snowpipe data loads, you also need usage on db/schema that has the pipe. 
-
-Example:
-```sql
-select *
-from table(
-  information_schema.copy_history(
-    table_name=>'mytable', 
-    start_time=> dateadd(hours, -1, current_timestamp())
-  )
-);
-```
-
 ## create external table
 When queried, an external table reads data from a set of files in an external stage and outputs the data in a single VARIANT column.
 
@@ -367,30 +342,6 @@ desc stage mystage;
 ```
 
 To post-process the output of this command, you can use the RESULT_SCAN function, which treats the output as a table that can be queried.
-
-## validate_pipe_load()
-Validate data files processed by Snowpipe within a time range. Returns details about any errors encountered during an attempted data load into Snowflake tables. 
-This function returns pipe activity within the last 14 days.
-
-```sql
-validate_pipe_load(
-  pipe_name => '<string>'
-  , start_time => <constant_expr>
-  [, end_time => <constant_expr> ] 
-)
-```
-
-If Snowpipe encountered no errors while processing data files within the specified time range, the function returns no results.
-
-Example:
-```sql
-select * from table(
-  validate_pipe_load(
-    pipe_name=>'my_db.public.mypipe',
-    start_time=>dateadd(hour, -1, current_timestamp())
-  )
-);
-```
 
 
 

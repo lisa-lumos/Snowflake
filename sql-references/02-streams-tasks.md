@@ -182,23 +182,18 @@ create task my_copy_task
 as
   call my_unload_sp();
 
-
-
-
-
-
-
-
-
 ```
 
+## show streams
+Lists the streams that you have access privileges. Can list streams for the current/specified db/schema, or across your entire account.
 
+Does not require a running warehouse to execute.
 
+To post-process the output of this command, you can use the RESULT_SCAN function. 
 
-
-
-
-
+```sql
+show streams like 'line%' in tpch.public;
+```
 
 
 
