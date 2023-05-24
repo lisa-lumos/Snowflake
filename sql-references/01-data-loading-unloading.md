@@ -1,6 +1,6 @@
 # 1. Data Loading & Unloading
 
-## COPY INTO table
+## copy into table
 Standard data load: 
 ```sql
 copy into 
@@ -200,40 +200,197 @@ copy into mytable validation_mode = 'return_2_rows';
 
 ```
 
+## copy_history()
+A table function inside information schema of any db. Show the data loading history (both bulk loading, and snowpipe) for a table within the past 14 days. 
 
+```sql
+copy_history(
+  table_name => '<string>'
+  , start_time => <constant_expr>
+  [, end_time => <constant_expr> ] 
+)
+```
 
+- For bulk data loads, this function returns results for a role that has MONITOR privilege on your Snowflake account, or a role with USAGE privilege on schema and database and any privilege on table.
+- For Snowpipe data loads, you also need usage on db/schema that has the pipe. 
 
+Example:
+```sql
+select *
+from table(
+  information_schema.copy_history(
+    table_name=>'mytable', 
+    start_time=> dateadd(hours, -1, current_timestamp())
+  )
+);
+```
 
+## create external table
+When queried, an external table reads data from a set of files in an external stage and outputs the data in a single VARIANT column.
 
+For partitions computed from expressions: 
+```sql
+create [ or replace ] external table [if not exists]
+  <table_name> (
+    [<part_col_name> <col_type> as <part_expr> ] [inlineconstraint], 
+    ... 
+  )
+cloudproviderparams -- notification integration
+[partition by (<part_col_name>, ... )] 
+location = externalstage
+[refresh_on_create =  true | false] -- default: true
+[auto_refresh = true | false] -- default: true
+[pattern = '<regex_pattern>']
+file_format = ( 
+  format_name = '<file_format_name>' | 
+  type = { csv | json | avro | orc | parquet } [formattypeoptions] 
+)
+[aws_sns_topic = '<string>'] -- for auto-refresh
+[copy grants] -- when recreate the table, copy original grants
+[row access policy <policy_name> on (value) ]
+[tag (<tag_name> = '<tag_value>', ...) ]
+[comment = '<string_literal>' ]
+```
 
+The external table does not inherit the file format in the stage definition. You must explicitly specify any file format options for the external table using the FILE_FORMAT parameter.
 
+Refreshing the external table metadata synchronizes the metadata with the current list of data files in the specified stage path. If the specified location contains close to 1 million files or more, we recommend that you set REFRESH_ON_CREATE = FALSE. After creating the external table, refresh the metadata incrementally by executing ALTER EXTERNAL TABLE ... REFRESH statements that specify subpaths in the location (i.e. subsets of files to include in the refresh) until the metadata includes all of the files in the location.
 
+AUTO_REFRESH Specifies whether Snowflake enable automatic refreshes of the external table metadata when new or updated data files are available in the named external stage specified in the LOCATION = .... You must configure an event notification for your storage location to notify Snowflake when new or updated data is available to read into the external table metadata.
 
+PARTITION_TYPE = USER_SPECIFIED Defines the partition type for the external table as user-defined. The owner of the external table must add partitions to the external metadata manually by executing ALTER EXTERNAL TABLE ... ADD PARTITION statements.
 
+External tables support external stages only; internal stages are not supported.
 
+External tables include the following metadata column:
+- METADATA$FILENAME: Name of each staged data file included in the external table. Includes the path to the data file in the stage.
+- METADATA$FILE_ROW_NUMBER: Row number for each record in the staged data file.
 
+The following are not supported for external tables:
+- Clustering keys
+- Cloning
+- Data in XML format
 
+Time Travel is not supported for external tables.
 
+You cannot add a masking policy to an external table column while creating the external table because a masking policy cannot be attached to a virtual column.
 
+You can add a row access policy to an external table while creating the external table.
 
+```sql
+-- add partitions automatically
+create stage s1 url='s3://mybucket/files/logs/' ...;
+select metadata$filename from @s1/;
+create external table et1(
+  date_part date as 
+    to_date(
+      split_part(metadata$filename, '/', 3)
+      || '/' || split_part(metadata$filename, '/', 4)
+      || '/' || split_part(metadata$filename, '/', 5), 'yyyy/mm/dd'
+    ),
+  timestamp bigint as (value:timestamp::bigint),
+  col2 varchar as (value:col2::varchar))
+partition by (date_part)
+location=@s1/logs/
+auto_refresh = true
+file_format = (type = parquet)
+aws_sns_topic = 'arn:aws:sns:us-west-2:001234567890:s3_mybucket'
+;
+alter external table et1 refresh;
+select timestamp, col2 from et1 where date_part = to_date('08/05/2018');
 
+-- add partitions manually
+create stage s1 url='s3://mybucket/files/logs/' ...;
+create external table et2(
+  col1 date as (parse_json(metadata$external_table_partition):col1::date),
+  col2 varchar as (parse_json(metadata$external_table_partition):col2::varchar),
+  col3 number as (parse_json(metadata$external_table_partition):col3::number))
+partition by (col1,col2,col3)
+location=@s2/logs/
+partition_type = user_specified
+file_format = (type = parquet)
+;
+alter external table et2 add partition(col1='2022-01-24', col2='a', col3='12') location '2022/01';
+select col1, col2, col3 from et1 where col1 = to_date('2022-01-24') and col2 = 'a' order by metadata$file_row_number;
 
+create materialized view 
+  et1_mv -- materialized view on a external table
+as
+  select col2 from et1;
 
+create external table mytable -- detect col definitions
+using template (
+  select 
+    array_agg(object_construct(*))
+  from table(
+    infer_schema(
+      location=>'@mystage',
+      file_format=>'my_parquet_format'
+    )
+  )
+)
+location=@mystage
+file_format=my_parquet_format
+auto_refresh=false;
+```
 
+## create file format
+```sql
+CREATE [OR REPLACE] FILE FORMAT [IF NOT EXISTS] 
+  <name>
+TYPE = CSV | JSON | AVRO | ORC | PARQUET | XML [formatTypeOptions]
+[COMMENT = '<string_literal>']
+```
 
+Examples:
+```sql
+create or replace file format my_csv_format
+type = csv
+field_delimiter = '|'
+skip_header = 1
+null_if = ('NULL', 'null')
+empty_field_as_null = true
+compression = gzip;
 
+create or replace file format my_json_format
+type = json;
 
+create or replace file format my_parquet_format
+type = parquet
+compression = snappy;
+```
 
+## describe stage
 
+```sql
+desc stage mystage;
+```
 
+To post-process the output of this command, you can use the RESULT_SCAN function, which treats the output as a table that can be queried.
 
+## validate_pipe_load()
+Validate data files processed by Snowpipe within a time range. Returns details about any errors encountered during an attempted data load into Snowflake tables. 
+This function returns pipe activity within the last 14 days.
 
+```sql
+validate_pipe_load(
+  pipe_name => '<string>'
+  , start_time => <constant_expr>
+  [, end_time => <constant_expr> ] 
+)
+```
 
+If Snowpipe encountered no errors while processing data files within the specified time range, the function returns no results.
 
-
-
-
-
+Example:
+```sql
+select * from table(
+  validate_pipe_load(
+    pipe_name=>'my_db.public.mypipe',
+    start_time=>dateadd(hour, -1, current_timestamp())
+  )
+);
+```
 
 
 
