@@ -9,6 +9,8 @@ Many of these system functions have the prefix SYSTEM$, such as `select system$t
 ## system$clustering_information()
 Returns clustering information for a table, including average clustering depth, based on one or more columns.
 
+You can use this argument to return clustering information for any columns in the table, regardless of whether a clustering key is defined for the table. In other words, you can use this to help you decide what clustering to use in the future.
+
 ```sql
 select system$clustering_information('test2', '(col1, col3)');
 -- +--------------------------------------------------------------+
