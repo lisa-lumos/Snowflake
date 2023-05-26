@@ -8,13 +8,13 @@ Snowflake is a true SaaS offering. More specifically:
 - There is no software to install, configure, or manage.
 - Ongoing maintenance, management, upgrades, and tuning are handled by Snowflake.
 
-Snowflake’s architecture is a `hybrid` of both:
+Snowflake's architecture is a `hybrid` of both:
 - `traditional shared-disk architecture` - central data repository for persisted data that is accessible from all compute nodes; Have data management simplicity.  
 - `shared-nothing database architecture` - processes queries using massively parallel processing (MPP) compute clusters where each node stores a portion of the entire data set locally. Have performance and scale-out benefits. 
 
-Snowflake’s unique architecture consists of `three key layers`:
+Snowflake's unique architecture consists of `three key layers`:
 - Database Storage - internal optimized, compressed, columnar format. Snowflake manages all aspects of how this data is stored. 
-- Query Processing - performs query execution. Snowflake processes queries using “virtual warehouses” (MPP compute cluster composed of multiple compute nodes allocated by Snowflake from a cloud provider)
+- Query Processing - performs query execution. Snowflake processes queries using "virtual warehouses" (MPP compute cluster composed of multiple compute nodes allocated by Snowflake from a cloud provider)
 - Cloud Services - a collection of services that coordinate activities across Snowflake. Also runs on compute instances provisioned by Snowflake from the cloud provider. (Authentication, Infrastructure management, Metadata management, Query parsing and optimization, Access control)
 
 Snowflake supports multiple `ways of connecting to the service`:
@@ -34,7 +34,7 @@ Pricing: Differences in unit costs for credits and data storage are calculated b
 
 Data Loading: Snowflake supports loading data from files staged in Internal stages, Amazon S3, Azure blob, Google Cloud Storage, regardless of the cloud platform for your Snowflake account. Supports both `bulk data loading` and `continuous data loading (Snowpipe)`. Supports unloading data from tables into any of the above staging locations.
 
-HITRUST CSF Certification: Enhances Snowflake’s security posture in regulatory compliance and risk management. Applicable to Snowflake editions that are Business Critical (or higher). 
+HITRUST CSF Certification: Enhances Snowflake's security posture in regulatory compliance and risk management. Applicable to Snowflake editions that are Business Critical (or higher). 
 
 ## Supported Cloud Regions
 Each Snowflake account is hosted in a single region. If you wish to use Snowflake across multiple regions, you must maintain a Snowflake account in each of the desired regions. There are `differences` in unit costs for credits and data storage between regions.

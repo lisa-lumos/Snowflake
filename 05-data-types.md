@@ -1,7 +1,6 @@
 # 5. Data Types
-
 ## Binary data input and output
-3 supported binary encoding formats: hex (default), base64, and UTF-8.
+3 supported binary encoding formats: hex (default, base16), base64, and UTF-8.
 
 Two session parameters determines how binary values are passed in and out of Snowflake: BINARY_INPUT_FORMAT and BINARY_OUTPUT_FORMAT, the default val for both is 'hex'. 
 
@@ -48,13 +47,13 @@ JSON, Avro, ORC, Parquet, XML.
 Refer to chapter 0. 
 
 ### Considerations for VARIANT
-The VARIANT data type imposes a 16 MB size limit on individual rows. If the data exceeds 16 MB, enable the STRIP_OUTER_ARRAY file format option for the COPY INTO command to remove the outer array brackets and load the records inside into separate table rows. 
+The VARIANT data type imposes a `16 MB size limit` on individual rows. If the data exceeds 16 MB, enable the STRIP_OUTER_ARRAY file format option for the COPY INTO command to remove the outer array brackets and load the records inside into separate table rows. 
 
 To convert a VARIANT "null" value to SQL NULL, cast it as a string.
 
-To improve query performance, recommend to extract semi-structured data elements containing “null” values into relational columns before loading them. Or, if the “null” values in your files simply mean missing values, recommend setting the file format option STRIP_NULL_VALUES to TRUE when loading the semi-structured data files. 
+To improve query performance, recommend to extract semi-structured data elements containing "null" values into relational columns before loading them. Or, if the "null" values in your files simply mean missing values, recommend setting the file format option `STRIP_NULL_VALUES` to TRUE when loading the semi-structured data files. 
 
-When working with unfamiliar semi-structured data, you might not know the key names in an OBJECT. You can use the FLATTEN function with the RECURSIVE argument to return the list of distinct key names in all nested elements in an OBJECT. You can also use this to retrieve all keys and paths in an OBJECT.
+When working with unfamiliar semi-structured data, you might not know the key names in an OBJECT. You can use the `FLATTEN function with the RECURSIVE argument to return the list of distinct key names in all nested elements in an OBJECT`. You can also use this to retrieve all keys and paths in an OBJECT.
 
 ## Unstructured data
 ### Intro
@@ -68,16 +67,16 @@ Snowflake supports:
 Both external and internal stages support unstructured data.
 
 Types of URLs to access files: 
-- **Scoped URL**: encoded, temp access of 24 hrs, need role privileges. Good for custom apps that provides files to other accounts via a `share`, for download for ad hoc analysis
-- **File URL**: identifies permanent full path of the files, need role privileges. Good for custom apps with authorization token. Format: `https://<account_identifier>/api/files/<db_name>.<schema_name>.<stage_name>/<relative_path>`
-- **Pre-signed URL**: a https url for web browser, anyone can access, configurable expiration time. Good for BI tools to display the file contents. Need stages with server-side encryption, NOT client-side encryption (because other users need the encryption key to read the files). 
+- **Scoped URL**: encoded, `temp access of 24 hrs`, need role privileges. Good for custom apps that provides files to other accounts via a `share`, for download for ad hoc analysis
+- **File URL**: identifies `permanent full path` of the files, need role privileges. Good for custom apps with authorization token. Format: `https://<account_identifier>/api/files/<db_name>.<schema_name>.<stage_name>/<relative_path>`
+- **Pre-signed URL**: a https url for web browser, `anyone can access`, configurable expiration time. Good for BI tools to display the file contents. Need stages with server-side encryption, NOT client-side encryption (because other users need the encryption key to read the files). 
 
 ### Directory tables
 Directory tables store file-level metadata about the files in a stage. Roles with sufficient privileges can get file URLs & metadata from them.
 
 A directory table can be added explicitly to a stage at any time. It is an implicit object layered on a stage. 
 
-The metadata for a directory table can be refreshed manually or automatically using the event notification service for your cloud storage service. The overhead charge for event notification management appears as Snowpipe charges in your billing statement.
+The metadata for a directory table can be refreshed manually, or automatically using the event notification service for your cloud storage service. The overhead charge for event notification management appears as Snowpipe charges in your billing statement.
 
 Automatic refresh the metadata is not available for:
 - internal stages

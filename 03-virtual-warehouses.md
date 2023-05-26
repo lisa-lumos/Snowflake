@@ -8,7 +8,7 @@ Available in two types:
 ## Overview
 Warehouse has 10 sizes: xs, s, m, l, xl, 2xl, ..., 6xl. xs warehouse consumes 1 credit per hour, and the credit usage doubles with each size up. 
 
-For warehouses created using CREATE WAREHOUSE command, size is xs by default, as opposed to xl default for those created in the web UI. 
+For warehouses created using CREATE WAREHOUSE command, size is `xs by default`, as opposed to xl default for those created in the legacy web UI. 
 
 Snowflake utilizes per-second billing, with a 60-second minimum each time the warehouse starts. The total number of credits billed depends on how long the warehouse runs continuously.
 
@@ -30,8 +30,8 @@ With multi-cluster warehouses, Snowflake supports allocating statically/dynamica
 It can be created using sql or web UI. 
 
 Multi-cluster warehouses can have two modes: 
-- Maximized: max num of clusters = min num of clusters. Suitable for large numbers of concurrent user sessions/queries, and it not fluctuate much. 
-- Auto-scale: max num of clusters != min num of clusters. Can set scaling policy to standard (default, start new cluster to avoid any query queue, close cluster when checked for ~3 min its load can move to other running clusters) or economy (start new cluster only if new query has to wait > ~6 min in queue; close cluster when checked for ~6 min its load can move to other running clusters). 
+- Maximized: `max num of clusters = min num of clusters`. Suitable for large numbers of concurrent user sessions/queries, and it not fluctuate much. The whole cluster resume and suspend together, not one by one. 
+- Auto-scale: `max num of clusters != min num of clusters`. Can set scaling policy to `standard` (default, start new cluster to avoid any query queue, close cluster when checked for ~3 min its load can move to other running clusters) or `economy` (start new cluster only if new query has to wait > ~6 min in queue; close cluster when checked for ~6 min its load can move to other running clusters). 
 
 To set max/min num of cluster, start with auto-scale, and start with small nums, then adjust with loads over time.
 
@@ -60,7 +60,7 @@ To disable auto-suspend, explicitly select Never in the web UI, or specify 0 or 
 If wish to control costs or user access, disable auto-resume and manually resume the wh only when needed. 
 
 Scaling Up vs Scaling Out
-- Scale up by resizing a warehouse.
+- Scale up by resizing a warehouse
 - Scale out by adding clusters to a multi-cluster warehouse
 
 If you are using Snowflake Enterprise Edition or higher, all your wh should be configured as multi-cluster.
@@ -69,7 +69,7 @@ If you are using Snowflake Enterprise Edition or higher, all your wh should be c
 A Snowflake session can only have one current warehouse at a time, which can be specified/changed at any time with the USE WAREHOUSE command.
 
 ## Query acceleration service (starts from Enterprise Edition)
-Can be enabled for a warehouse. Can accelerate query or its sub-queries, by offloading parts of the work in parallel to serverless compute resources provided by the service. Reduces the impact of outlier queries. 
+`Can be enabled for a warehouse.` Can accelerate query or its sub-queries, by offloading parts of the work in parallel to serverless compute resources provided by the service. Reduces the impact of outlier queries. 
 
 To identify the queries that might benefit from this service
 - use the SYSTEM$ESTIMATE_QUERY_ACCELERATION function to check a specific query
@@ -99,7 +99,7 @@ This service's cost is billed as a serverless feature. Can be seen in
 - query_acceleration_history function 
 
 ## Monitoring load
-Query load char from the UI shows num of concurrent queries of a warehouse in the past 2 weeks. Viewer needs MONITOR privilege on the wh. 
+Query load chart from the UI shows num of concurrent queries of a warehouse in the past 2 weeks. Viewer needs MONITOR privilege on the wh. 
 
 In the query_history view, you can see wh performance metrics for different queries.
 

@@ -6,10 +6,10 @@ Database can have one or more schemas (logical groupings of db objects, such as 
 Snowflake do not limit the number of databases, schemas, or objects you can create.
 
 ## Table structures
-All data in Snowflake is stored in database tables. Permanent tables have time trave period of 0 or 1 (default) day for standard edition, and 0 to 90 days of time travel for enterprise edition and above. Fail-safe is always 7 days. 
+All data in Snowflake is stored in database tables. Permanent tables have time trave period of `0 or 1 (default) day for standard edition`, and `0 to 90 days of time travel for enterprise edition and above`. Fail-safe is always 7 days. 
 
 ### Micro-Partitions & Data Clustering
-Data in Snowflake tables is automatically divided into compressed micro-partitions, each contains 50-500 MB of data before compression. Each partition contains multiple rows of the table stored column by column (columnar), and metadata about these rows (value range of each cols, num of distinct vals, ...). 
+Data in Snowflake tables is automatically divided into compressed micro-partitions, each contains `50-500 MB` of data before compression. Each partition contains multiple rows of the table stored column by column (columnar), and metadata about these rows (value range of each cols, num of distinct vals, ...). 
 
 Data in a table is partitioned by the data insertion/load order. 
 
@@ -20,7 +20,7 @@ Benefits:
 - columnar format allows for efficient analytical queries
 - each column in a partition is compressed
 
-Clustering metadata for a table:
+Clustering metadata for a table contains:
 - num of partitions
 - num of partitions with overlapping vals
 - overlap depth of partitions (clustering depth)
@@ -30,15 +30,15 @@ Clustering depth can be use for:
 - decide whether a large table would benefit from a clustering key
 
 To view clustering info for a col in a table, use these system functions:
-- SYSTEM$CLUSTERING_DEPTH
-- SYSTEM$CLUSTERING_INFORMATION (including clustering depth)
+- `SYSTEM$CLUSTERING_DEPTH()`
+- `SYSTEM$CLUSTERING_INFORMATION()` (including clustering depth)
 
 ### Cluster Keys & Clustered Tables
 A clustering key for a table is some columns (or expressions) that are used to co-locate the data in the same micro-partitions. Useful for large tables who do not have ideal ordering. Queries benefit from clustering when the queries filter/sort on the clustering key.
 
 Enable clustering on a table/materialized view by specifying a clustering key for it. Snowflake then will automatically maintain it being clustered (by reclustering), which consumes serverless compute credits and storage costs (especially for time travel and fail-safe). 
 
-Cost-effective for tables that are queried frequently and updated infrequently.
+Cost-effective for tables that are queried frequently, and updated infrequently.
 
 Clustering is best for tables that satisfies all of this: 
 - contains TBs of data
@@ -68,7 +68,7 @@ To check whether automatic clustering is enabled:
 View cost by: 
 - Snowsight: admin -> usage
 - SQL: 
-  - AUTOMATIC_CLUSTERING_HISTORY table function
+  - AUTOMATIC_CLUSTERING_HISTORY() table function
   - AUTOMATIC_CLUSTERING_HISTORY View
 
 ## Temporary and Transient tables/stages
@@ -90,9 +90,9 @@ All tables created in a transient schema, as well as all schemas created in a tr
 ## External Tables
 The data in an external table is stored in files in an external stage. It stores metadata about the data files (filename, version identifier, ...), so you can query a file in an external stage as if it were inside a database. Can access data supported by COPY INTO statements.
 
-This metadata can be manually refreshed (charged as cloud services), or configured to auto-refresh using event notifications (cloud messaging) from your cloud service (within snowpipe charges). AUTO_REFRESH_REGISTRATION_HISTORY table function, EXTERNAL_TABLES View, etc shows history of metadata and credits consumption. 
+This metadata can be manually refreshed (charged as cloud services), or configured to auto-refresh using event notifications (cloud messaging) from your cloud service (within snowpipe charges). AUTO_REFRESH_REGISTRATION_HISTORY() table function, EXTERNAL_TABLES View, etc shows history of metadata and credits consumption. 
 
-External tables are read-only. Views/materialized views can be created based on them.
+`External tables are read-only. Views/materialized views can be created based on them.`
 
 All external tables include the following columns:
 - VALUE - A VARIANT col of one row in the external file; select * returns this col
@@ -110,7 +110,7 @@ Similar to tables, the query results for external tables persist for 24 hours, a
 Use case: in a S3 bucket, you have weather data of each city in a country that is uploaded daily into the bucket. But your customer has a manufacture business in city A, so they are only interested in visualizing the weather data of this city (only a subset of your massive data). 
 
 ## Search Optimization service (Enterprise edition and higher)
-Applies to a whole table or columns in a table. Can significantly improve the performance of certain types of queries that
+`Applies to a whole table or columns in a table.` Can significantly improve the performance of certain types of queries that
 - returns small num of distinct rows (with highly selective filters like equal to)
 - does substr and regex searches (like, etc)
 - uses variant, object, array fields with filters
@@ -136,7 +136,7 @@ If a table in the primary database has the SEARCH OPTIMIZATION property enabled,
 
 If a table has a high churn rate, enabling automatic clustering and configuring search optimization for the table can result in higher maintenance costs than if the table is just configured for search optimization.
 
-To estimate the cost of search optimization, use the SYSTEM$ESTIMATE_SEARCH_OPTIMIZATION_COSTS function.
+To estimate the cost of search optimization, use the `SYSTEM$ESTIMATE_SEARCH_OPTIMIZATION_COSTS()` function.
 
 ## Views
 A regular view is a named definition of a query, and can be recursive. Views can be used for combining, segregating, and protecting data (by granting privileges on a view, instead of on the underlying tables). Can be used for writing modular code and increase code re-use. 
@@ -181,7 +181,7 @@ Recommend batching DML operations on the base table to minimize costs.
 
 You can suspend a materialized view to defer maintenance costs. 
 
-You can create a materialized view on data shared to you. You pay for its charges. 
+`You can create a materialized view on data shared to you.` You pay for its charges. 
 
 You can share a materialized view. 
 
@@ -226,7 +226,7 @@ TABLE_STORAGE_METRICS view includes a breakdown of the physical storage (in byte
 
 Data files staged in Snowflake internal stages have no Time Travel and Fail-safe cost, but they have standard data storage costs. 
 
-Zero-copy clone is useful for creating instant backups that do not have any additional costs,until changes are made to the cloned object.
+Zero-copy clone is useful for creating instant backups that do not have any additional costs, until changes are made to the cloned object.
 
 High-churn dimension tables can be identified by calculating the ratio of FAILSAFE_BYTES divided by ACTIVE_BYTES in the TABLE_STORAGE_METRICS view. Any table with a large ratio is a high-churn table. 
 
