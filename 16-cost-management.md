@@ -161,35 +161,19 @@ To view whether a resource monitor is set for your account, use the web interfac
 
 A warehouse-level resource monitor can monitor, but cannot suspend, credit usage by Cloud Services.
 
-
 ## Attributing Cost
+Snowflake provides the following attribution strategies:
+- Object tagging: can provide granular attribution that allows you to assign the cost of using individual resources like a warehouse or database to a specific unit within the organization.
+- Executing queries: can attribute warehouse usage by role, user, or query, which is particularly helpful when multiple cost centers share the same warehouse.
 
-
+Using tags: an administrator creates a tag (e.g. cost_center), then defines a list of possible values of the tag (e.g. sales, finance). In this example, each cost center gets a unique tag value. The tag/value combination is then assigned to resources used by a cost center. As these resources consume credits, you can run reports grouped by the tag value. Because this tag value corresponds directly to a particular grouping within the organization, costs can be attributed accurately.
 
 ## Controlling Cost
+Carefully defining who can work with warehouses and what they can do with those warehouses helps control cost. 
 
+Centralizing the responsibility of creating and scaling warehouses to just a few members of your team is considered a best practice. You can create a dedicated role with permissions to create and modify all warehouses, and then grant that role to a limited number of users. This allows you to control your warehouse policies and prevent accidental cost overruns resulting from warehouses being created or upsized unexpectedly.
 
+To avoid the excess cost associated with a runaway query, you can set the STATEMENT_TIMEOUT_IN_SECONDS parameter to define the maximum amount of time a SQL statement can run before it is cancelled. The STATEMENT_TIMEOUT_IN_SECONDS parameter can be set for an entire account, a user, a session, or a specific warehouse so that you can carefully set time limits that match the expected run times for various workloads. 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+The parameter that controls the amount of time that a SQL statement stays in the queue is STATEMENT_QUEUED_TIMEOUT_IN_SECONDS. This parameter can be set for an entire account, a user, a session, or a specific warehouse. This parameter is set at the account level by default.
 
