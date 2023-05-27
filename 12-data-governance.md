@@ -3,17 +3,17 @@
 ### Object Tagging (Enterprise Edition &+)
 Tags enable data stewards to monitor sensitive data. A tag is a schema-level object that can be assigned to another Snowflake object.
 
-A tag is a schema-level object that can be assigned to other Snowflake objects. A single tag can be assigned to different object types at the same time (e.g. warehouse and table simultaneously). At the time of assignment, the tag string value can be duplicated or remain unique. 
+A single tag can be assigned to different object types at the same time (e.g. warehouse and table simultaneously). At the time of assignment, the tag string value can be duplicated or remain unique. 
 
-For example, multiple tables can be assigned the cost_center tag and the tag can always have the string value be sales. Alternatively, the string value could be different (e.g. engineering, marketing, finance). After defining the tags and assigning the tags to Snowflake objects, tags can be queried to monitor usage on the objects. 
+For example, multiple tables can be assigned the cost_center tag and the tag can always have the string value be sales. Alternatively, the string value could be different (e.g. engineering, marketing, finance). `After defining the tags and assigning the tags to Snowflake objects, tags can be queried to monitor usage on the objects. `
 
-Tags can be assigned to tables, views, and columns, setting a tag and then querying the tag enables the discovery of database objects and columns that contain sensitive information. 
+Tags can be assigned to tables/views/columns, setting a tag and then querying the tag enables the discovery of database objects and columns that contain sensitive information. 
 
-Assigning tags to warehouses enables accurate resource usage monitoring. Querying tags on resources allows for easy resource grouping by cost center or other organization units. The tag can also facilitate analyzing short-term business activities, such as projects, to provide a more granular insight into what, when, and how resources were used.
+Assigning tags to warehouses enables accurate resource usage monitoring. Querying tags on resources allows for easy resource grouping by cost center or other organization units. The tag can also facilitate analyzing short-term business activities, such as projects, to provide a more granular insight into what/when/how resources were used.
 
-The string value for each tag can be up to 256 characters, with the option to specify allowed values for a tag.
+`The string value for each tag can be up to 256 characters, with the option to specify allowed values for a tag.`
 
-Snowflake allows max 50 unique tags to be set on a single object directly. If the object is a table/view, additional 50 tags are allowed to set on its columns. 
+`Snowflake allows max 50 unique tags to be set on a single object directly.` If the object is a table/view, additional 50 tags are allowed to set on its columns. 
 
 Dropped tag can be undropped within 1 day. 
 
@@ -21,7 +21,7 @@ Tag inheritance: if a tag is applied to a table, the tag also applies to the col
 
 Tags can get replicated. 
 
-The max num of possible string values (ALLOWED_VALUES) for a single tag is 50.
+The max num in allowed string values (ALLOWED_VALUES) for a single tag is 50.
 
 A masking policy directly assigned to a column takes precedence over a tag-based masking policy.
 
@@ -37,7 +37,7 @@ Snowflake supports different permissions to create and set a tag on an object:
 Classification: a multi-step process that associates Snowflake-defined tags (system tags) to columns, by analyzing the cells and metadata for personal sensitive data, which can now be tracked by a data engineer, they then can protect it with a masking policy, or a row access policy.
 
 Classification simplifies to a three-step process: 
-1. analyze - The data engineer calls the EXTRACT_SEMANTIC_CATEGORIES(table_name) function, which analyzes table columns, and outputs the possible categories and their probabilities. 
+1. analyze - The data engineer calls the `EXTRACT_SEMANTIC_CATEGORIES(table_name)` function, which analyzes table columns, and outputs the possible categories and their probabilities. 
 2. review - the data engineer manually reviews the category results, to ensure the results of the previous step make sense.
 3. apply - The data engineer manually set a system tag on a column, or call the ASSOCIATE_SEMANTIC_CATEGORY_TAGS SP. Then they can track the system tag, and protect the sensitive data with a masking policy, or a row access policy.
 
@@ -50,7 +50,7 @@ The classification process requires compute resources. Recommend to use a larger
 
 ## Data access policies
 ### Masking Policies (Enterprise Edition &+)
-Column-level Security allows applying a masking policy to a table/view column. This includes:
+Column-level Security allows applying a masking policy to a table's/view's column. This includes:
 1. Dynamic Data Masking - uses masking policies to mask plain-text data in table and view columns at query time. 
 2. External Tokenization - allow accounts to tokenize data before loading it into Snowflake, and detokenize the data at query runtime. Uses masking policies with `external functions`.
 
@@ -64,17 +64,17 @@ Snowflake supports nested masking policies, eg, a masking policy on a table, and
 
 Since tokenization provides a unique value for a given set of characters, it is possible to group records by a tokenized value without revealing the sensitive information.
 
-For a table or view, the same column cannot be used in both masking policy and row access policy at the same time.
+For a table/view, the same column cannot be used in both [masking policy] and [row access policy] at the same time.
 
 Snowflake allows setting a masking policy on a materialized view column. 
 
 A masking policy cannot be set on a table column if a materialized view is already created from the underlying table.
 
-If a masking policy is set on an underlying table column and a materialized view is created from that table, the materialized view only contains columns that are not protected by a masking policy. 
+`If a masking policy is set on an underlying table column and a materialized view is created from that table, the materialized view only contains columns that are not protected by a masking policy. `
 
 Hashing and cryptographic/checksum can be used in masking policies to mask sensitive data.
 
-You can apply the masking policy to the external table VALUE column using ALTER TABLE .. ALTER COLUMN on the external table. A policy cannot be set on any other external table column, including user-added virtual columns. If these columns need to be protected, create a view on the external table and apply a policy to the view column.
+`You can apply the masking policy to the external table VALUE column using ALTER TABLE .. ALTER COLUMN on the external table.` `A policy cannot be set on any other external table column, including user-added virtual columns.` If these columns need to be protected, create a view on the external table and apply a policy to the view column.
 
 Masking policies on columns in a table carry over to a stream on the same table.
 
@@ -82,9 +82,9 @@ Cloning an individual policy object is not supported. Cloning a schema results i
 
 Executing a CREATE TABLE ... AS SELECT populates masked data in the new table. 
 
-You can use `count(distinct col_name)` on a view that refers to a table that uses this masked column. 
+You CAN use `count(distinct col_name)` on a view that refers to a table that uses this masked column. 
 
-A UDF can be passed into the masking policy conditions.
+`A UDF can be passed into the masking policy conditions.`
 
 Masking policies and their assignments can be replicated using database replication and replication groups.
 
@@ -111,11 +111,11 @@ IS_ROLE_IN_SESSION cannot be used with row access policies that contain mapping 
 
 When a database object has both a row access policy and masking policies, Snowflake evaluates the row access policy first.
 
-Simulate how a policy will work: call the POLICY_CONTEXT function. 
+Simulate how a policy will work: call the `POLICY_CONTEXT` function. 
 
 You can create/apply an external table with a row access policy. Snowflake does not support using external tables as a "mapping table" in a row access policy.
 
-Snowflake supports adding a row access policy to a materialized view provided that a row access policy is not set on the underlying table or view.
+Snowflake supports adding a row access policy to a materialized view provided that a row access policy is not set on its underlying table.
 
 In the EXPLAIN command result and the query profile, Snowflake does not show users any row access policy information (i.e. policy name, policy signature, policy expression), nor the objects accessed by the policy.
 
@@ -261,5 +261,5 @@ A given table/view column cannot be specified in masking policy and row access p
 
 A row access policy is a schema-level object that determines whether a given row in a table or view can be viewed from the following types of statements: SELECT statements, and rows selected by UPDATE, DELETE, and MERGE statements. A single policy can be set on different tables and views at the same time.
 
-A row access policy condition can reference a mapping table to filter the query result set, however using mapping tables may result in decreased performance compared to the more simple example.``
+A row access policy condition can reference a mapping table to filter the query result set, however using mapping tables may result in decreased performance compared to the more simple example.
 

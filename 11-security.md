@@ -37,7 +37,7 @@ MFA is enabled on a per-user basis; however, users are not automatically enrolle
 Snowflake strongly recommends that at least all users with the ACCOUNTADMIN role be required to use MFA.
 
 ### OAuth
-OAuth is an open standard protocol that allows users to grant access to their protected resources on one website to another website/application without sharing their credentials. It is commonly used for authorization and secure access to APIs.OAuth uses tokens (access tokens & refresh tokens) to provide secure and limited access to the protected resources. The access token allows the client application to make authorized requests to the resource server on behalf of the user.
+OAuth is an open standard protocol that allows users to grant access to their protected resources on one website to another website/application without sharing their credentials. It is commonly used for authorization and secure access to APIs. OAuth uses tokens (access tokens & refresh tokens) to provide secure and limited access to the protected resources. The access token allows the client application to make authorized requests to the resource server on behalf of the user.
 
 Snowflake supports the OAuth 2.0 protocol for authentication/authorization using one of these:
 - Snowflake OAuth
@@ -49,19 +49,17 @@ For managing network configurations to Snowflake. A network policy allow you to 
 - an IP allowed list, 
 - an IP blocked list, if desired.
 
-A security admin or higher, or someone with global CREATE NETWORK POLICY privilege, can create a network policy to allow/deny access to a single IP address or a list of addresses.
+`A security admin or higher, or someone with global CREATE NETWORK POLICY privilege, can create a network policy` to allow/deny access to a single IP address or a list of addresses.
 
 Currently support only IPv4 addresses.
 
 To activate a network policy, modify the account/user properties and assign the policy to the object. Only one network policy can be assigned to the account/one-user. Attaching a network policy to your account automatically replaces the existing network policy. 
 
-Security admin, or a higher role, or someone with the global ATTACH POLICY privilege can activate a network policy.
-
-A role that has been granted the global ATTACH POLICY privilege.
+`Security admin, or a higher role, or someone with the global ATTACH POLICY privilege can activate a network policy`.
 
 Snowflake supports specifying ranges of IP addresses using CIDR notation. 
 
-It is possible to temporarily bypass a network policy for a set num of mins by configuring the user object property MINS_TO_BYPASS_NETWORK_POLICY. Contact Snowflake to set it. 
+`It is possible to temporarily bypass a network policy for a set num of mins by configuring the user object property MINS_TO_BYPASS_NETWORK_POLICY. Contact Snowflake to set it. `
 
 When a network policy includes values in both the allowed and blocked IP address lists, blocked IP address list takes precedence.
 
@@ -101,13 +99,13 @@ The idle session timeout applies to:
 - Supported connectors and drivers.
 - Third-party clients that connect to Snowflake using a supported connector or driver.
 
-Snowflake recommends reusing existing sessions when possible and to close the connection to Snowflake when a session is no longer needed.
+Snowflake recommends reusing existing sessions when possible, and closing the connection to Snowflake when a session is no longer needed.
 
 In the GUI, Snowflake creates a new session every time a new worksheet is created, and the idle timeout for each worksheet is tracked separately. When a worksheet is closed, the user session for the worksheet ends. After the 4-hr time limit expires for any open worksheet, Snowflake logs the user out of the web interface.
 
 A session policy:
 - defines the idle session timeout period in minutes 
-- can override the default idle timeout value of 4 hrs.
+- can override `the default idle timeout value of 4 hrs`.
 
 The session policy can be set for an account/user. If a user is associated with both an account and user-level session policy, the user-level session policy takes precedence. 
 
@@ -117,7 +115,7 @@ The session policy can be set for an account/user. If a user is associated with 
 
 If a session policy is not set, Snowflake uses a default value of 4 hrs. The min configurable idle timeout value for a session policy is 5 mins. 
 
-If a client supports the CLIENT_SESSION_KEEP_ALIVE option and it is set to TRUE, the client preserves the Snowflake session indefinitely as long as the connection is active. Avoid using this option - it can result in many open sessions, and place a greater demand on resources, which can lead to a performance degradation.
+If a client supports the `CLIENT_SESSION_KEEP_ALIVE` option and it is set to TRUE, the client preserves the Snowflake session indefinitely as long as the connection is active. Avoid using this option - it can result in many open sessions, and place a greater demand on resources, which can lead to a performance degradation.
 
 ### SCIM
 SCIM is an open specification to help facilitate the automated management of user ids and groups (i.e. roles) in cloud applications using RESTful APIs. These APIs use common methods (e.g. GET, POST) with key-value pair attributes in JSON format.
@@ -129,7 +127,7 @@ Snowflake's access control combines aspects from both:
 
 Each securable object is owned by a single role, which by default is the role who created the object. 
 
-In a `regular schema`, the owner role has all privileges on the object by default, including the ability to grant/revoke privileges on the object to other roles. However, in a `managed access schema`, object owners lose the ability to make grant decisions. Only the schema owner or a role with the MANAGE GRANTS privilege can grant privileges on objects in the schema.
+In a `regular schema`, the owner role has all privileges on the object by default, including the ability to grant/revoke privileges on the object to other roles. However, in a `managed access schema`, object owners lose the ability to make grant decisions. Only the "schema owner or a role with the MANAGE GRANTS privilege" can grant privileges on objects in the schema.
 
 A role owner (the role that has the OWNERSHIP privilege on the role) does not inherit the privileges of the owned role. Privilege inheritance is only possible within a role hierarchy.
 
@@ -141,7 +139,7 @@ Types of Roles:
 
 System-Defined Roles:
 - ORGADMIN: create/view accounts, view usage info
-- ACCOUNTADMIN: root role in the system. Should be granted to a limited number of users in your account.
+- ACCOUNTADMIN: highest role in the system. Should be granted to a limited number of users in your account.
 - SECURITYADMIN: manage object grants globally, create/monitor/manage users & roles. 
 - USERADMIN: create/manage users and roles
 - SYSADMIN: create warehouses and database objects. Grant privileges on warehouses/databases/objects to other roles.
@@ -153,13 +151,13 @@ Role hierarchy diagram:
 
 <img src="images/system-role-hierarchy.png">
 
-Database roles that are granted to a share can be granted to other database roles, as well as account roles. If a database role is granted to a share, then no other database roles can be granted to that database role (db roles in a share has to be lowest in the tree, cannot have children in the tree). 
+Database roles that are granted to a share can be granted to other database roles, as well as account roles. If a database role is granted to a share, then no other database roles can be granted to that database role (db roles in a share has to be lowest in the tree, cannot have any children). 
 
 Every active user session has a current role (`primary role`). In addition, any number of `secondary roles` can be activated concurrently in a user session. A user can perform SQL actions on objects in a session using the aggregate privileges granted to the primary and secondary roles. Secondary roles are particularly useful for SQL operations such as cross-database joins that would otherwise require creating a parent role of the roles that have permissions to access the objects in each database.
 
-A database role can not be a primary/secondary role. Grant the database role to an account role to user their privileges. Only account roles can be activated in a session.
+A database role can not be a primary/secondary role. Grant the database role to an account role to use their privileges. AKA - Only account roles can be activated in a session.
 
-Authorization to execute CREATE statements comes from the primary role only. For any other SQL action, any permission granted to any active primary/secondary role can be used to authorize the action.
+Authorization to execute CREATE statements comes from the primary role only. For other SQL actions, any permission granted to any active primary/secondary role can be used to authorize the action.
 
 ### Access Control Considerations
 The account admin: 
@@ -171,9 +169,9 @@ Note that ACCOUNTADMIN is not a superuser role. This role only allows viewing an
 
 Recommend these for account admin:
 - Assign it only to a select/limited number of people.
-- all users of this role should user MFA to login
+- All users of this role should use MFA to login
 - Assign this role to at least two users. So they can reset each other's passwords.
-- it should not be used to create objects unless absolute necessary. 
+- It should not be used to create objects unless absolute necessary. 
 - Do not make ACCOUNTADMIN the default role for any users in the system. 
 - Avoid using the ACCOUNTADMIN for automated scripts
 
@@ -187,7 +185,7 @@ Database roles (in preview), scope is the db that they live in:
 - Ease of management: Database owners can create & manage db roles, grant privileges to db roles, grant db roles to other db roles in the same db. 
 - Data share: can be used in data share, instead of one IMPORTED PRIVILEGES to all. 
 
-Only the user who executed a query can access the query results - other users cannot see it, not even account admin users. 
+`Only the user who executed a query can access the query results - other users cannot see it, not even account admins.` 
 
 A cloned object is considered a new object in Snowflake. Any privileges granted on the source object do not transfer to the cloned object. However, a cloned container object (database/schema) retains any privileges granted on the objects contained in the source object. Eg, a cloned schema retains any privileges granted on the tables, views, UDFs, and other objects in the source schema.
 
@@ -197,10 +195,10 @@ A cloned object is considered a new object in Snowflake. Any privileges granted 
 ### Access Control Configuring
 Grants of privileges on a source object (i.e. database) are not copied to its clones, but privilege grants on all child objects (i.e. tables in the database) are copied to the clones.
 
-CREATE/ALTER SCHEMA statement with the WITH MANAGED ACCESS keywords will turn the schema into a managed access schema.
+CREATE/ALTER SCHEMA statement with the `WITH MANAGED ACCESS` keywords will turn the schema into a managed access schema.
 
 ### End-to-End Encryption
-End-to-end encryption (E2EE) is a method to secure data that prevents 3rd parties from reading data while at-rest or in transit to and from Snowflake, and to minimize the attack surface.
+End-to-end encryption (E2EE) is a method to secure data that prevents 3rd parties from reading data while at-rest, or in transit, to and from Snowflake, and to minimize the attack surface.
 
 For data loading: 
 - For an external stage, the user can optionally encrypt the data files using client-side encryption, which Snowflake recommend. But if the data is not encrypted, Snowflake immediately encrypts the data when it is loaded into a table.
@@ -224,9 +222,9 @@ When you create a stage with a master key associated to it, the master key is tr
 ### Encryption Key Management
 Snowflake manages data encryption keys automatically to protect customer data. This management is transparent for customers.
 
-Customers can use the key management service in the cloud platform that hosts their Snowflake account to maintain their own additional encryption key. When enabled, the combination of a Snowflake-maintained key and a customer-managed key creates a composite master key to protect the Snowflake data. This is called `Tri-Secret Secure` (for Business Critical Edition +).
+Customers can use the key management service in the cloud platform that hosts their Snowflake account to maintain their own additional encryption key. When enabled, the combination of a Snowflake-maintained key and a customer-managed key creates a composite master key to protect the Snowflake data. This is called `Tri-Secret Secure` (for Business Critical Edition &+).
 
-Snowflake uses AES 256-bit encryption, with a hierarchical key model rooted in a `hardware security module`. Keys are automatically rotated every 30 days (new key encrypts new data files), and data can be automatically re-encrypted (rekeyed) on a regular basis (rekeying needs Enterprise Edition and +). 
+Snowflake uses AES 256-bit encryption, with a hierarchical key model rooted in a `hardware security module`. `Keys are automatically rotated every 30 days` (new key encrypts new data files), and data can be automatically re-encrypted (rekeyed) on a regular basis (rekeying needs Enterprise Edition &+). 
 
 The hierarchy is composed of several layers of keys, each higher layer of keys (parent keys) encrypts the layer below (child keys). In security terminology, a parent key encrypting all child keys is known as `wrapping`.
 
@@ -236,13 +234,13 @@ Snowflake's hierarchical key model consists of four levels of keys:
 - Table master keys
 - File keys
 
-In a multi-tenant cloud service like Snowflake, the hierarchical key model isolates every account with the use of separate account master keys. In addition to the access control model, the hierarchical key model provides another layer of account isolation. 
+In a multi-tenant cloud service like Snowflake, the hierarchical key model isolates every account, with the use of separate account master keys. In addition to the access control model, the hierarchical key model provides another layer of account isolation. 
 
-If periodic rekeying is enabled, when the retired encryption key for a table is older than one year, Snowflake automatically creates a new encryption key and re-encrypts all data previously protected by the retired key using the new key. The new key is used to decrypt the table data going forward. The retired keys can then be destroyed. 
+`If periodic rekeying is enabled, when the retired encryption key for a table is older than 1 year, Snowflake automatically creates a new encryption key and re-encrypts all data previously protected by the retired key using the new key.` The new key is used to decrypt the table data going forward. The retired keys can then be destroyed. 
 
 Snowflake rekeys data files online, in the background, without any impact to currently running customer workloads. Data that is being rekeyed is always available to you.
 
-Snowflake customers are charged with additional storage for Fail-safe protection of data files that were rekeyed. For these files, 7 days of Fail-safe protection is charged. Eg, the data files with the old key on Amazon S3 are already protected by Fail-safe, and the data files with the new key on Amazon S3 are also added to Fail-safe, leading to a second charge, but only for the 7-day period.
+Snowflake customers are charged with additional storage for Fail-safe protection of data files that were rekeyed. For these files, 7 days of Fail-safe protection is charged. Eg, the data files (micro-partitions) with the old key on Amazon S3 are already protected by Fail-safe, and the data files with the new key on Amazon S3 are also added to Fail-safe, leading to a second charge, but only for the 7-day period.
 
 Snowflake does not support key rotation for customer-managed keys and does not recommend implementing an automatic key rotation policy on the customer-managed key.
 

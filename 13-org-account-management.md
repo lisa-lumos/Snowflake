@@ -35,7 +35,7 @@ skipped
 All parameters have default values, which can be overridden at the account level. In addition, the default values for session and object parameters can be overridden at each level in the parameter hierarchy.  
 
 ### User Management
-During the initial user creation, it is possible to set a weak password for the user that does not meet the minimum requirements described below (e.g. 'test12345'). This allows administrators to use generic passwords for the user during the creation process. If this pathway is chosen, Snowflake strongly recommends setting the MUST_CHANGE_PASSWORD property to TRUE to require users to change their password on their next login, including the initial login, to Snowflake.
+During the initial user creation, it is possible to set a weak password for the user that does not meet the minimum requirements described below (e.g. 'test12345'). This allows administrators to use generic passwords for the user during the creation process. If this pathway is chosen, Snowflake strongly recommends setting the `MUST_CHANGE_PASSWORD` property to TRUE to require users to change their password on their next login, including the initial login, to Snowflake.
 
 Snowflake enforces the following password policy as a minimum requirement while using the ALTER USER command and the web interface:
 - Must be at least 8 characters long.
