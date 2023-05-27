@@ -58,7 +58,7 @@ Used to generate unique numbers across sessions and statements, including concur
 `When a query is executed, the result is cached for 24hrs (result cache).` This can be used for retrieval optimization to avoid re-generating query results when query & the original data did not change. You can also use this cache to do post-processing. 
 
 Query results are reused if all of the following conditions are met:
-- The new query syntactically matches the old query.
+- The new query exactly matches the old query, in terms of syntax.
 - The query does not include functions like CURRENT_TIMESTAMP() etc. CURRENT_DATE() works though...
 - The query does not include UDFs or external functions.
 - The underlying table data contributing to the query result has not changed.
