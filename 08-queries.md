@@ -55,9 +55,9 @@ Used to generate unique numbers across sessions and statements, including concur
 - Snowflake may calculate the next value for a sequence as soon as the current sequence number is used, rather than waiting until the next sequence number is requested. So an `ALTER SEQUENCE ... SET INCREMENT ...` command may not affect the next operation that uses it.
 
 ## Persisted query results
-When a query is executed, the result is cached for 24hrs. This can be used for retrieval optimization to avoid re-generating query results when query & the original data did not change. You can also use this cache to do post-processing. 
+`When a query is executed, the result is cached for 24hrs (result cache).` This can be used for retrieval optimization to avoid re-generating query results when query & the original data did not change. You can also use this cache to do post-processing. 
 
-query results are reused if all of the following conditions are met:
+Query results are reused if all of the following conditions are met:
 - The new query syntactically matches the old query.
 - The query does not include functions like CURRENT_TIMESTAMP() etc. CURRENT_DATE() works though...
 - The query does not include UDFs or external functions.
@@ -67,13 +67,13 @@ query results are reused if all of the following conditions are met:
 - Any config options that affect the results have not changed.
 - The table's micro-partitions have not changed (not reclustered/consolidated).
 
-By default, result reuse is enabled, but can be overridden at the account/user/session level using the USE_CACHED_RESULT session param.
+By default, result cache is enabled, but can be overridden at the account/user/session level using the `USE_CACHED_RESULT` session param.
 
 Post-processing Query Results use cases:
 - You are developing a complex query step-by-step, you want to add a new layer on top of the previous query and run the new query without recalculating the prev results.
 - The previous query was a SHOW/DESCRIBE/CALL statement, or a SP, which returns results in a form that are not easy to reuse.
 
-Post-processing can be performed using the RESULT_SCAN table function, which returns the results of a previous query as a "table".
+Post-processing can be performed using the `RESULT_SCAN` table function, which returns the results of a previous query as a "table".
 
 ## Distinct counts
 Ways to get the num of rows with distinct values: 
@@ -85,7 +85,9 @@ Ways to get the num of rows with distinct values:
 MinHash for efficiently estimating the similarity between two or more data sets. 
 
 ## Frequency estimation
-The Space-Saving algorithm is an efficient way of estimating frequent values in data sets. Aggregate functions include approx_top_k, etc. 
+The Space-Saving Algorithm is an efficient way of estimating frequent values in data sets. 
+
+Aggregate functions include approx_top_k, etc. 
 
 ## Estimating percentile values
 The t-Digest algorithm is an efficient way of estimating percentile values in data sets. Aggregate functions include approx_percentile, etc. 
@@ -93,7 +95,7 @@ The t-Digest algorithm is an efficient way of estimating percentile values in da
 ## Query profile
 Provides execution details for a query - a graphical representation of the main components of the processing plan, statistics for each component, details and statistics for the overall query. 
 
-Helps to understand the performance/behavior of a particular query - spot mistakes in the query, identify performance bottlenecks and improvement opportunities.
+Helps to understand the performance/behavior of a particular query - spot mistakes in the query, identify performance bottlenecks, and improvement opportunities.
 
 Operators are the functional building blocks of a query. Operator types:
 - data access and generation operators: TableScan, ValuesClause, Generator, ExternalScan, InternalObject. 
@@ -120,13 +122,10 @@ Statistics:
   - Bytes read from result
   - External bytes scanned: bytes read from an external object, e.g. a stage
 - DML: 
-  - Number of rows inserted
-  - Number of rows updated
-  - Number of rows deleted
-  - Number of rows unloaded
+  - Number of rows inserted/updated/deleted/unloaded
 - Pruning: 
   - Partitions scanned
-  - Partitions total: total num of partitions the table
+  - Partitions total: total num of partitions in the table
 - Spilling: disk usage where intermediate results do not fit in memory
   - Bytes spilled to local storage: to local disk
   - Bytes spilled to remote storage: to remote disk
@@ -136,15 +135,19 @@ Statistics:
 
 Common query problems identified by query profile:
 - exploding joins: did not provide join condition, resulting in a cartesian product
-- UNION without ALL: UNION does dup. Use UNION ALL when do not need to de-dup
+- UNION without ALL: UNION does de-dup. Use UNION ALL when do not need to de-dup
 - queries too large to fit in memory: See data spilling to local disk then remote disk. Need to use a larger wh, or, process the data in smaller batches. 
 - inefficient pruning: "partitions scanned" almost equal to "partitions total". 
 
 ## Cancel statements
-Recommend to cancel a statement using the interface of the app in which the query is running (e.g. Worksheet in the SnowSight),  or the cancellation API of the Snowflake ODBC/JDBC driver. However, sometimes using sql is necessary. 
+Recommend to cancel a statement using either:
+- the interface of the app in which the query is running (e.g. Worksheet in the SnowSight) 
+- or, the cancellation API of the Snowflake ODBC/JDBC driver 
+
+However, sometimes using sql is necessary. 
 
 ### Notes
-In query history, some queries do not have warehouse size, this is because they used cache, and never required a warehouse. If a client shows Go, it means this query started from SnowSight, because it was written in the Go language. If a query was initiated in the SnowSQL, it will show Python, because SnowSQL is written in python. If from Tableau, it will show JDBC. 
+In query history, some queries do not have warehouse size, this is because they used cache, and never required a warehouse. If a client shows Go, it means this query started from SnowSight, because SnowSight was written in the Go language. If a query was initiated in the SnowSQL, it will show Python, because SnowSQL is written in python. If from Tableau, it will show JDBC. 
 
-As to query tag, if you are from IT team, and need to debug/optimize queries, you can tag these queries using alter session, and put ticket/Jira number in it, so the prod department know where these additional compute cost came from. 
+Query tag - if you are from IT team, and need to debug/optimize queries, you can tag these queries using alter session, and put ticket/Jira number in it, so the prod department know where these additional compute cost came from. 
 

@@ -1,13 +1,13 @@
 # 6. Data loading
 ## Overview
-The location of data files in cloud storage called a stage. A named external stage is a database object that lives in a schema. 
+A stage: the location of data files in cloud storage. A named external stage lives in a schema. 
 
 Snowflake supports 3 types of internal stages: 
 - User: belong to a single user, cannot be dropped, do not support file format options because it may need to handle any file format. User need insert privilege on target table. `@~`
 - Table: belong to a table, cannot be dropped. Do not support transform while loading. Only table owner can use it. `@%table_name`
 - Named:  a db object lives inside a schema. Most flexible. Privileges can be granted/revoked, ownership can be transferred. `@stage_name`
 
-You can do bulk loading and continuous loading from any sort of stages to tables. You can directly load from S3 bucket without using an external stage.  
+`You can do bulk loading, and continuous loading, from any sort of stages to tables.` `You can directly load from S3 bucket without using an external stage.`  
 
 Bulk loading uses user-provided virtual warehouses, specified in the COPY statement. 
 
@@ -23,14 +23,14 @@ Continuous loading using snowpipe:
 
 The Snowflake Connector for Kafka can connect to an Apache Kafka server, load data from topics into an internal stage, and load data files into tables (manual or pipe). Example: a Kafka topic has 3 partitions, and each partition loads files into their respective folder in a internal stage, then the REST API for snowpipe is called, and the 3 pipes would load data into one table concurrently, from their respective folder. 
 
-For semi-structured data (Apache Parquet, Apache Avro, and ORC files), snowflake supports auto detection of schema, which retrieves the column definitions (names, data types, and ordering of columns in the files). Use function INFER_SCHEMA and GENERATE_COLUMN_DESCRIPTION. Create tables with the column definitions derived from a set of staged files using the CREATE TABLE ... USING TEMPLATE. 
+For semi-structured data (Apache Parquet, Apache Avro, and ORC files), snowflake supports auto detection of schema, which retrieves the column definitions (names, data types, and ordering of columns in the files). Use function `INFER_SCHEMA` and `GENERATE_COLUMN_DESCRIPTION`. Create tables with the column definitions derived from a set of staged files using the `CREATE TABLE ... USING TEMPLATE`. 
 
 Instead of loading data into sf table, you can query then directly in the stage also. Useful if you only want to query a subset of data. 
 
 You can create external stages/tables on software and devices, on premises or in a private cloud, that is highly compliant with Amazon S3 API (Amazon S3-compatible Storage). 
 
 Note:
-- metadata for pipe and manual bulk load lives in different places, if pipe already loaded the files, and you run copy into command manually on these files, you will get duplicated records in the table. 
+- Metadata for pipe and manual bulk load lives in different places, if pipe already loaded the files, and you run copy into command manually on these files, you will get duplicated records in the table. 
 
 ## Feature Summary
 For files to load to SF, the default encoding character set is UTF-8. 
@@ -49,10 +49,10 @@ File sizing (for both bulk and pipe loading):
 - Can use split command in Linux to partition large files
 
 Semi-structured:
-- Supported semi-structured data formats: JSON, Avro, ORC, Parquet, XML (preview)
-- The VARIANT data type imposes a 16 MB size limit on individual rows. 
-- Use the STRIP_OUTER_ARRAY file format option for the COPY INTO command to load the records into separate table rows. 
-- Extract semi-structured data elements containing "null" values into relational columns before loading them; or, set the file format option STRIP_NULL_VALUES to TRUE when loading it.
+- Supported semi-structured data formats: `JSON, Avro, ORC, Parquet, XML (preview)`
+- The VARIANT data type imposes a `16 MB size limit` on individual rows. 
+- Use the `STRIP_OUTER_ARRAY` file format option for the COPY INTO command to load the records into separate table rows. 
+- Extract semi-structured data elements containing "null" values into relational columns before loading them; or, set the file format option `STRIP_NULL_VALUES` to TRUE when loading it.
 
 Snowpipe:
 - Snowpipe is designed to load new data within a minute after a file notification is sent. 
@@ -87,7 +87,7 @@ Snowflake maintains data loading metadata for each table, this metadata lives in
 - Last load timestamp for each file
 - Loading error info for the file
 
-This metadata is used to prevent data duplication during loading for the target table. It expires after 64 days for bulk loading. For files with unknown status, they are skipped by default. 
+This metadata is used to prevent data duplication during loading for the target table. `It expires after 64 days for bulk loading`. `For files with unknown status, they are skipped by default.` 
 
 When loading staged data, narrow the path to the most granular level, such as using pattern options or use common prefix of the files. 
 
@@ -119,7 +119,7 @@ checked.
 ### Staging Files
 checked. 
 ### Copying Data from a Local Filesystem
-Before loading data, you can validate that the data in the uploaded files will load correctly by using the VALIDATION_MODE parameter in COPY INTO command. 
+Before loading data, you can validate that the data in the uploaded files will load correctly by using the `VALIDATION_MODE` parameter in COPY INTO command. 
 
 The ON_ERROR copy option for the COPY INTO command indicates what action to perform if errors are encountered in a file during loading.
 
@@ -127,11 +127,11 @@ The ON_ERROR copy option for the COPY INTO command indicates what action to perf
 ### Allowing the Virtual Private Cloud IDs
 Your sf account has a unique VPC id, you can create an Amazon S3 policy allowing this id, then provide an IAM role for sf to access the specific S3 bucket. 
 ### Configuring Secure Access
-You can use storage integrations to allow Snowflake to read/write data from/to an Amazon S3 bucket referenced in a stage. This avoids the need for passing explicit cloud provider credentials like secret keys or access tokens. It stores an AWS IAM user ID. An admin in your org grants the IAM user permissions to the AWS account.
+You can use `storage integrations` to allow Snowflake to read/write data from/to an Amazon S3 bucket referenced in a stage. This avoids the need for passing explicit cloud provider credentials like secret keys or access tokens. It stores an AWS IAM user ID. An admin in your org grants the IAM user permissions to the AWS account.
 
 Different stage objs can refer different buckets and paths and use the same storage integration for authentication. SF provisions a single IAM user for your entire sf account. All S3 storage integrations use that IAM user.
 ### AWS Data File Encryption
-Snowflake supports either client-side encryption (Requires a MASTER_KEY of 128/256-bit and base64 encoded) or server-side encryption. 
+Snowflake supports either `client-side encryption` (Requires a MASTER_KEY of 128/256-bit and base64 encoded) or `server-side encryption`. 
 ### Creating an S3 Stage
 skipped
 ### Copying Data from an S3 Stage
@@ -148,12 +148,12 @@ Data load failures:
 CURRENT_TIMESTAMP is evaluated when the load statement is compiled, rather than when the record is inserted into the table. 
 ## Snowpipe 
 2 mechanisms for detecting the staged files:
-- using cloud messaging
+- using cloud messaging (auto-ingest)
 - calling Snowpipe REST endpoints
 ## Snowpipe Overview
 Cross-cloud support is currently only available to accounts hosted on AWS.
 ## Snowpipe Auto Ingest
-Event notifications received while a pipe is paused are retained for only a limited period of time (14 days). 
+Event notifications received while a pipe is paused are retained for 14 days. 
 
 auto_ingest parameter should be set to true. 
 ### Automating for Amazon S3
@@ -200,33 +200,33 @@ skipped
 Snowflake uses file loading metadata (which lives in the pipes) to prevent reloading the same files in one table. Snowpipe prevents loading files with the same name even if they were later modified. Staged files with the same name as files that were already loaded are ignored, even if they have been modified, e.g. if new rows were added or errors in the file were corrected. If the files are modified and staged again after 14 days, Snowpipe loads the data again, potentially resulting in duplicate records in the target table.
 
 ## Snowpipe Managing
-Pipe does not support the PURGE copy option. To remove staged files that you no longer need, recommend periodically executing the REMOVE command to delete the files. Alternatively, configure any lifecycle management features provided by your cloud storage service provider.
+`Pipe does not support the PURGE copy option.` To remove staged files that you no longer need, recommend periodically executing the REMOVE command to delete the files. Alternatively, configure any lifecycle management features provided by your cloud storage service provider.
 
 ALTER PIPE ... REFRESH statement loads the files that are staged within the past 7 days, and checks the load history for both the target table and the pipe to ensure the same files are not loaded twice.
 
 
 ## Snowpipe Costs
 Query either of the following:
-- PIPE_USAGE_HISTORY table function (in the Snowflake Information Schema).
+- PIPE_USAGE_HISTORY table function (in Information Schema).
 - PIPE_USAGE_HISTORY View
 
-Managed service, with additional cost of 0.06 credit/1k files being loaded. 
+`Managed service, with additional cost of 0.06 credit/1k files being loaded.` 
 
-## Snowpipe Streaming Overview (preview)
-Calling the Streaming API from your `Java application code` to `insert` rows of data to Snowflake tables directly, without staged files in the middle. This architecture results in lower load latencies and costs, which makes it great for real-time data streams. Do not require and pipe objects. 
+## Snowpipe Streaming - Overview (preview)
+Calling the Streaming API from your `Java application code` to `insert` rows of data to Snowflake tables directly, without staged files in the middle. This architecture results in lower load latencies and costs, which makes it great for real-time data streams. Do not require pipe objects. 
 
 The API ingests rows via one or more channels. Each channel points to only one table, but a table can have multiple channels pointing to it. 
 
-## Snowpipe Streaming Configuring
+## Snowpipe Streaming - Configuring
 API calls rely on key pair authentication with JSON Web Token (JWT).
 
-## Snowpipe Streaming Recommendations
+## Snowpipe Streaming - Recommendations
 Recommend calling the API with fewer clients that write more data per second.
 
-## Snowpipe Streaming Costs
+## Snowpipe Streaming - Costs
 Similar to other serverless features. 
 
-## Snowpipe Streaming Kafka Connector with Snowpipe Streaming
+## Snowpipe Streaming - Kafka Connector with Snowpipe Streaming
 Optionally replace Snowpipe with Snowpipe Streaming in your data loading chain from Kafka. Low latency and low cost. 
 
 ## Amazon S3-compatible Storage (Preview)
@@ -250,7 +250,7 @@ The metadata columns are:
 ## Transforming Data During Load
 All file formats supported by COPY INTO can use transformations, except JSON has to be "Newline delimited JSON" standard format. 
 
-The VALIDATION_MODE param does not support transforming data during a load.
+`The VALIDATION_MODE param does not support transforming data during a load.`
 
 ## Continuous data pipelines Overview
 It automates many manual steps in transforming and optimizing continuous data loads. Usually, the raw data files are first loaded temporarily into a staging table, then transformed using SQL statements, then inserted into the destination reporting tables. The efficient way is to transform only new/modified data. 
@@ -264,23 +264,23 @@ A stream itself does not contain any table data - it only stores source object's
 
 For streams on views, change tracking must be enabled explicitly for the view & underlying tables to add the hidden columns to these tables.
 
-A stream provides the minimal set of changes from its current offset to the current version of the table. Multiple queries can independently consume the same change data from a stream without changing the offset. A stream advances the offset only when it is used in a DML transaction. 
+A stream provides the minimal set of changes from its current offset to the current version of the table. Multiple queries can independently consume (select from) the same change data from a stream without changing the offset. A stream advances the offset only when it is used in a DML transaction. 
 
 When you query a stream within a transaction, it follows repeatable read isolation transaction isolation level. When DML transaction completes successfully, the stream offset advances. To ensure multiple statements access the same change records in the stream (lock the stream), surround them with an explicit transaction statement (BEGIN .. COMMIT). 
 
 Stream differs from the read committed mode supported for tables, in which statements see any changes made by previous statements executed within the same transaction, even though those changes are not yet committed.
 
 Stream has 3 additional cols:
-- METADATA$ACTION: the DML operation INSERT/DELETE.
-- METADATA$ISUPDATE: in the stream, updates are represented as a pair of DELETE and INSERT records with  METADATA$ISUPDATE = TRUE. Because streams record the overall differences between two offsets, so if a row is added and then updated, the delta change is a new row. The METADATA$ISUPDATE row records a FALSE value.
-- METADATA$ROW_ID: the unique and immutable ID for the row.
+- `METADATA$ACTION`: the DML operation INSERT/DELETE.
+- `METADATA$ISUPDATE`: in the stream, updates are represented as a pair of DELETE and INSERT records with  METADATA$ISUPDATE = TRUE. Because streams record the overall differences between two offsets, so if a row is added and then updated, the delta change is a new row. The METADATA$ISUPDATE row records a FALSE value.
+- `METADATA$ROW_ID`: the unique and immutable ID for the row.
 
 3 stream types:
 - Standard. tracks all DML changes (insert/update/delete). Support tables, directory tables, views. Do not work with geospatial data - recommend creating append-only streams on them.
 - Append-only. tracks row inserts only. Support standard tables, directory tables, views. 
 - Insert-only. tracks row inserts only. Support `external tables` only. Overwritten/appended files are handled as new files - the stream does not record the diff of the old and new file versions.
 
-A stream (unconsumed records inside it) becomes stale (gone) when its offset is outside of the effective data retention period for its source table, or the underlying tables for a source view. To track new change records for the table, recreate the stream. If the data retention period for a table is < 14d, and a stream has not been consumed, Snowflake extends to 14d by default (MAX_DATA_EXTENSION_TIME_IN_DAYS param), aka effective data retention time for this stream, regardless of the Snowflake edition. This could incur storage costs. 
+A stream (unconsumed records inside it) becomes stale (gone) when its offset is outside of the effective data retention period for its source table, or the underlying tables for a source view. To track new change records for the table, recreate the stream. If the data retention period for a table is < 14d, and a stream has not been consumed, Snowflake extends to 14d by default (`MAX_DATA_EXTENSION_TIME_IN_DAYS` param), aka effective data retention time for this stream, regardless of the Snowflake edition. This could incur storage costs. 
 
 To view the current staleness status of a stream, execute DESCRIBE STREAM / SHOW STREAMS. 
 
@@ -292,7 +292,7 @@ Renaming a source obj does not break its stream (references are used instead of 
 
 Recommend to create a separate stream for each DML consumer (task, script, ... that consumes the same change data) for an obj.
 
-Streams works for local views and shared secure views, but NOT for materialized views. Underlying tables must be native tables with change tracking enabled (using ALTER TABLE ... CHANGE_TRACKING = TRUE), and the view may only have projections, filters, inner/cross joins, union all, system scalar functions (group by, qualify, limit, etc are not supported). 
+`Streams works for local views and shared secure views, but NOT for materialized views.` Underlying tables must be native tables with change tracking enabled (using ALTER TABLE ... CHANGE_TRACKING = TRUE), and the view may only have projections, filters, inner/cross joins, union all, system scalar functions (group by, qualify, limit, etc are not supported). 
 
 The CHANGES clause in SELECT enables querying change tracking metadata between two points in time, without having a stream. Using a stream is sufficient for most use cases, CHANGES clause is useful in infrequent cases when you need to manage the offset for arbitrary periods of time. 
 
@@ -301,7 +301,7 @@ The main cost associated with a stream is the processing time used by a virtual 
 ### Managing streams
 Only the object owner role of a view or underlying tables can enable change tracking.
 
-Creating a stream on the view you own enables change tracking on the view, and all its underlying tables you own. If you don't own a underlying table, the owner must explicitly enable change tracking for it. 
+`Creating a stream on the view you own enables change tracking on the view, and all its underlying tables you own. If you don't own a underlying table, the owner must explicitly enable change tracking for it.` 
 
 During the enabling operation of CDC for a table, the table is locked for writes until the command finishes running. 
 
@@ -319,8 +319,8 @@ Can be combined with streams for continuous ELT workflows.
 Can also be used independently to do periodic work, such as for periodic reports by inserting/merging rows into a report table.
 
 Tasks require compute resources to execute SQL code. Individual tasks can have either of these:
-- Serverless/managed tasks using snowflake-managed resources. Snowflake determines the size of the compute resources for a run based on the previous runs of this task. Max size is 2xl, can be used in parallel by diff tasks. Omit the WAREHOUSE parameter when CREATE TASK (the role needs EXECUTE MANAGED TASK privilege). Cannot work for UDFs with Java/Python inside, or SPs in Scala. 
-- User-managed tasks using user-specified virtual warehouse. Specify the WAREHOUSE parameter when CREATE TASK. 
+- `Serverless/managed tasks using snowflake-managed resources`. Snowflake determines the size of the compute resources for a run based on the previous runs of this task. Max size is 2xl, can be used in parallel by diff tasks. Omit the WAREHOUSE parameter when CREATE TASK (the role needs EXECUTE MANAGED TASK privilege). Cannot work for UDFs with Java/Python inside, or SPs in Scala. 
+- `User-managed tasks using user-specified virtual warehouse`. Specify the WAREHOUSE parameter when CREATE TASK. 
 
 Query the TASK_HISTORY Account Usage view to find the average run time of a task (avg difference between scheduled and completed time). The warehouse size you choose should be large enough to run multiple child tasks that are triggered simultaneously by predecessor tasks. Choose an appropriate warehouse size for task to complete its workload within the defined schedule interval.
 
@@ -328,11 +328,11 @@ serverless or user-managed task, which one to choose:
 - Choose serverless tasks if: you have too few tasks to run concurrently; tasks runtime < 1min; tasks with stable runtime; need to fully adhere to the schedule (has no queue period)
 - Choose user-managed tasks if: you can fully utilize one warehouse; have unpredictable runtime/loads; no need to fully adhere to the schedule
 
-A standalone task or the root task in a DAG generally runs on a schedule. You can define the schedule when creating a task (using CREATE TASK) or later (using ALTER TASK). If a task is still running when it is already the next scheduled execution time, then that scheduled run is skipped.
+A standalone task or the root task in a DAG generally runs on a schedule. You can define the schedule when creating a task (using CREATE TASK) or later (using ALTER TASK). If a task is still running when it is already the next scheduled execution time, then that scheduled run is skipped (by default).
 
 The cron expression in a task definition supports specifying a time zone (daylight saving time is included in some timezones, need to be careful with this). Easiest way to avoid DST confusion is to use a timezone that do not use DST, such as UTC. 
 
-A `Directed Acyclic Graph (DAG)` is a series of tasks with a single root task, organized by their dependencies. DAGs flow in a single direction. Each task (not the root) can have multiple predecessor tasks (dependencies); and each task can have multiple subsequent/child tasks that depend on it. A task runs only after all of its predecessor tasks have successfully completed.
+A `Directed Acyclic Graph (DAG)` is a series of tasks with a single root task, organized by their dependencies. DAGs flow in a single direction. Each task (not the root) can have multiple predecessor tasks (dependencies); and each task can have multiple subsequent/child tasks that depend on it. `A task runs only after all of its predecessor tasks have successfully completed`.
 
 The root task have a schedule that starts a run of the DAG. 
 
@@ -342,11 +342,11 @@ A DAG is limited to a max of 1000 tasks. A single task can have a max of 100 pre
 
 You can include a conclude task in a DAG calling an external function to trigger a remote messaging service to send a notification that all prev tasks have successfully completed.
 
-All tasks in a DAG must have the same task owner and be stored in the same db and schema.
+`All tasks in a DAG must have the same task owner and be stored in the same db and schema.`
 
 Transferring ownership of a task severs the dependency between this task and any predecessor and child tasks, unless all tasks ownership is transferred all at once (by dropping the old owner role so the tasks are transferred to the dropper, or by GRANT OWNERSHIP on all tasks in a schema to a diff role). 
 
-By default, Snowflake allow only one instance of a DAG to run at a time. The next run of a root task is scheduled only after the whole DAG have finished running. This is controlled by ALLOW_OVERLAPPING_EXECUTION parameter on the root task. Overlapping runs are fine when overlapping runs of a DAG do not produce incorrect/duplicate data. 
+By default, Snowflake allow only one instance of a DAG to run at a time. The next run of a root task is scheduled only after the whole DAG have finished running. This is controlled by `ALLOW_OVERLAPPING_EXECUTION` parameter on the root task. Overlapping runs are fine when overlapping runs of a DAG do not produce incorrect/duplicate data. 
 
 TASK_DEPENDENTS table function shows all dependents of a task in a DAG. 
 
@@ -362,7 +362,7 @@ To retrieve the history of task versions, query TASK_VERSIONS Account Usage view
 
 A task supports all session parameters. You can set them for a task. A task does not support account or user params.
 
-You can configure a task or DAG to auto suspend after n consecutive failed/timeout runs. Set the SUSPEND_TASK_AFTER_FAILURES param on a [standalone task] or [the DAG root task to be effective if one task in DAG meets this condition]. 
+You can configure a task or DAG to auto suspend after n consecutive failed/timeout runs. Set the `SUSPEND_TASK_AFTER_FAILURES` param on a [standalone task] or [the DAG root task to be effective if one task in DAG meets this condition]. 
 
 Root task can also be manually triggered (good for testing), its successful run triggers the rest of the DAG. 
 
@@ -374,11 +374,11 @@ Ways to view task history:
 - COMPLETE_TASK_GRAPHS table function in information schema
 - COMPLETE_TASK_GRAPHS View in Account Usage
 
-To recover the management costs of Snowflake-provided compute resources, 1.5x multiplier to resource consumption is applided. Note that the serverless compute model could still reduce compute costs over user-managed warehouses; in some cases significantly.
+`To recover the management costs of Snowflake-provided compute resources, 1.5x multiplier to resource consumption is applied.` Note that the serverless compute model could still reduce compute costs over user-managed warehouses; in some cases significantly.
 
 To retrieve credit usage for a task, use the SERVERLESS_TASK_HISTORY table function in info schema, or SERVERLESS_TASK_HISTORY view in Account Usage.
 
-Tasks run with the privileges of the task owner whether [scheduled] or [run manually by EXECUTE TASK by another role with OPERATE privilege].
+Tasks run with the privileges of the task owner, whether [scheduled] or [run manually by EXECUTE TASK by another role with OPERATE privilege].
 
 In addition to the task owner, a role that has the OPERATE privilege on the task can suspend/resume the task.
 
@@ -392,7 +392,7 @@ A task can push error notifications to a cloud messaging service, using:
 - Microsoft Azure Event Grid
 - Google Pub/Sub 
 
-To enable a task to send error notifications, you must associate the task with a notification integration: CREATE TASK ... ERROR_INTEGRATION = ... as ..., or ALTER TASK ... SET ...
+To enable a task to send error notifications, you must associate the task with a `notification integration`: CREATE TASK ... ERROR_INTEGRATION = ... as ..., or ALTER TASK ... SET ...
 
 ### Troubleshooting tasks
 1. verify that the task indeed did not run using TASK_HISTORY table function
@@ -400,7 +400,7 @@ To enable a task to send error notifications, you must associate the task with a
 3. verify that the task owner has sufficient permissions
 4. verify the conditions for the task to run, like streams actually has data. Historical data for a stream can be queried using an AT | BEFORE clause.
 
-There is a 60 min default limit on one run of a task. Increase the wh size accordingly if it exceeds this limit, or, increase this timeout limit param for this task using ALTER TASK ... SET USER_TASK_TIMEOUT_MS = .... 
+`There is a 1hr default limit on one run of a task.` Increase the wh size accordingly if it exceeds this limit, or, increase this timeout limit param for this task using `ALTER TASK ... SET USER_TASK_TIMEOUT_MS = ....` 
 
 ## Continuous data pipelines - Examples
 read & skipped.

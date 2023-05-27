@@ -55,7 +55,7 @@ The recipient emails in the SYSTEM$SEND_EMAIL() sp must exist in the list of ALL
 ```sql
 CALL SYSTEM$SEND_EMAIL(
     '<integration_name>',
-    '<email_address_1> [ , ... <email_address_N> ]',
+    '<email_address_1>, ...',
     '<email_subject>', -- cannot be empty
     '<email_content>'  -- cannot be empty
 );

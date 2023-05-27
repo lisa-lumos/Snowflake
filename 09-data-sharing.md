@@ -7,11 +7,11 @@ Sharing options (first 2 support reader accounts):
    - provide additional metadata to consumer, & view consumer usage info. 
    - optionally charge for data. 
    - offer data publicly/privately. 
-2. Direct share. share data to other accounts within the same sf region. 
-3. Data Exchange. share data with a group of accounts that you selected, if private listing is not an option for you. Can see usage metrics. 
+2. Direct share. Share data to other accounts within the same sf region. 
+3. Data Exchange. Share data with a group of accounts that you selected, if private listing is not an option for you. Can see usage metrics. 
 
 ## Intro
-You can share the following Snowflake database objects:
+`You can share the following Snowflake database objects:`
 - Tables
 - External tables
 - Secure views
@@ -47,12 +47,12 @@ Using Snowsight, you can see inbound/outbound requests from a data exchange.
 If you have the Data Exchange Admin role, or Provider Profile Level Privileges, you can create and manage provider profiles for a data exchange. 
 
 ## Listings 
-A listing is a way of Secure Data Sharing and uses the same provider and consumer model. As a provider, you can use a listing to share data in your Snowflake account with other Snowflake accounts privately, or by offering a listing on the Snowflake Marketplace. As a consumer, you can use a listing to access data shared by other Snowflake accounts on the Snowflake Marketplace, or privately with your account. 
+A listing is a way of Secure Data Sharing, and uses the same provider/consumer model. As a provider, you can use a listing to share data in your Snowflake account with other Snowflake accounts privately, or by offering a listing on the Snowflake Marketplace. As a consumer, you can use a listing to access data shared by other Snowflake accounts privately with your account, or on the Snowflake Marketplace. 
 
 Listings add capabilities to Secure Data Sharing:
 - Share publicly on the Snowflake Marketplace.
 - Charge consumers for the shared data.
-- Monitor interest in your listing and usage of the shared data.
+- Monitor interest in your listing, and usage of the shared data.
 - Provide metadata about the share, such as a title, description, sample SQL queries, and info about the data provider.
 
 When you create a listing, you choose one way to offer it:
@@ -72,7 +72,7 @@ As a consumer, you can:
 - Discover/test 3rd-party data sources.
 - Easy access to raw data products from vendors.
 - Combine new & existing data to derive new business insights.
-- Have data available instantly and updated continually for users.
+- Have data available instantly, and updated continually for users.
 - Avoid the costs of building/maintaining APIs/data pipelines to load/update data.
 - Use BI tools of your choice.
 
@@ -99,11 +99,11 @@ read, skipped.
 ### Preparing Data for a Listing
 - To create/manage a list, you need ACCOUNTADMIN role, or a role with the global CREATE DATA EXCHANGE LISTING privilege.
 
-A share's owner can attach it to a listing. They also need MODIFY LISTING privilege on that listing. 
+A share's owner can attach this share to a listing. They also need MODIFY LISTING privilege on that listing. 
 
 You can only share protected health information (PHI) through a personalized listing, and both need to sign an agreement with Snowflake. 
 
-while you can share personal data through free/personalized listing, you must have the applicable legal rights if the data is not publicly available.
+While you can share personal data through free/personalized listing, you must have the applicable legal rights if the data is not publicly available.
 
 You can add shares that are already shared with a consumer account, such as with a direct share, to a listing.
 
@@ -111,7 +111,7 @@ Not all countries can create paid listings. Your country is the one on your bill
 
 When you offer a paid listing on the Snowflake Marketplace, you must offer consumers the ability to trial the listing before they purchase it. Trials are optional for paid private listings. Use SYSTEM$IS_LISTING_PURCHASED function to control which data is visible to trial/paid consumers. 
 
-Offering listings in other regions in Marketplace requires replicating data, you need to manually replicate the data or use auto-fulfillment.
+Offering listings in other regions in Marketplace requires replicating data, you need to either manually replicate the data, or use auto-fulfillment.
 
 For a private listing, you need to share your listing to the regions where your consumer's accounts are. Use auto-fulfillment to replicate. 
 
@@ -122,7 +122,7 @@ read, skipped.
 To automatically replicate the data product associated with your listing to other Snowflake regions.
 
 ### Managing Auto-fulfillment Costs
-compute + storage + data transfer
+compute + storage + data transfer. 
 ### Configuring Listings
 The fields that you can configure for a listing
 
@@ -134,8 +134,8 @@ Pricing Model Components:
 - Number of free queries: num of free queries after the first query is run
 
 ### Managing Listings as a Provider
-- Snowflake Marketplace paid listing, and private listings use cross-cloud auto-fulfillment. They are available to consumers immediately.
-- Snowflake Marketplace free listings can use cross-cloud auto-fulfillment (available to consumers immediately), or be manually replicated (consumers must request these listings). 
+- Snowflake Marketplace paid/private listings use cross-cloud auto-fulfillment. They are available to consumers immediately.
+- Snowflake Marketplace free listings can use either cross-cloud auto-fulfillment (available to consumers immediately), or be manually replicated (consumers must request these listings). 
 - Personalized listings require manual data replication (consumers must request these listings).
 
 ### Modifying Published Listings
@@ -161,8 +161,8 @@ Snowflake tracks many metrics for listings:
 ### Monetization Usage Views
 Paid listings' historical usage data:
 - MARKETPLACE_DISBURSEMENT_REPORT View
-- MONETIZED_USAGE_DAILY View
-- LISTING_EVENTS_DAILY View
+- MONETIZED_USAGE_DAILY View 
+- LISTING_EVENTS_DAILY View 
 
 ## Using listings as a consumer
 ### Becoming a Consumer of Listings
@@ -184,8 +184,8 @@ skipped
 skipped
 
 ### Review Your Usage of Paid Listings
-- MARKETPLACE_PAID_USAGE_DAILY View
-- MARKETPLACE_PAID_USAGE_DAILY View
+- MARKETPLACE_PAID_USAGE_DAILY View (in ORGANIZATION_USAGE schema)
+- MARKETPLACE_PAID_USAGE_DAILY View (in DATA_SHARING_USAGE schema)
 
 ## Data sharing for providers
 ### Getting Started
@@ -196,7 +196,7 @@ Must need account admin role.
 Two ways to share database objects:
 1. Grant "database roles" to a share. (In preview)
    - create many "database roles" in a database.
-   - grant privileges on different of objects to each db role, then grant all these db roles to the share
+   - grant privileges on different objects in this db to each db role, then grant all these db roles to the share
    - consumers can grant these db roles to their own roles in their account
    - db roles live in one db
 2. Grant privileges on objects directly to a share. 
@@ -219,19 +219,19 @@ A new object created in a database is not automatically available to consumers -
 
 If you decide to filter the data in table(s) based on certain conditions, you need to create secure views on the table(s).
 
-SIMULATED_DATA_SHARING_CONSUMER session parameter can be used to validate whether objects are configured correctly to display only what you want to. 
+`SIMULATED_DATA_SHARING_CONSUMER` session parameter can be used to validate whether objects are configured correctly to display only what you want to. 
 
-Consumers can create streams in their own dbs on the shared tables/views. For consumers to create streams on shared tables/views, provider must enable change tracking on the shared tables or the underlying tables for a view.
+Consumers can create streams in their own dbs on the shared tables/views. For consumers to create streams on shared tables/views, provider must enable change tracking on the shared tables, or the underlying tables for a view.
 
 You remove an account from a share by setting a new list of accounts for it and leaving the desired account off the list. After removing an account from a share, you can add it back again to the share; however, they lose the database they created earlier from the share. They must create a new database from the share. This can have a significant impact on the business operations of the account. Similar thing happens if you drop a share. 
 
 ### Sharing Data from Multiple Databases
-Providers can share data that in different databases by using secure views. A secure view can reference objects such as schemas/tables/views from other databases.
+Providers can share data from in different databases by using secure views. A secure view can reference objects such as schemas/tables/views from other databases.
 
-In addition to performing all the standard steps to share data, you must grant the REFERENCE_USAGE privilege on each database referenced by the secure view you want to share.
+In addition to performing all the standard steps to share data, you must grant the `REFERENCE_USAGE` privilege on each database referenced by the secure view you want to share.
 
 ### Replicating Shares Across Regions and Cloud Platforms (using account replication)
-Account replication enables the objects replication from a source account to many target accounts in the same organization. Replicated objects are secondary objects and are replicas of the primary objects.
+Account replication enables the objects replication from a source account to many target accounts in the same organization. Replicated objects are secondary objects, and are replicas of the primary objects.
 
 A replication group is a collection of source objects that are replicated as a unit to many target accounts. Replication groups provide read-only access for the replicated objects. Replication groups provide point-in-time consistency for the objects.
 
@@ -241,7 +241,7 @@ When a secondary replication group is created in the target account, an initial 
 
 In the target account, people who executes the `alter replication group ... refresh` command need a role with the REPLICATE privilege on the replication group. 
 
-Recommend to schedule automatic refreshes using the REPLICATION_SCHEDULE parameter. 
+Recommend to schedule automatic refreshes, using the REPLICATION_SCHEDULE parameter. 
 
 ### Sharing Data Across Regions and Cloud Platforms (using database replication)
 Database replication is now a part of Account Replication. 
@@ -251,11 +251,11 @@ When sharing a view that references objects in many databases, each of these oth
 skipped. 
 
 ### Using Secure Objects to Control Data Access
-Strongly recommend sharing secure views/UDFs instead of sharing tables.
+`Strongly recommend sharing secure views/UDFs instead of sharing tables.`
 
 For optimal performance, especially with extremely large tables, recommend defining clustering keys on the base table(s).
 
-You can create a share with one of them:
+`You can create a share with one of them:`
 - the ACCOUNTADMIN role
 - OWNERSHIP on the shared database
 - USAGE privilege on the database WITH GRANT OPTION. 
@@ -275,7 +275,7 @@ Limitations for consumers:
 
 ## General data sharing tasks
 ### Managing Reader Accounts
-Reader accounts enable providers to share data with consumers who are not Snowflake customers and no not prefer to be. 
+Reader accounts enable providers to share data with consumers who are not Snowflake customers, and not prefer to be. 
 
 Provider need ACCOUNTADMIN role, or the CREATE ACCOUNT global privilege to proceed. 
 
@@ -325,7 +325,7 @@ By default, only ACCOUNTADMIN in the Data Exchange admin account can manage a Da
 To delegate these tasks to other users, use IMPORTED PRIVILEGES. 
 
 ### Sharing from Business Critical to Non-Business Critical
-By default, Snowflake does not allow sharing data from a Business Critical to a non-Business Critical account. Snowflake provides the OVERRIDE SHARE RESTRICTIONS global privilege to the ACCOUNTADMIN role. When the parameter is disabled, a Business Critical provider account can add a regular consumer account to a share.
+`By default, Snowflake does not allow sharing data from a Business Critical to a non-Business Critical account.` Snowflake provides the `OVERRIDE SHARE RESTRICTIONS global privilege` to the ACCOUNTADMIN role. When the parameter is disabled, a Business Critical provider account can add a regular consumer account to a share.
 
 ## Data exchange
 ### About
@@ -369,7 +369,7 @@ For free listings, you have an option to pre-associate a share with the listing 
 For personalized listings, you can replicate data upon consumer's request.
 
 ### Configuring and Using Data Exchanges
-You invite members using their Snowflake account name or account URL.
+You invite members using their Snowflake account name, or account URL.
 
 ### Requesting a New Data Exchange
 contact Snowflake Support, provide requested fields. 
