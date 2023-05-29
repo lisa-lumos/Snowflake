@@ -2,61 +2,74 @@
 A transaction is a sequence of SQL statements that are committed or rolled back as a unit.
 
 Transactions follow these rules:
-- `Transactions are never nested.` For example, you cannot create an outer transaction that would roll back an inner transaction that was committed, or create an outer transaction that would commit an inner transaction that had been rolled back.
+- `Transactions are never nested.` You cannot create an outer transaction that would roll back an inner transaction that was committed, or create an outer transaction that would commit an inner transaction that had been rolled back.
 - A transaction is associated with a single session. Multiple sessions cannot share the same transaction. 
 
 A transaction can be started explicitly by executing a `BEGIN` statement. A transaction can be ended explicitly by executing `COMMIT` or `ROLLBACK`. 
 
 Explicit transactions should contain only DML statements and query statements. DDL statements implicitly commit active transactions
 
-Each DDL statement executes as a separate transaction.
+Each DDL statement (such as CREATE/DROP TABLE, ALTER TABLE ADD COLUMN, ...) executes as a separate transaction. So you cannot roll back a DDL statement.
 
 If a DDL statement is executed while a transaction is active, the DDL statement:
 - First implicitly commits the active transaction.
-- Then executes the DDL statement as a separate transaction.
-
-Because a DDL statement is its own transaction, you cannot roll back a DDL statement. 
+- Then executes itself (DDL statement) as a separate transaction.
 
 Snowflake supports an AUTOCOMMIT parameter. The default setting for AUTOCOMMIT is on.
 
 While AUTOCOMMIT is enabled:
-- statements are automatically committed if it succeeds, and automatically rolled back if it fails.
+- individual statements are automatically committed if it succeeds, and automatically rolled back if it fails.
 - Statements inside an explicit transaction are not affected by AUTOCOMMIT.
 
 While AUTOCOMMIT is disabled:
-- An implicit BEGIN TRANSACTION is executed at:
-  - The first DML statement or query statement after a transaction ends
-  - The first DML statement or query statement after disabling AUTOCOMMIT
-- An implicit COMMIT is executed at: 
-  - The execution of a DDL statement
-  - The execution of ALTER SESSION SET AUTOCOMMIT
-- An implicit ROLLBACK is executed at:
-  - The end of a session
-  - The end of a SP
+- An implicit BEGIN TRANSACTION happens when:
+  - The first DML/query statement after a transaction ends, or `ALTER SESSION UNSET AUTOCOMMIT`
+- An implicit COMMIT happens when: 
+  - The execution of a DDL statement, or `ALTER SESSION SET AUTOCOMMIT`
+- An implicit ROLLBACK happens when:
+  - The end of a session/SP
 
-To avoid writing confusing code, avoid mixing implicit and explicit starts and ends in the same transaction. 
+You cannot change AUTOCOMMIT settings inside a SP.
 
-If a statement fails within a transaction, you can still commit, rather than roll back, the transaction. If the transaction is committed, the changes by the successful statements are applied. The statements after the failed INSERT statement might or might not be executed, depending upon how the statements are run and how errors are handled.
+To avoid writing confusing code, avoid mixing implicit and explicit starts/ends in the same transaction. 
 
-When a DML statement or CALL statement in a transaction fails, the changes made by that failed statement are rolled back. 
+If a statement fails within a transaction, you can still commit the transaction, rather than roll back. If the transaction is committed, the changes by the successful statements are applied. The statements after the failed INSERT statement in this transaction might or might not be executed, depending upon how the statements are run and how errors are handled:
+- If it is inside an SP, the failed statement throws an exception:
+  - If the exception is not handled, this transaction is implicitly rolled back. 
+  - If the exception is handled, and it commits the statements prior to the failed statement, then only the committed vals exist in the target table.
+- If it is not inside a SP:
+  - If executed through Snowsight, execution halts at the first error.
+  - If executed by SnowSQL using the -f (filename) option, then the statements after the error are executed.
+
+When a DML/CALL statement in a transaction fails, the changes made by that failed statement are rolled back. 
 
 Snowflake recommends that multi-threaded client programs do at least one of the following:
 - Use a separate connection for each thread.
-- Execute the threads synchronously to control the order in which steps are performed.
+- Execute the threads synchronously, to control the order in which steps are performed.
 
-A transaction can be inside a stored procedure, or a stored procedure can be inside a transaction; however, a transaction cannot be partly inside and partly outside a stored procedure, or started in one stored procedure and finished in a different stored procedure.
+A transaction can be inside a SP, or a SP can be inside a transaction; however, a transaction cannot be partly inside and partly outside a SP, or started in one SP and finished in a different SP.
 
-The stored procedure inside a transaction follows the rules of the enclosing transaction:
-- If the transaction is committed, then all the statements inside the procedure are committed.
-- If the transaction is rolled back, then all statements inside the procedure are rolled back.
+The SP inside a transaction:
+- If the transaction is committed, then all statements inside the SP are committed.
+- If the transaction is rolled back, then all statements inside the SP are rolled back.
 
-You can execute any number of transactions inside a stored procedure. 
+You can execute any number of transactions inside a SP. 
 
-Scoped Transactions: A stored procedure that contains a transaction can be called from within another transaction. For example, a transaction inside a stored procedure can include a call to another stored procedure that contains a transaction. (My question - why do not sf call them nested transactions?)
+Scoped Transactions: A SP that contains a transaction can be called from within another transaction. For example, a transaction inside a SP can include a call to another SP that contains a transaction. Snowflake does not treat the inner transaction as nested; instead, the inner transaction is a independent/separate transaction. 
+
+In a SP:
+- a `begin transaction;` without an explicit `commit/rollback` will be implicitly rolled back. 
+- a `commit` without an explicit `begin transaction` will cause an error. 
 
 Overlapping scoped transactions can cause a deadlock if they manipulate the same database object (e.g. table). Scoped transactions should be used only when necessary.
 
-When AUTOCOMMIT is off, be especially careful combining implicit transactions and stored procedures. If you accidentally leave a transaction active at the end of a stored procedure, the transaction is rolled back.
+When AUTOCOMMIT is off, be especially careful combining implicit transactions and stored procedures. If you accidentally leave a transaction active at the end of a SP, the transaction is rolled back.
+
+When AUTOCOMMIT is set to false, and the first DML after that happens inside an SP, and this SP did not end with a `commit/roll back`, then this DML and whatever after it in the SP is implicitly rolled back - even if there is a `commit` outside and after the SP. To avoid this, you can either:
+- outside the SP, add a `begin transaction;` before entering the SP. 
+- inside the SP, explicitly use `begin transaction` and `commit/roll back` 
+
+Inside a SP, if `begin` is missing its `commit`, or vise versa, it will be rolled back and return an error. 
 
 READ COMMITTED is the only isolation level currently supported for tables.
 

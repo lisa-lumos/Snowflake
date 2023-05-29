@@ -1,4 +1,11 @@
 # 11. Semi-structured data
+## parse_json(<string>)
+Takes a string, returns a variant. 
+
+If the input is NULL, the output is also NULL. 
+
+If the input string is 'null', then it is interpreted as a JSON null value, so that the result is not SQL NULL, but a valid VARIANT value containing null.
+
 
 ## try_parse_json(<string>) function
 A special version of parse_json() that returns a NULL, if an error occurs during parsing.
