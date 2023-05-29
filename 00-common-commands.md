@@ -1211,16 +1211,16 @@ alter table my_db.my_schema.hr_data
   modify column fname
   set tag snowflake.core.semantic_category='name';
 alter table my_db.my_schema.hr_data
-  modify column fname
-  set tag snowflake.core.privacy_category='identifier';
+modify column fname
+set tag snowflake.core.privacy_category='identifier';
 
 use role policy_admin;
 select * from snowflake.account_usage.tag_references
   where tag_name = 'privacy_category'
   and tag_value = 'identifier';
 alter table my_db.my_schema.hr_data
-  modify column fname
-  set masking policy governance.policies.identifier_mask;
+modify column fname
+set masking policy governance.policies.identifier_mask;
 
 use role securityadmin;
 select * from snowflake.account_usage.tag_references
@@ -1314,14 +1314,14 @@ as select * from sales;
 alter table t1 add row access policy rap_t1 on (empl_id);
 alter view v1 add row access policy rap_v1 on (empl_id);
 
-CREATE TABLE sales ( -- table
+create table sales ( -- table
   customer   varchar,
   product    varchar,
   spend      decimal(20, 2),
   sale_date  date,
   region     varchar
 );
-CREATE TABLE security.salesmanagerregions ( -- mapping table (maps roles to their regions)
+create table security.salesmanagerregions ( -- mapping table (maps roles to their regions)
   sales_manager varchar, -- role name
   region        varchar  -- matching region for this role
 );

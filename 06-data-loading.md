@@ -145,7 +145,9 @@ Data load failures:
 - view the copy history for the table
 - use validation_mode in COPY INTO statement: `VALIDATION_MODE=RETURN_ALL_ERRORS`
 
-CURRENT_TIMESTAMP is evaluated when the load statement is compiled, rather than when the record is inserted into the table. 
+If you use CURRENT_TIMESTAMP() inside a COPY INTO command, it is evaluated at compile time, rather than when the record is actually inserted into the table. The latter is reflected in the LOAD_TIME column in the COPY_History view/function. 
+
+
 ## Snowpipe 
 2 mechanisms for detecting the staged files:
 - using cloud messaging (auto-ingest)
