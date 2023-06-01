@@ -19,25 +19,25 @@ You can create UDFs inline in a Snowpark app. Snowpark can push your code to the
 (skipped)
 
 ## Python
+You can write Snowpark Python code in:
+- A local development environment, for client app
+- A Python worksheet in Snowsight, for writing SPs
 
+Snowpark Python can: 
+- Query/process data with a DataFrame object
+- Convert custom lambdas/functions to UDFs, that you can call to process data
+- Write a UDTF, that processes data, and returns data
+- Write a SP to process data, or automate tasks
+- Perform machine learning tasks like training models with SP, and deploy them with udfs. 
 
+The Snowpark API requires Python 3.8.
 
+The Snowpark API provides methods for writing data to/from Pandas DataFrames.
+
+Install the Snowpark Python package into the Python 3.8 venv by `pip install snowflake-snowpark-python`.
+
+By writing code in Python worksheets, you can perform your development/testing in Snowflake, without needing to install dependent libraries.
 
 ## Scala
 (skipped)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
