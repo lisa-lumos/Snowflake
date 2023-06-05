@@ -33,6 +33,48 @@ A single executable statement can call only one SP. In contrast, a single SQL st
 Unlike SPs, UDFs do not have access to an API that can perform database operations.
 
 ## Guidelines
+### Handler code inline with sql, or on a stage?
+Handler code lives in-line with sql:
+- Easy to implement/deploy
+- Has an upper limit on the source code size
+- Change the code via ALTER FUNCTION/PROCEDURE
+
+If the in-line handler source code needs to be compiled (Java/Scala), Snowflake manages compiled output as such:
+- If the SQL statement (such as CREATE FUNCTION) uses TARGET_PATH to specify a output location (such as for the JAR file), Snowflake compiles the code once, and keeps the compiled output for future use. This can result in faster execution on repeated calls.
+- If the SQL statement does not specify a output location, Snowflake re-compiles the code each time it was called. Snowflake automatically cleans up the file after the SQL statement finishes.
+
+Handler code lives in stage:
+- Can use compiled code
+- Can use code that is too big to paste into sql statement
+- One handler file can contain many handler functions, so many functions/procedures can use them. 
+- When code is large/complex, using existing testing/debugging tools are convenient. 
+
+If you delete or rename the handler file, you can no longer call the function/procedure. To update your handler file:
+- First, ensure that no calls are being made to the function/procedure that uses the handler.
+- Use the PUT command to upload a new handler file. Use the PUT command OVERWRITE=TRUE clause to overwrite the old handler file.
+
+### Security Practices
+
+
+### Secure UDFs and Procedures
+
+
+### Pushdown Optimization and Data Visibility
+
+
+### Designing for Snowflake Constraints
+
+
+### Data Type Mappings
+
+
+### Naming Conventions
+
+
+### Uploading Dependencies
+
+
+
 
 
 ## Packaging Handler Code
