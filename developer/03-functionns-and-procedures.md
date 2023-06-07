@@ -91,12 +91,36 @@ See if a function/procedure is secure: SHOW FUNCTIONS/PROCEDURES command.
 The internals of a secure function are not exposed in Query Profile - not even for the owner, since non-owners may have access to an owner's Query Profile.
 
 ### Pushdown Optimization and Data Visibility
+Pushdown optimization: Snowflake makes query processing faster/efficient, by filtering rows early, and apply the most selective filters first. In this way, only needed micro-partitions are fetched by the warehouse. 
 
+However, filters can be reordered by query optimizer, so pushdown can expose data indirectly, which you might not want.
+
+An example showed that a user can deduce information about rows that the user cannot view directly, using the `1/IFF(category = 'MentalHealth', 0, 1) = 1;`, by observing whether the query returns an "divide by zero" error.
 
 ### Designing for Snowflake Constraints
-
+During run time, these limitations are enforced:
+- Avoid to consume too much memory, either by large values, or by stack depth. 
+- Avoid long running algorithms
+- Do not use libraries that may introduce security problems, such as writing to files
 
 ### Data Type Mappings
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### Naming Conventions
