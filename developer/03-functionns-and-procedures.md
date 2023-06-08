@@ -103,37 +103,19 @@ During run time, these limitations are enforced:
 - Avoid long running algorithms
 - Do not use libraries that may introduce security problems, such as writing to files
 
-### Data Type Mappings
+### Data Type Mappings for functions/SPs
+skipped
 
+### Naming Conventions for functions/SPs
+Built-in, system-defined functions provided by Snowflake have no namespace, so you can call them from anywhere.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Naming Conventions
-
+Snowflake supports overloading of procedure and function names, as long as their signatures differ. 
 
 ### Uploading Dependencies
-
-
-
-
+When your UDF or SP uses external code/files (such as Python module, Java/Scala JAR, config files, ...), you can upload the dependency to a stage, then referencing it with IMPORTS clause (such as `IMPORTS = ('@mystage/MyCompiledJavaCode.jar')`).
 
 ## Packaging Handler Code
-
+Scala build tool (sbt), and Maven. 
 
 ## Stored Procedures
 
@@ -142,26 +124,6 @@ During run time, these limitations are enforced:
 
 
 ## Logging and Tracing
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
