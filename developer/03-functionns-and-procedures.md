@@ -132,37 +132,26 @@ For example, if you want to clean up a database by deleting data older than a sp
 - Snowflake Scripting (SQL)
 
 ### Usage
+SPs are not atomic. You can use SPs with transactions to make a group of statements atomic. 
 
-For a role to use a SP, they must either be the owner, or have been granted USAGE privilege on the SP.
+Best practices:
+- If a SP makes temp changes to your session, then that procedure should undo those changes before returning.
+- If a SP uses exception handling/branching/etc, you need to clean up whatever you created, regardless of which branches you take during a particular invocation.
 
-Although stored procedures allow nesting and recursion, the current maximum stack depth of nested calls for user-defined stored procedures is 5.
+For a role to use a SP, they must either be the owner, or have USAGE privilege on the SP.
 
-You can minimize the risk of SQL injection attacks by binding parameters rather than concatenating text.
+Although SPs allow nesting/recursion, the current max stack depth of nested calls for user-defined SPs is 5.
 
+You can minimize the risk of SQL injection attacks, by binding parameters, rather than concatenating text.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SPs are usually written to be re-used/shared. Documenting them can make them easier to use/maintain.
 
 ### Caller and Owner Rights
 A SP runs with either the caller's rights, or the owner's rights. At the time that the SP is created, the creator specifies whether the procedure runs with owner's rights, or caller's rights. `The default is owner's rights.` The owner can interchange these two rights by an ALTER PROCEDURE command. 
 
 A caller's rights stored procedure can read/set/unset the caller's session parameters/variables. If a caller's rights stored procedure makes changes to the session, those changes can persist after the end of the CALL. 
 
-An owner's rights stored procedure runs mostly with the privileges of the stored procedure's owner. Owner's rights stored procedures are not permitted to change session state (cannot view/set/unset session variables; can view some session parameters, but cannot set/unset them) of the caller. 
+An owner's rights stored procedure runs mostly with the privileges of the stored procedure's owner. Owner's rights SPs are not permitted to change session state (cannot view/set/unset session variables; can view some session parameters, but cannot set/unset them) of the caller. 
 
 
 The primary advantage of an owner's rights stored procedure is that the owner can delegate specific administrative tasks, such as cleaning up old data, to another role without granting that role more general privileges, such as privileges to delete all data from a specific table.
