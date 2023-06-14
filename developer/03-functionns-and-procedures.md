@@ -147,14 +147,27 @@ You can minimize the risk of SQL injection attacks, by binding parameters, rathe
 SPs are usually written to be re-used/shared. Documenting them can make them easier to use/maintain.
 
 ### Caller and Owner Rights
-A SP runs with either the caller's rights, or the owner's rights. At the time that the SP is created, the creator specifies whether the procedure runs with owner's rights, or caller's rights. `The default is owner's rights.` The owner can interchange these two rights by an ALTER PROCEDURE command. 
+A SP runs with either the caller's rights, or the owner's rights. When a SP is created/altered, the owner can specify which right it runs with. `The default is owner's rights.` 
 
-A caller's rights stored procedure can read/set/unset the caller's session parameters/variables. If a caller's rights stored procedure makes changes to the session, those changes can persist after the end of the CALL. 
+A caller's rights SP runs with caller's privileges: 
+- Can read/set/unset the caller's [session parameters/variables]. Its modifications to the session persist after the call completes. 
+- Uses caller's warehouse. 
+- Uses caller's current db/schema. 
+- Caller can see the code. 
 
-An owner's rights stored procedure runs mostly with the privileges of the stored procedure's owner. Owner's rights SPs are not permitted to change session state (cannot view/set/unset session variables; can view some session parameters, but cannot set/unset them) of the caller. 
+An owner's rights SP runs with owner's privileges:
+- Cannot view/set/unset [session variables]. 
+- Can view some caller's [session parameters], but cannot set/unset them. 
+- Uses caller's warehouse. 
+- Uses the db/schema that the SP was created in, not caller's settings. 
+- Caller cannot see the code. 
 
+The advantage of an owner's rights SP is that, the owner can delegate specific admin tasks, such as cleaning up old data, to another role without granting that role more general privileges, such as privileges to delete all data from a specific table.
 
-The primary advantage of an owner's rights stored procedure is that the owner can delegate specific administrative tasks, such as cleaning up old data, to another role without granting that role more general privileges, such as privileges to delete all data from a specific table.
+To better isolate SP from the rest of the session:
+- Avoid using session variables directly - pass them as explicit parameters.
+- Clean up any session variables that you set inside the SP; and use rare names, so you don't accidentally clean up a pre-existing session variable).
+
 
 ### Creating
 
