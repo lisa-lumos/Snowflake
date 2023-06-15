@@ -168,11 +168,16 @@ To better isolate SP from the rest of the session:
 - Avoid using session variables directly - pass them as explicit parameters.
 - Clean up any session variables that you set inside the SP; and use rare names, so you don't accidentally clean up a pre-existing session variable).
 
-
 ### Creating
+If you do not have CREATE PROCEDURE schema privileges, you can create/call an anonymous procedure that isn't stored for later use. Both the creation and calling live in one command. It will run with caller's rights. 
 
+When the handler language is Java/Python/Scala, use the RUNTIME_VERSION clause to specify which supported runtime version to use. Omitting it will use the default, which may change in the future.
 
 ### Calling
+
+
+
+
 
 
 
