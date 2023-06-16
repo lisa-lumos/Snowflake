@@ -179,10 +179,20 @@ The CREATE PROCEDURE statement associates the procedure name with the handler - 
 skipped. 
 
 ## User-Defined Functions
+A user-defined function (UDF) is a function you define, so you can call it from SQL. It extends or enhances SQL. You can call it repeatedly from multiple places in code.
 
+You can write a UDF that returns a single value (a scalar UDF), or a tabular value (a user-defined table function, or UDTF).
 
+`Supported languages:`
+- Java
+- JavaScript
+- Python
+- Scala
+- SQL
 
 ### Privileges
+
+
 ### Creating
 ### Calling
 
