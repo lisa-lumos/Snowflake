@@ -173,15 +173,15 @@ If you do not have CREATE PROCEDURE schema privileges, you can create/call an an
 
 When the handler language is Java/Python/Scala, use the RUNTIME_VERSION clause to specify which supported runtime version to use. Omitting it will use the default, which may change in the future.
 
+The CREATE PROCEDURE statement associates the procedure name with the handler - so the name does not need to match the name of the handler. 
+
 ### Calling
-
-
-
-
-
-
+skipped. 
 
 ## User-Defined Functions
+
+
+
 ### Privileges
 ### Creating
 ### Calling
