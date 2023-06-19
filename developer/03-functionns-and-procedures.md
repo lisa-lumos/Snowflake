@@ -191,11 +191,21 @@ You can write a UDF that returns a single value (a scalar UDF), or a tabular val
 - SQL
 
 ### Privileges
-
+skipped
 
 ### Creating
-### Calling
+skipped 
 
+### Calling
+```sql
+SELECT udf_concatenate_strings(
+  'one',
+  'two',
+  'three');
+
+select ...
+from table(my_java_udtf('2021-01-16'::date));
+```
 ## Logging and Tracing
 
 

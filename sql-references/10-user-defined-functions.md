@@ -40,28 +40,3 @@ In the returned JS object to be casted to SQL variant:
 
 For a SQL UDF:
 A reference to an schema object requires the function owner to have privileges to access that schema object. The invoker of the function only needs the privilege to use the function, they do not need to have access to the objects used in the function definition. (my thought: this works like a view)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
