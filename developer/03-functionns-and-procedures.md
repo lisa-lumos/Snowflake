@@ -206,16 +206,14 @@ SELECT udf_concatenate_strings(
 select ...
 from table(my_java_udtf('2021-01-16'::date));
 ```
+
 ## Logging and Tracing
+You can record the activity of function/procedure handler code (including those using Snowpark APIs), by capturing log messages and trace events from the code, as it executes. Once you've collected the data, you can query it with SQL to analyze the results.
 
+Steps:
+1. Create an event table and associate with your account. You store your log and trace data in an event table in Snowflake. It is a special table, with a predefined set of columns.
+2. Use an API in your handler language to emit log messages from handler code. 
+3. Query the event table to analyze collected log and trace data.
 
-
-
-
-
-
-
-
-
-
+More details skipped. 
 
