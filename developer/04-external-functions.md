@@ -47,40 +47,26 @@ Using external functions incurs costs associated with:
 - Data transfer.
 
 ## Data Formats
-
-
-
-
+Each HTTP request from Snowflake is a POST or a GET.
+- A POST request contains headers and a request body. The request body includes a batch of rows.
+- A GET contains only headers, and is used only for polling when the remote service returns results asynchronously.
 
 ## Request and Response Translators
-
-
-
-
+With request and response translators, you can change the format of data sent to, and received from, remote services used by external functions.
 
 ## Performance
+A remote service can be synchronous or asynchronous.
 
+synchronous:
+A call to a synchronous remote service is a blocking call. The remote service does not send any response, until the results are ready. The service can't be polled. Easier to implement than async code.
 
-
-
+asynchronous:
+An async remote service can be polled while the caller waits for results. Reduces sensitivity to timeouts.
 
 ## Best Practices
-
-
-
-
+skipped
 
 ## Security
+Snowflake supports API keys (subscription keys in Azure's term), which are alphanumeric string values that a developer can give to those users who need to provide subscription information.
 
-
-
-
-
-
-
-
-
-
-
-
-
+The API_KEY clause is optional - you can omit it if the service does not need a key.
