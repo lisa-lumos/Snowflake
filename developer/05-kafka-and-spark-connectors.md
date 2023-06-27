@@ -27,7 +27,18 @@ Each Kafka message is passed to Snowflake in JSON/Avro format.
 
 The amount of metadata recorded in the RECORD_METADATA column is configurable, using optional Kafka configuration properties.
 
+The Kafka connector does below stuff, to subscribe to Kafka topics and create Snowflake objects:
+1. It subscribes to one/more Kafka topics, based on the config info, provided via the Kafka config file or command line.
+2. It creates the following objects for each topic:
+   - One internal stage, to temporarily store data files for each topic.
+   - One pipe, to ingest the data files for each topic partition.
+   - One table for each topic. If the table does not exist, it will be created; otherwise, it creates the RECORD_CONTENT and RECORD_METADATA columns in the existing table, and verifies the other cols are nullable.
 
+The sf Kafka connector buffers messages from the Kafka topics. When a threshold is reached, the connector writes the messages to a temporary file in the internal stage. The connector then triggers Snowpipe to ingest the temporary file. After the file is loaded, the connector cleans it up in the stage. If a failure prevented the data from loading, the connector moves the file into the table stage and produces an error message.
+
+Instances of the Kafka connector do not communicate with each other. If you start multiple instances of the connector on the same topics/partitions, then multiple copies of the same row might be inserted into the table. This is not recommended; each topic should be processed by only one instance of the connector.
+
+There is no guarantee that rows are inserted in the order that they were originally published.
 
 ## Spark Connector
 ### Overview
