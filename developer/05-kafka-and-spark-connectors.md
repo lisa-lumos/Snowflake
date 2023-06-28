@@ -41,20 +41,4 @@ Instances of the Kafka connector do not communicate with each other. If you star
 There is no guarantee that rows are inserted in the order that they were originally published.
 
 ## Spark Connector
-### Overview
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Allows Spark to read data from, and write data to, Snowflake. 
