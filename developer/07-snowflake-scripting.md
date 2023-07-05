@@ -72,10 +72,71 @@ If a block declares an object, and there is an object declared in an outer block
 ### Binding
 Use a var in a sql statement. 
 
+```sql
+insert into my_table (x) values (:my_variable) -- use var in a sql statement
 
+select count(*) from identifier(:table_name) -- use var as name of an object
 
+return profit; -- var in expression do not need colon prefix
+
+let select_statement := 'select * from invoices where id = ' || id_variable; -- var in expression do not need colon prefix
+```
+
+### Set vars using as SELECT statement
+```sql
+declare
+  id_variable integer;
+  name_variable varchar;
+begin
+  select id, name into :id_variable, :name_variable from some_data where id = 1;
+  return id_variable || ' ' || name_variable;
+end;
+```
+
+### Variables examples
+```sql
+create procedure duplicate_name(pv_name varchar)
+returns varchar
+language sql
+as
+begin
+  declare
+    pv_name varchar;
+  begin
+    pv_name := 'middle block variable';
+    declare
+      pv_name varchar;
+    begin
+      pv_name := 'innermost block variable';
+      insert into names (v) values (:pv_name);
+    end;
+    -- because the innermost and middle blocks have separate variables
+    -- named "pv_name", the insert below inserts the value
+    -- 'middle block variable'.
+    insert into names (v) values (:pv_name);
+  end;
+  -- this inserts the value of the input parameter.
+  insert into names (v) values (:pv_name);
+  return 'completed.';
+end;
+
+call duplicate_name('parameter');
+
+```
 
 ## Returning a Value
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
