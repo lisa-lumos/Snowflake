@@ -125,20 +125,9 @@ call duplicate_name('parameter');
 ```
 
 ## Returning a Value
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+You can return a value of of either:
+- A SQL data type, such as `return my_variable; `
+- A table, such as `returns table(my_result_set); `
 
 ## Conditional Logic
 
