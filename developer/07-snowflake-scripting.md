@@ -130,8 +130,59 @@ You can return a value of of either:
 - A table, such as `returns table(my_result_set); `
 
 ## Conditional Logic
+"if" statement: 
+```sql
+begin
+  let count := 1;
+  if (count < 0) then
+    return 'negative value';
+  elseif (count = 0) then
+    return 'zero';
+  else
+    return 'positive value';
+  end if;
+end;
+```
 
+"case" statement:
+```sql
+-- simple case statements
+declare
+  expression_to_evaluate varchar default 'default value';
+begin
+  expression_to_evaluate := 'value a';
+  case (expression_to_evaluate)
+    when 'value a' then
+      return 'x';
+    when 'value b' then
+      return 'y';
+    when 'value c' then
+      return 'z';
+    when 'default value' then
+      return 'default';
+    else
+      return 'other';
+  end;
+end;
 
+-- searched case statements
+declare
+  a varchar default 'x';
+  b varchar default 'y';
+  c varchar default 'z';
+begin
+  case
+    when a = 'x' then
+      return 'a is x';
+    when b = 'y' then
+      return 'b is y';
+    when c = 'z' then
+      return 'c is z';
+    else
+      return 'a is not x, b is not y, and c is not z';
+  end;
+end;
+```
 
 ## Loops
 
