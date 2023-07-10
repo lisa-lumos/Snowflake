@@ -185,8 +185,93 @@ end;
 ```
 
 ## Loops
+```sql
+-- for loop, counter based, example
+declare
+  counter integer default 0;
+  maximum_count integer default 5;
+begin
+  for i in 1 to maximum_count do
+    counter := counter + 1;
+  end for;
+  return counter;
+end;
 
+-- for loop, cursor based, example
+create or replace table invoices (price number(12, 2));
+insert into invoices (price) values
+  (11.11),
+  (22.22);
 
+declare
+  total_price float;
+  c1 cursor for select price from invoices;
+begin
+  total_price := 0.0;
+  for record in c1 do
+    total_price := total_price + record.price;
+  end for;
+  return total_price;
+end;
+
+-- while loop, example
+begin
+  let counter := 0;
+  while (counter < 5) do
+    counter := counter + 1;
+  end while;
+  return counter;
+end;
+
+-- repeat loop, example
+begin
+  let counter := 5;
+  let number_of_iterations := 0;
+  repeat
+    counter := counter - 1;
+    number_of_iterations := number_of_iterations + 1;
+  until (counter = 0)
+  end repeat;
+  return number_of_iterations;
+end;
+
+-- loop loop, example
+begin
+  let counter := 5;
+  loop
+    if (counter = 0) then
+      break;
+    end if;
+    counter := counter - 1;
+  end loop;
+  return counter;
+end;
+```
+
+You can explicitly terminate a loop early, by executing the `BREAK` command. 
+
+You can use the `CONTINUE` (or `ITERATE`) command to jump to the end of an iteration of a loop, skipping the remaining statements in it. The loop continues at the start of the next iteration.
+
+You can specify which loop to continue, ec:
+```sql
+begin
+  let inner_counter := 0;
+  let outer_counter := 0;
+  loop
+    loop
+      if (inner_counter < 5) then
+        inner_counter := inner_counter + 1;
+        continue outer;
+      else
+        break outer;
+      end if;
+    end loop inner;
+    outer_counter := outer_counter + 1;
+    break;
+  end loop outer;
+  return array_construct(outer_counter, inner_counter);
+end;
+```
 
 ## Cursors
 
