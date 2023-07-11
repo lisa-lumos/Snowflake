@@ -274,10 +274,64 @@ end;
 ```
 
 ## Cursors
+Use it to iterate through query results, one row at a time.
 
+```sql
+declare
+  id integer default 0;
+  minimum_price number(13,2) default 22.00;
+  maximum_price number(13,2) default 33.00;
+  c1 cursor for select id from invoices where price > ? and price < ?; -- ? are bind parameters
+begin
+  -- Although cursor definition has a query inside, the query is not executed until you "open" the cursor
+  open c1 using (minimum_price, maximum_price);
+  -- Use "fetch" to retrieve the current row, and advance the pointer to the next row.
+  fetch c1 into id;
+  return id;
+end;
+```
 
+When using a cursor in a FOR loop, you do not need to "open" the cursor explicitly.
+
+If you declare a cursor for a RESULTSET obj, the query is executed when you associate the RESULTSET with the query. Therefore opening the cursor will not re-execute it.
+
+As with any SQL query, if the query definition does not contain an ORDER BY, then the result set has no defined order. 
+
+If you try to FETCH a row after the last row, you get NULL.
+
+```sql
+declare
+  c1 cursor for select * from invoices;
+begin
+  open c1;
+  -- returns a table from the cursor
+  return table(resultset_from_cursor(c1));
+end;
+```
+
+To close a cursor: `close my_cursor;`
 
 ## RESULTSETs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
