@@ -312,30 +312,57 @@ end;
 To close a cursor: `close my_cursor;`
 
 ## RESULTSETs
+A pointer, that points to the result set of a query.
 
+Cursor vs RESULTSET: 
+| Cursor      | RESULTSET   |
+| ----------- | ----------- |
+| Query is executed with its OPEN command  | Query is executed when you assign the query to it       |
+| Support binding in OPEN cmd   | Do not support OPEN cmd        |
 
+```sql
+-- assign query directly
+declare
+  res resultset;
+begin
+  res := (select col1 from mytable order by col1);
+  ...
+;
 
+-- assign query via a variable
+declare
+  res resultset;
+  col_name varchar;
+  select_statement varchar;
+begin
+  col_name := 'col1';
+  select_statement := 'select ' || col_name || ' from mytable';
+  res := (execute immediate :select_statement);
+  return table(res); -- return the RESULTSET via a table
+end;
 
+-- access RESULTSET with a cursor
+declare
+  ...
+  res resultset default (select col1 from mytable order by col1);
+  c1 cursor for res;
+...
+;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
 
 ## Exceptions
+
+
+
+
+
+
+
+
+
+
+
 
 
 
