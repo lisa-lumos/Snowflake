@@ -352,21 +352,83 @@ declare
 ```
 
 ## Exceptions
+Snowflake Scripting raises an exception if an error occurs while executing a statement, such as when it attempts to DROP a non-existing table. An exception prevents the next lines of code from executing.
 
+If the block (in which the exception occurred) has a handler for that exception, then execution resumes at the handler.
 
+An exception handler can contain its own exception handler, in case an exception occurs while handling another exception.
 
+```sql
+declare
+  -- declare your own exception
+  my_exception exception (-20002, 'Raised MY_EXCEPTION.');
+begin
+  let counter := 0;
+  let should_raise_exception := true;
+  if (should_raise_exception) then
+    raise my_exception;
+  end if;
+  counter := counter + 1;
+  return counter;
+end;
 
+-- return:
+-- -20002 (P0001): Uncaught exception of type 'MY_EXCEPTION' on line 8 at position 4 : Raised MY_EXCEPTION.
 
+```
 
+You can handle customized exceptions, and built-in exceptions. Currently, Snowflake provides these built-in exceptions:
+- STATEMENT_ERROR: an error while executing a statement. e.g., you attempt to drop a non-existent table.
+- EXPRESSION_ERROR: an error related to an expression. e.g., you create an expression that evaluates to a VARCHAR, and attempt to assign it to a FLOAT.
 
+```sql
+declare
+  my_exception exception (-20002, 'Raised MY_EXCEPTION.');
+begin
+  let counter := 0;
+  let should_raise_exception := true;
+  if (should_raise_exception) then
+    raise my_exception;
+  end if;
+  counter := counter + 1;
+  return counter;
+exception
+  when statement_error then
+    return object_construct('Error type', 'statement_error',
+                            'sqlcode', sqlcode,
+                            'sqlerrm', sqlerrm,
+                            'sqlstate', sqlstate);
+  when my_exception then
+    return object_construct('Error type', 'my_exception',
+                            'sqlcode', sqlcode,
+                            'sqlerrm', sqlerrm,
+                            'sqlstate', sqlstate);
+  when other then
+    return object_construct('Error type', 'Other error',
+                            'sqlcode', sqlcode,
+                            'sqlerrm', sqlerrm,
+                            'sqlstate', sqlstate);
+END;
 
+-- result:
+-- +--------------------------------------+
+-- | anonymous block                      |
+-- |--------------------------------------|
+-- | {                                    |
+-- |   "Error type": "MY_EXCEPTION",      |
+-- |   "SQLCODE": -20002,                 |
+-- |   "SQLERRM": "Raised MY_EXCEPTION.", |
+-- |   "SQLSTATE": "P0001"                |
+-- | }                                    |
+-- +--------------------------------------+
+```
 
-
-
-
-
+When you need to raise the same exception that you caught in your exception handler, simply execute the RAISE command.
 
 ## Affected Rows
+
+
+
 
 
 
