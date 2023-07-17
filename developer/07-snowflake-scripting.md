@@ -426,54 +426,15 @@ END;
 When you need to raise the same exception that you caught in your exception handler, simply execute the RAISE command.
 
 ## Affected Rows
-
-
-
-
-
+After each DML command is executed, Snowflake Scripting sets the 3 global variables, which can be used, such as `RETURN SQLROWCOUNT;`, `IF (SQLNOTFOUND = true) THEN ...`: 
+- SQLROWCOUNT: num of rows affected by the last dml statement. 
+- SQLFOUND: TRUE if the statement affected >=1 rows. 
+- SQLNOTFOUND: TRUE if the statement affected 0 rows. 
 
 ## Getting a Query ID
-
-
+If you need to access the query ID of the last query that was executed, use the global variable SQLID. 
 
 ## Using Snowflake Scripting in SnowSQL or the Classic Console
+Use delimiters around the start and end of a Snowflake Scripting block, if you are using SnowSQL, or the Classic Console.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+If you are writing an anonymous block, pass the block as a string literal, to the EXECUTE IMMEDIATE command. 
