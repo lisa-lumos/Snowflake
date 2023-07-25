@@ -1,7 +1,7 @@
 # 1. SQL command reference
 ## Query Syntax
-Example of using a recursive CTE, to generate a Fibonacci series:
 ```sql
+-- Example of using a recursive CTE, to generate a Fibonacci series:
 with recursive current_f (previous_val, current_val) as (
   select 
     1, 0
@@ -16,6 +16,30 @@ with recursive current_f (previous_val, current_val) as (
 select current_val  
 from current_f 
 order by current_val;
+
+-- Top example:
+select top 5
+  *
+from my_table
+order by my_col
+;
+
+-- Snowflake scripting, select a single row to a set of variables:
+select 
+  <expression1>,
+  <expression2>
+into 
+  :var1, 
+  :var2 
+from ...
+where ...
+
+
+
+
+
+
+
 ```
 
 ## Query Operators
