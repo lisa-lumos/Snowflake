@@ -34,9 +34,16 @@ into
 from ...
 where ...
 
+-- use time travel in select
+select * 
+from my_table at(
+  timestamp => 'Fri, 01 May 2015 16:20:00 -0700'::timestamp
+);
 
-
-
+select * 
+from my_table 
+at(offset => -60*5) as t  -- select data from 5 min ago
+where t.flag = 'valid';
 
 
 
