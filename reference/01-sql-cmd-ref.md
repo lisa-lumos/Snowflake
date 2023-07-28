@@ -45,9 +45,24 @@ from my_table
 at(offset => -60*5) as t  -- select data from 5 min ago
 where t.flag = 'valid';
 
-
+-- query the change tracking metadata for a table/view 
+-- within a specified interval of time 
+-- without using a stream
+-- Change tracking must be enabled on the source table 
+select *
+from t1
+  changes(information => default) -- full delta
+  at(timestamp => $ts1)
+;
+select *
+from t1
+  changes(information => append_only) -- only new rows
+  at(timestamp => $ts1)
+  end(timestamp => $ts2);
+;
 
 ```
+
 
 ## Query Operators
 
