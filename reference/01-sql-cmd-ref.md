@@ -61,6 +61,23 @@ from t1
   end(timestamp => $ts2);
 ;
 
+-- connect by 
+select employee_id, manager_id, title
+  from employees
+    start with title = 'president'
+    connect by
+      manager_id = prior employee_id
+order by employee_id;
+-- +-------------+------------+----------------------------+
+-- | EMPLOYEE_ID | MANAGER_ID | TITLE                      |
+-- |-------------+------------+----------------------------|
+-- |           1 |       NULL | President                  |
+-- |          10 |          1 | Vice President Engineering |
+-- |          20 |          1 | Vice President HR          |
+-- |         100 |         10 | Programmer                 |
+-- |         101 |         10 | QA Engineer                |
+-- |         200 |         20 | Health Insurance Analyst   |
+-- +-------------+------------+----------------------------+
 ```
 
 
