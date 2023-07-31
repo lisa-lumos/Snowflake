@@ -78,6 +78,23 @@ order by employee_id;
 -- |         101 |         10 | QA Engineer                |
 -- |         200 |         20 | Health Insurance Analyst   |
 -- +-------------+------------+----------------------------+
+
+-- You CANNOT use "join" keyword on lateral table function:
+select ... from my_table 
+join table(flatten(input=>[col_a])) -- NOT allowed
+on ... ;
+
+-- Without "join" is allowed on lateral table function:
+select ... from my_table,
+table(flatten(input=>[col_a]))
+on ... ;
+
+-- Natural join produces the same output as the corresponding inner join, 
+-- except its output doesn't include a 2nd copy of the join column
+
+
+
+
 ```
 
 
