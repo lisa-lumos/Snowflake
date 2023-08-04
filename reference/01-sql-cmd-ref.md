@@ -162,7 +162,7 @@ order by employee_id;
 
 -- match_recognize is often used to detect events in time series
 
--- pivot example
+-- pivot example. Transform vals in a col to col headers
 create or replace table monthly_sales(
   empid int, 
   amount int, 
@@ -200,7 +200,51 @@ order by empid;
 -- |     2 | 39500 | 90700 | 12000 |  5300 |
 -- +-------+-------+-------+-------+-------+
 
+-- unpivot example. Transforms cols to rows
+-- example setup
+create or replace table monthly_sales(
+  empid int, 
+  dept text, 
+  JAN int, 
+  FEB int, 
+  MAR int, 
+  APRIL int
+);
 
+insert into monthly_sales values
+  (1, 'electronics', 100, 200, 300, 100),
+  (2, 'clothes', 100, 300, 150, 200),
+  (3, 'cars', 200, 400, 100, 50)
+;
+-- EMPID DEPT        JAN FEB MAR APRIL
+-- 1     electronics 100 200 300 100
+-- 2     clothes     100 300 150 200
+-- 3     cars        200 400 100 50
+
+select * 
+from monthly_sales
+  unpivot(
+    sales -- name of the new col
+    for month -- name of the new dimensional col
+      in (JAN, FEB, MAR, APRIL) -- list of column names to go into the new dimensional col
+  )
+order by empid;
+-- +-------+-------------+-------+-------+
+-- | EMPID | DEPT        | MONTH | SALES |
+-- |-------+-------------+-------+-------|
+-- |     1 | electronics | JAN   |   100 |
+-- |     1 | electronics | FEB   |   200 |
+-- |     1 | electronics | MAR   |   300 |
+-- |     1 | electronics | APRIL |   100 |
+-- |     2 | clothes     | JAN   |   100 |
+-- |     2 | clothes     | FEB   |   300 |
+-- |     2 | clothes     | MAR   |   150 |
+-- |     2 | clothes     | APRIL |   200 |
+-- |     3 | cars        | JAN   |   200 |
+-- |     3 | cars        | FEB   |   400 |
+-- |     3 | cars        | MAR   |   100 |
+-- |     3 | cars        | APRIL |    50 |
+-- +-------+-------------+-------+-------+
 
 
 
