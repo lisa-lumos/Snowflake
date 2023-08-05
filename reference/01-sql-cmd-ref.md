@@ -246,10 +246,42 @@ order by empid;
 -- |     3 | cars        | APRIL |    50 |
 -- +-------+-------------+-------+-------+
 
-
-
-
-
+-- VALUES example
+select * from values 
+  (1, 'one'), 
+  (2, 'two'), 
+  (3, 'three')
+;
+-- +---------+---------+
+-- | COLUMN1 | COLUMN2 |
+-- |---------+---------|
+-- |       1 | one     |
+-- |       2 | two     |
+-- |       3 | three   |
+-- +---------+---------+
+select column1, $2 from values 
+  (1, 'one'), 
+  (2, 'two'), 
+  (3, 'three')
+;
+-- +---------+-------+
+-- | COLUMN1 | $2    |
+-- |---------+-------|
+-- |       1 | one   |
+-- |       2 | two   |
+-- |       3 | three |
+-- +---------+-------+
+select v1.$2, v2.$2
+from 
+  values (1, 'one'), (2, 'two') as v1 -- join values
+  inner join values (1, 'one'), (3, 'three') as v2
+  on v2.$1 = v1.$1
+;
+select c1, c2 -- alias the values' column name
+from values 
+  (1, 'one'), 
+  (2, 'two') as v1 (c1, c2)
+;
 
 
 
