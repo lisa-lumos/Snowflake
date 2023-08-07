@@ -283,9 +283,10 @@ from values
   (2, 'two') as v1 (c1, c2)
 ;
 
-
-
-
+-- return a random subset of rows from table, using sample
+select * from my_table sample bernoulli (10.2); -- each row has 10.2% chance of being returned, use bernoulli method for sampling
+select * from my_table sample system (3.1) seed (82); -- each row has 3.1% chance of being returned, use system method (appx, and faster) for sampling, fix the seed val
+select * from my_table sample (10 rows); -- sample and return 10 rows. Slower. 
 
 
 
