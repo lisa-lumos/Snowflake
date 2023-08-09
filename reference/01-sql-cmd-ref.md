@@ -288,7 +288,8 @@ select * from my_table sample bernoulli (10.2); -- each row has 10.2% chance of 
 select * from my_table sample system (3.1) seed (82); -- each row has 3.1% chance of being returned, use system method (appx, and faster) for sampling, fix the seed val
 select * from my_table sample (10 rows); -- sample and return 10 rows. Slower. 
 
-
+-- where clause
+-- In most contexts, the boolean expression NULL = NULL returns NULL, not TRUE. Use IS [ NOT ] NULL to compare NULL values.
 
 
 
