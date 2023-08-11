@@ -300,6 +300,8 @@ from employees
 group by state -- SF uses the state col in table, not the alias in select. 
 ;
 
+-- group by cube/rollup. Can be re-written using group by.
+-- group by grouping sets. Can be re-written using group by.
 
 
 
