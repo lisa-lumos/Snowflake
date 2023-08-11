@@ -291,7 +291,14 @@ select * from my_table sample (10 rows); -- sample and return 10 rows. Slower.
 -- where clause
 -- In most contexts, the boolean expression NULL = NULL returns NULL, not TRUE. Use IS [ NOT ] NULL to compare NULL values.
 
-
+-- group by. Takes col name, position number, expression
+-- GROUP BY ALL: group by all non aggregated items in the SELECT.
+select -- still, not recommend to have dup alias with existing col names
+  sum(salary), 
+  any_value(employment_state) as state -- state is already a col name in employees table
+from employees
+group by state -- SF uses the state col in table, not the alias in select. 
+;
 
 
 
