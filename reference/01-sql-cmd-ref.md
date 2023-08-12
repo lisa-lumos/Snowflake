@@ -303,25 +303,54 @@ group by state -- SF uses the state col in table, not the alias in select.
 -- group by cube/rollup. Can be re-written using group by.
 -- group by grouping sets. Can be re-written using group by.
 
+-- having
+select department_id
+from employees
+group by department_id
+having count(*) < 10;
 
+-- qualify. Filters window functions after they are computed. Can be replace by cte
+select 
+  col1, 
+  col2, 
+  row_number() over (partition by col1 order by col2) as row_num
+from qt
+qualify row_num = 1
+;
+with vals as (
+  select 
+    min(col1) as filtered_col1
+  from tbl1
+  group by col2
+  having filtered_col1 > 3;
+)
+select 
+  col2, 
+  sum(col3) over (partition by col2) as r
+from tbl2
+where col3 < 4
+group by col2, col3
+having sum(col1) > 3
+qualify r in (vals)
 
+-- order by: NULL values are higher than non-NULL values.
+select col1
+from values (1), (null), (2), (null), (3)
+order by column1 nulls first; -- then nulls come first
 
-
-
-
-
-
-
-
-
-
-
-
-
+-- limit
+select col1 from testtable 
+order by col1 
+limit 3 offset 3
+;
 ```
 
-
 ## Query Operators
+
+
+
+
+
 
 
 ## General DDL
