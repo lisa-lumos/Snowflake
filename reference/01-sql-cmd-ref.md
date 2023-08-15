@@ -346,9 +346,30 @@ limit 3 offset 3
 ```
 
 ## Query Operators
+```sql
+-- Leading digits (L): num of digits to the left of the decimal point
+-- Scale (S): num of digits to the right of the decimal point
+-- Precision (P): P = L + S. Total num of digits. Always limited to 38, in sf.
+-- e.g.: for the decimal(8,2) data type, precision is 8, scale is 2, and leading digits is 6.
+
+-- logical operators
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
 
 
 
