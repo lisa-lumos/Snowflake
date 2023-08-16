@@ -352,13 +352,31 @@ limit 3 offset 3
 -- Precision (P): P = L + S. Total num of digits. Always limited to 38, in sf.
 -- e.g.: for the decimal(8,2) data type, precision is 8, scale is 2, and leading digits is 6.
 
--- logical operators
+-- set operators
+-- Make sure:
+-- 1. each query selects the same num of columns
+-- 2. the data type of each column is consistent from different sources
+-- 3. the meanings of the columns should match
 
+-- intersect: return the intersection rows, does deduplication
+select ...
+intersect
+select ...
 
+-- minus(same with except): rmv intersection rows, does deduplication
+select ...
+minus
+select ...
 
+-- union: union does deduplication, union all does not do it. 
+select ...
+union [all]
+select ...
+```
 
-
-
+## General DDL
+To to create/manipulate/modify objects in Snowflake. 
+```sql
 
 
 
@@ -370,12 +388,6 @@ limit 3 offset 3
 
 
 ```
-
-
-
-
-## General DDL
-
 
 ## General DML
 
