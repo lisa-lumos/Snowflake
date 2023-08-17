@@ -331,7 +331,7 @@ from tbl2
 where col3 < 4
 group by col2, col3
 having sum(col1) > 3
-qualify r in (vals)
+qualify r in (select * from vals)
 
 -- order by: NULL values are higher than non-NULL values.
 select col1
@@ -377,9 +377,23 @@ select ...
 ## General DDL
 To to create/manipulate/modify objects in Snowflake. 
 ```sql
+-- alter
+alter account/session set param_name = param_val;
+alter obj_type obj_name ...;
 
+-- comment. Adds/overrides comment for an object
+comment [if exists] on obj_type obj_name is 'my obj comment';
+comment [if exists] on column my_table.my_column is 'my col comment';
 
+-- create
+create [or replace] obj_type [if not exists] obj_name ...
+; -- CREATE TABLE ... CLONE includes the COPY GRANTS option
+create database/schema/table obj_name 
+  clone source_obj_name ...
+; -- with/without time travel
+-- when clone from db/schema, views inside them do not have ddl change (points to source tables/views, same as source views). 
 
+-- describe
 
 
 
