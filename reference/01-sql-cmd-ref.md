@@ -394,6 +394,32 @@ create database/schema/table obj_name
 -- when clone from db/schema, views inside them do not have ddl change (points to source tables/views, same as source views). 
 
 -- describe
+describe obj_type obj_name;
+
+-- drop
+-- 1. restrict: do not drop if foreign key points to the obj. 
+-- 2. cascade: drop the obj, and drop any foreign keys that point to this obj.
+drop obj_type [if exists] obj_name [restrict/cascade];
+
+-- undrop. Relies on time travel. 
+undrop obj_type obj_name;
+
+-- show
+-- 1. uses cloud services layer only
+-- 2. only show objs you have access to (roles with MANAGE GRANTS privilege can see every object in the account)
+-- 3. recommend to provide scope
+-- 4. return max of 10k records. To see more, go to information_schema
+show obj_type_plural [like 'my_pattern'] [in obj_type [obj_name]];
+
+-- use. Sets the role/wh/db/sc for the current session
+use obj_type obj_name;
+```
+
+## General DML
+```sql
+
+
+
 
 
 
@@ -403,11 +429,8 @@ create database/schema/table obj_name
 
 ```
 
-## General DML
-
-
 ## All Commands 
-
+skipped. 
 
 ## Accounts
 
