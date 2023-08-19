@@ -417,9 +417,28 @@ use obj_type obj_name;
 
 ## General DML
 ```sql
-
-
-
+-- insert. Can use OVERWRITE param to do truncate and insert in one transaction. 
+insert [overwrite] into employees
+values -- multi-row insert
+  ('Lysandra','Reeves','1-212-759-3751','New York',10018),
+  ('Michael','Arnett','1-650-230-8467','San Francisco',94116)
+;
+insert into table1 (col_number, col_string, col_variant)
+select 
+  4, 
+  'fourier', 
+  parse_json('{ "key1": "value1", "key2": "value2" }')
+;
+insert into employees (first_name, last_name)
+with cte as(
+  select 
+    contractor_first as first_name,
+    contractor_last as last_name
+  from contractors
+)
+select first_name, last_name
+from cte
+;
 
 
 
