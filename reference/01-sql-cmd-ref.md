@@ -440,6 +440,19 @@ select first_name, last_name
 from cte
 ;
 
+-- merge. 
+-- Inserts/updates/deletes vals in a table, 
+-- based on vals in a 2nd table/subquery, when it is like a change log.
+-- ERROR_ON_NONDETERMINISTIC_MERGE session parameter is true by default,
+-- which will return an error if multiple rowsin my_log matches the condition
+merge into my_table using my_log on my_table.col1 = my_log.col1
+when matched and ... then update/delete ...
+when matched then update/delete ...
+when not matched and ... then insert ... values ...
+when not matched then insert ... values ...
+;
+
+-- update
 
 
 
