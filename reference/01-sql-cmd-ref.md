@@ -444,7 +444,7 @@ from cte
 -- Inserts/updates/deletes vals in a table, 
 -- based on vals in a 2nd table/subquery, when it is like a change log.
 -- ERROR_ON_NONDETERMINISTIC_MERGE session parameter is true by default,
--- which will return an error if multiple rowsin my_log matches the condition
+-- which will return an error if multiple rows in my_log matches the condition
 merge into my_table using my_log on my_table.col1 = my_log.col1
 when matched and ... then update/delete ...
 when matched then update/delete ...
@@ -453,22 +453,53 @@ when not matched then insert ... values ...
 ;
 
 -- update
+-- ERROR_ON_NONDETERMINISTIC_MERGE session parameter is true by default,
+-- which will return an error if multiple rows in my_log matches the condition
+update target_table
+set v = src_table.v
+from src_table
+where target_table.k = src_table.k;
 
+-- delete
+delete from bicycles 
+where bicycle_id = 105
+;
+delete from table1 
+using table2 
+where table1.k = table2.k
 
-
-
-
-
+-- truncate
+-- also deletes the load metadata for the table, for manual load
+truncate [table] [if exists] my_table;
 ```
 
 ## All Commands 
 skipped. 
 
 ## Accounts
+Note that all show ... commands lives on cloud services layer. 
+```sql
+create/drop/undrop account ...; -- need to be ORGADMIN
+ 
+show organization accounts ...;  -- need to be ORGADMIN. 
 
+-- for reader accounts. 
+create/drop managed account ...;  -- need to be accountadmin, or "create account" privilege on account object
+show managed accounts ...;  -- need to be accountadmin, or "monitor usage" global privilege. 
+
+alter account set/unset ...; 
+-- need to be accountadmin, for account/session/object parameters, resource monitors, tags. 
+-- need to be securityadmin, for network_policy account param. 
+-- need to be orgadmin, for rename account, enable orgadmin role for the account. 
+
+-- lists both native function and user-defined functions. 
+show functions ...;
+```
 
 ## Users, Roles, & Privileges
+```sql
 
+```
 
 ## Integrations
 
