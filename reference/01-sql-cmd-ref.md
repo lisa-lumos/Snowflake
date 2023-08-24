@@ -504,6 +504,26 @@ drop user ...;
 describe user ...; -- user's owner+ can see other users, or user can see themselves
 show users ...; -- security admin+, or needs "manage grants" global privilege 
 
+create database role ...; -- need to be user admin+, or db owner/user, or have "create database role" privilege on the db.  
+alter database role ...; -- need to be db role owner+
+drop database role ...;
+show database roles in database ...; -- need to be db user
+grant database role ... to role ...; -- grant the db role to an account/db role. Need to be the owner of the source db role, or have global "manage grants" privilege. 
+revoke database role ... from role ...;
+grant database role ... to share ...;
+revoke database role ... from share ...;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ```
