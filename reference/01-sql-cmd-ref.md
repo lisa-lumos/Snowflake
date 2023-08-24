@@ -498,6 +498,13 @@ show functions ...;
 
 ## Users, Roles, & Privileges
 ```sql
+create user ...; -- need to be useradmin+, or "create user" privilege on the account object
+alter user ...; -- admin can do this to all users; individual users can modify default warehouse/namespace/role/session-params of themselves. 
+drop user ...;
+describe user ...; -- user's owner+ can see other users, or user can see themselves
+show users ...; -- security admin+, or needs "manage grants" global privilege 
+
+
 
 ```
 
