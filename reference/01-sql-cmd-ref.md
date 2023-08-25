@@ -513,10 +513,14 @@ revoke database role ... from role ...;
 grant database role ... to share ...;
 revoke database role ... from share ...;
 
-
-
-
-
+create role ...; -- need to be useradmin+, or "create role" privilege on account obj
+alter role ...; -- need to be the role owner+
+drop role ...; -- Objects owned by the dropped role is transferred to the role that executes the DROP command. If a role has a future privilege as a grantor/grantee, the role can only be dropped by a role with the "manage grants" privilege. 
+show roles ...; 
+grant role to role/user ...; -- need to be owner of role, or security admin, or have "manage grants" privilege. 
+revoke role from role/user ...; 
+use role ...; -- set the cur primary role for the session
+use secondary roles all/none; -- use all roles available as secondary role, or disable secondary roles. 
 
 
 
