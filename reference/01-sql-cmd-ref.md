@@ -522,18 +522,26 @@ revoke role from role/user ...;
 use role ...; -- set the cur primary role for the session
 use secondary roles all/none; -- use all roles available as secondary role, or disable secondary roles. 
 
+-- You must use an application role, to grant/revoke privileges on objects in an application
+grant ... on ... to application role ...;
+revoke ... on ... from application role ...;
+grant ... on ... to role ...;
+grant ... on ... to database role ...;
+revoke ... on ... from role ...;
+revoke ... on ... from database role ...;
+grant ... on ... to share ...;
+revoke ... on ... from share ...;
+grant ownership on ... to role ...;
+grant ownership on ... to database role ...;
 
-
-
-
-
-
-
+show grants [on ...]; -- list all privileges you have on this object
+show grants to ...; -- list all privileges/roles this role/user/share has
+show grants of ...; -- list all users/roles granted to this role/share...
 
 ```
 
 ## Integrations
-
+skipped
 
 ## Security Policies
 
