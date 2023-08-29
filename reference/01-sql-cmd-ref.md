@@ -544,10 +544,34 @@ show grants of ...; -- list all users/roles granted to this role/share...
 skipped
 
 ## Security Policies
+```sql
+create network policy ...; -- need to be security admin+, or "create network policy" privilege on the account object
+alter network policy ...; -- need to be the network policy owner+
+drop network policy ...; -- need to be security admin+
+describe network policy ...; -- need to be the network policy owner+
+show network polices ...; -- need to be the network policy owner+
 
+-- After creating a password policy object, apply it to an account using ALTER ACCOUNT, or a user using ALTER USER.
+create password policy ...; -- need to have "create password policy" privilege on the schema object
+alter password policy ...; -- need to be the password policy owner+
+drop password policy ...; -- need to be the password policy owner+
+describe password policy ...; -- need to be the password policy owner+, or have "apply password policy" on the account object. 
+show password policies ...; -- need to be the password policy owner+, or have "apply password policy" on the account object. 
+
+-- Session policies requires Enterprise Edition &+
+-- defines the idle session timeout period in minutes.
+-- After creating a session policy object, apply it to an account using ALTER ACCOUNT, or a user using ALTER USER.
+create session policy ...; -- need to have "create session policy" privilege on the schema object
+alter session policy ...; -- need to be the session policy owner+
+drop session policy ...; -- need to be the session policy owner+
+describe session policy ...; -- need to be the session policy owner+, or have "apply session policy" privilege on the account object
+show session polices ...; -- need to be the session policy owner+, or have "apply session policy" privilege on the account object
+```
 
 ## Replication & Failover
+```sql
 
+```
 
 ## Sessions
 
