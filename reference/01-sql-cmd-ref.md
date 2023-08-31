@@ -570,7 +570,33 @@ show session polices ...; -- need to be the session policy owner+, or have "appl
 
 ## Replication & Failover
 ```sql
+-- list all the accounts in your org that enabled replication, and their region
+show replication accounts ...; -- need to be account admin
+-- list all the dbs that enabled replication, and their region
+show replication databases ...; -- need usage/monitor on the db
+-- list all the regions, in which accounts can be created.
+show regions ...;
 
+-- replication
+-- Database and share replication are available to all accounts.
+-- Replication of other account objects & failover/failback require Business Critical Edition &+
+
+-- Create a replication group in the source/target account, in the same org
+create replication group ...; 
+-- need to be account admin, or "create replication group" on the account object. 
+-- To add a db, need to have "monitor" privilege on the db; 
+-- for a share, need to be its owner. 
+
+alter/drop replication group ...;
+show databases/shares in replication group ...;
+show replication groups ...;
+
+create/alter/drop failover group ...;
+show failover groups ...;
+show databases/shares in failover group ...;
+
+create/alter/drop connection ...; -- for client redirect, during disaster recovery, or account migration
+show connections ...;
 ```
 
 ## Sessions
