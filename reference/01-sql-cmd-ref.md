@@ -600,7 +600,17 @@ show connections ...;
 ```
 
 ## Sessions
+```sql
+alter session set/unset ...; -- have types, allow boolean/number/string.
+show parameters ...; -- show all params in account/session/objs
 
+set var_name = my_expression; -- set session variable
+unset var_name; 
+show variables ...; -- list all vars defined in cur session
+
+explain my_statement; -- get the execution plan for the statement, in tab/text/json format
+describe result 'my_query_id'/last_query_id(); -- describe the cols in query result
+```
 
 ## Transactions
 
