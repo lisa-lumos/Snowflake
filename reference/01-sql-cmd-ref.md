@@ -613,7 +613,37 @@ describe result 'my_query_id'/last_query_id(); -- describe the cols in query res
 ```
 
 ## Transactions
+```sql
+-- All transactions have a system-generated internal ID.
+-- When you query a stream within an explicit transaction, 
+-- the stream is queried at the timestamp when the transaction began, 
+-- rather than when the statement was run. 
 
+-- begins a transaction in the current session, can give it a name
+begin ...;  -- same as "start transaction; ", "begin transaction", "begin work"
+
+show transactions;
+select current_transaction();
+
+-- To complete a transaction, a COMMIT/ROLLBACK command must be explicitly executed.
+commit; -- same as "commit work"
+
+select last_transaction();
+
+describe transaction my_transaction_id;
+
+rollback; -- same as "rollback work"
+
+-- lists all running transactions for the current user, that have locks on resources. 
+-- If account admin runs it, it shows result across the account. 
+-- can then use system$abort_transaction() to abort a specific transaction.
+show locks; 
+
+-- list all running transactions for the current user
+-- If account admin runs it, it shows result across the account. 
+-- can then use system$abort_transaction() to abort a specific transaction.
+show transactions;
+```
 
 ## Virtual Warehouses & Resource Monitors
 
