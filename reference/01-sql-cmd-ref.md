@@ -646,10 +646,27 @@ show transactions;
 ```
 
 ## Virtual Warehouses & Resource Monitors
+```sql
+create warehouse ...; -- Need to be sysadmin+, or with "create warehouse" privilege on the account object
+alter warehouse ...; -- Need to have usage/operate/monitor/modify privilege on the wh
+describe warehouse ...;
+drop warehouse ...;
+show warehouses ...; -- list all whs that you have access to
 
+-- After a resource monitor is created, 
+-- it must be assigned to a warehouse/account, 
+-- before it can perform any monitoring actions
+create resource monitor ...; -- Need to be account admin. 
+alter resource monitor ...;
+drop resource monitor ...;
+show resource monitors ...; -- list all resource monitors that you have access to
+```
 
 ## Databases, Schemas, & Shares
+```sql
 
+
+```
 
 ## Tables, Views, & Sequences
 
