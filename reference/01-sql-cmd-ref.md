@@ -664,8 +664,25 @@ show resource monitors ...; -- list all resource monitors that you have access t
 
 ## Databases, Schemas, & Shares
 ```sql
+create database ...; -- need to be sysadmin+, or with "create database" privilege on the account
+alter database ...;
+describe database ...;
+drop database ...;
+undrop database ...;
+show databases;
 
+create schema ...;
+alter schema ...;
+describe schema ...;
+drop schema ...;
+undrop schema ...;
+show schemas;
 
+create share;
+alter share;
+describe share;
+drop share;
+show shares;
 ```
 
 ## Tables, Views, & Sequences
