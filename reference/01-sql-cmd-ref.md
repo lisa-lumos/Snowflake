@@ -665,18 +665,18 @@ show resource monitors ...; -- list all resource monitors that you have access t
 ## Databases, Schemas, & Shares
 ```sql
 create database ...; -- need to be sysadmin+, or with "create database" privilege on the account
-alter database ...;
-describe database ...;
+alter database ...; -- must be db owner, may require more privileges depends on work
+describe database ...; -- shows schemas in the db, etc
 drop database ...;
 undrop database ...;
-show databases;
+show databases; -- list all dbs you have access to, optionally including dropped ones in time travel
 
 create schema ...;
-alter schema ...;
-describe schema ...;
+alter schema ...; -- must be schema owner, and have "create schema" privilege on the db
+describe schema ...; -- lists objects in the schema
 drop schema ...;
 undrop schema ...;
-show schemas;
+show schemas; -- list all schemas you have access to, optionally including dropped ones in time travel
 
 create share;
 alter share;
