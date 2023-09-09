@@ -678,15 +678,18 @@ drop schema ...;
 undrop schema ...;
 show schemas; -- list all schemas you have access to, optionally including dropped ones in time travel
 
-create share;
-alter share;
-describe share;
-drop share;
-show shares;
+create share; -- creates an empty share. Need to be account admin, or have "create share" privilege on the account object
+alter share; -- need to be owner of the share, or have "create share" privilege
+drop share; -- need to be the owner of the share
+describe share; -- list the objects in a share. Need to be account admin. 
+show shares; -- list all inbound/outbound shares. Need to be account admin, or with "import share" privilege
 ```
 
 ## Tables, Views, & Sequences
+```sql
 
+
+```
 
 ## Functions, Procedures, & Scripting
 
