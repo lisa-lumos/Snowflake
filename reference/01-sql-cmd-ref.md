@@ -687,6 +687,14 @@ show shares; -- list all inbound/outbound shares. Need to be account admin, or w
 
 ## Tables, Views, & Sequences
 ```sql
+show objects ...; -- list tables/views that you have access to
+
+create table ...;
+create table ... as select ...; -- create table with a select query
+create table ... using template ...; -- create table with infer_schema() from staged files 
+create table ... like ...; -- create table with same schema as an existing table, without data
+create table ... clone ...; -- create table via cloning from another table, can use time travel
+
 
 
 ```
