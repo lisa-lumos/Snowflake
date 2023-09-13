@@ -689,12 +689,18 @@ show shares; -- list all inbound/outbound shares. Need to be account admin, or w
 ```sql
 show objects ...; -- list tables/views that you have access to
 
+-- need to have "create table" privilege on the schema object
+-- a schema cannot contain tables/views with the same name
 create table ...;
 create table ... as select ...; -- create table with a select query
 create table ... using template ...; -- create table with infer_schema() from staged files 
 create table ... like ...; -- create table with same schema as an existing table, without data
 create table ... clone ...; -- create table via cloning from another table, can use time travel
 
+-- Inside a transaction, any DDL statement commits the current transaction, 
+-- before executing the DDL statement itself. 
+-- The DDL statement then runs in its own transaction.
+-- The next statement after the DDL statement starts a new transaction.
 
 
 ```
