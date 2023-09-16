@@ -702,6 +702,16 @@ create table ... clone ...; -- create table via cloning from another table, can 
 -- The DDL statement then runs in its own transaction.
 -- The next statement after the DDL statement starts a new transaction.
 
+-- For compatibility with other databases, Snowflake provides constraint properties.
+-- Note, they are not enforced or maintained by Snowflake.
+-- except the "not null" constraint
+create table ... constraint ...; 
+
+alter table ...;
+-- rename table
+-- alter/add/drop/rename col 
+-- set table properties, such as clustering, copy options, add masking policy, search optimization, ...
+-- set/unset tag, add/drop row access policy
 
 ```
 
