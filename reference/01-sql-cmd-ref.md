@@ -713,6 +713,7 @@ alter table ...;
 -- set table properties, such as clustering, copy options, add masking policy, search optimization, ...
 -- set/unset tag, add/drop row access policy
 
+-- Adding a new column with a default value containing a function is not currently supported.
 ```
 
 ## Functions, Procedures, & Scripting
