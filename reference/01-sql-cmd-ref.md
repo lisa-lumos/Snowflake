@@ -602,7 +602,7 @@ show connections ...;
 ## Sessions
 ```sql
 alter session set/unset ...; -- have types, allow boolean/number/string.
-show parameters ...; -- show all params in account/session/objs
+show parameters in ...; -- show all params in account/session/objs
 
 set var_name = my_expression; -- set session variable
 unset var_name; 
@@ -714,6 +714,17 @@ alter table ...;
 -- set/unset tag, add/drop row access policy
 
 -- Adding a new column with a default value containing a function is not currently supported.
+-- If a new column with a default value is added to a table, all of the existing rows are populated with the default value.
+
+
+alter table ... alter column ...;
+
+drop/undrop table ...;
+show tables [like ...] [in account/database/schema ...]; -- list tables in scope
+show columns [like ...] [in account/database/schema/table/view ...]; -- list cols in scope
+show primary keys [in account/database/schema/table/view ...]; -- list pks in scope
+describe table/view ... [type = columns/stage]; -- can use describe table for view, and vise versa
+
 ```
 
 ## Functions, Procedures, & Scripting
