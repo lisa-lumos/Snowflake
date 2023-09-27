@@ -725,6 +725,28 @@ show columns [like ...] [in account/database/schema/table/view ...]; -- list col
 show primary keys [in account/database/schema/table/view ...]; -- list pks in scope
 describe table/view ... [type = columns/stage]; -- can use describe table for view, and vise versa
 
+describe search optimization on ...; -- shows search optimization info for a table and its cols
+
+-- dynamic tables
+-- Dynamic tables are updated as underlying database objects change. 
+-- Change tracking must be enabled on all its underlying objects.
+-- Snowflake will attempt to enable change tracking on all underlying objects, when a dynamic table is created.
+-- min lag behind base table could be 1 min
+-- If the dynamic table A depends on dynamic table B, 
+-- the min lag for A must >= the lag for B.
+create dynamic table ...; -- need to have "create dynamic table" privilege on the schema
+alter dynamic table ... suspend/resume; -- suspend/resume its refresh, and dynamic tables that rely on it
+alter dynamic table ... refresh; -- can also refresh it even if its suspended
+alter dynamic table ... set ...; -- need "operate" privilege on the table to alter it
+describe dynamic table ...; -- need "monitor" privilege on the table
+drop dynamic table ...; -- your role must be its owner
+show dynamic tables ...; -- list the dynamic tables you have access to (have monitor privilege on them)
+
+-- external table
+
+
+
+
 ```
 
 ## Functions, Procedures, & Scripting
