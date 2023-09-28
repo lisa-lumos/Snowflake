@@ -743,16 +743,20 @@ drop dynamic table ...; -- your role must be its owner
 show dynamic tables ...; -- list the dynamic tables you have access to (have monitor privilege on them)
 
 -- external table
--- it reads from one or more files from external stage when queried,
--- and outputs the data in one variant col
+-- It reads from one or more files from external stage when queried,
+-- and outputs the data in one variant col.
 -- Refreshing the external table metadata synchronizes the metadata, 
 -- with the current list of data files in the specified stage path.
 -- This is required for the metadata to register any existing data files
 -- in the named external stage specified in the "location = ...".
 -- Recommend to manually batch refresh, if path has >= 1m files.
 -- auto_refresh updates metadata when new/updated files are available (need event notification). 
+-- "copy grants" option specifies whether retain the replaced ext tables's permissions in the new ext table, if using "create or replace". 
+-- Partition columns optimize query performance,
+-- by pruning out the data files that do not need to be scanned.
+-- You can set partition using expression automatically, or add it manually
 create external table ...;
--- PATTERN = 'regex_pattern'
+-- access control requirements
 
 
 ```
