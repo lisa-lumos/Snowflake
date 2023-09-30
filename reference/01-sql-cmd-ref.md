@@ -755,8 +755,8 @@ show dynamic tables ...; -- list the dynamic tables you have access to (have mon
 -- Partition columns optimize query performance,
 -- by pruning out the data files that do not need to be scanned.
 -- You can set partition using expression automatically, or add it manually
-create external table ...;
--- access control requirements
+create external table ...; -- need "create external table" privilege on the schema
+
 
 
 ```
