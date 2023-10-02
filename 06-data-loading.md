@@ -261,6 +261,49 @@ A stream object records the delta (inserts etc, DML) of CDC info for a table - a
 
 A task object defines a recurring schedule for executing a SQL statement (and SP calls) - can be chained together for successive execution of complex periodic processing. Can use streams by calling SYSTEM$STREAM_HAS_DATA. Users can define a tree-like structure of tasks to process/move data.
 
+## Continuous data pipelines - Dynamic table
+Dynamic table content is based on the results of a specific query. When the underlying data on which the dynamic table is based on changes, the table is updated to reflect those changes. These updates are referred to as a "refresh".
+
+When a dynamic table is created, it is initially populated using data from the underlying tables (via a full refresh, could take time to finish). The refresh ensures snapshot isolation. 
+
+To track progress of the initial full refresh, query the refresh history using `information_schema.dynamic_table_refresh_history()`, where `refresh_trigger = INITIAL`; or user the `show dynamic tables` command, and check `refresh_mode` column.
+
+During the initialization of a new version of an existing dynamic table, the existing version remains accessible, until the new version is available, ensuring that failing to create a new version doesn't affect the current instance.
+
+The dynamic table refresh process operates in 1 of 2 ways:
+1. Incremental refresh. It analyzes the dynamic table's query, and calculates changes since the last refresh. It then "merges" these changes into the table. Types of queries that support incremental refreshes:
+   - WITH (for CTEs)
+   - Expressions in SELECT (including deterministic system functions, and immutable UDFs)
+   - FROM (source tables, views, and other dynamic tables)
+   - OVER (supports all window functions)
+   - WHERE (including deterministic system functions, and immutable UDFs)
+   - JOIN (inner/outer/cross joins)
+   - UNION ALL
+   - GROUP BY
+2. Full refresh. When the automated process can't perform an incremental refresh, it conducts a full refresh. This involves executing the query for the dynamic table, and completely replacing the previous materialized results.
+
+Types of queries that do NOT support incremental refreshes:
+- LATERAL joins
+- Subqueries outside of FROM clauses (e.g., WHERE EXISTS)
+- VOLATILE UDFs
+
+The "constructs used in the query" determine whether an incremental refresh can be used. After you create a dynamic table, you can monitor the table, to determine whether incremental or full refreshes are used to update that table.
+
+Target lag is specified in 1 of 2 ways:
+1. Measure of freshness (target_lag). Defines the maximum amount of time that the dynamic table's content should lag behind updates to the base tables. Specified with the TARGET_LAG parameter.
+2. DOWNSTREAM. Specifies that the dynamic table should be refreshed, when its downstream dynamic tables need to refresh. 
+
+
+
+
+
+
+
+
+
+
+
+
 ## Continuous data pipelines - Streams
 A stream itself does not contain any table data - it only stores source object's offset and returns CDC records, using the source's versioning history. The stream rely on both the offset and the change tracking metadata stored in the table (several hidden cols created when stream for the table was first created, or when ALTER TABLE ... CHANGE_TRACKING = TRUE is executed).
 
