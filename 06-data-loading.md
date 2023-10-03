@@ -262,6 +262,16 @@ A stream object records the delta (inserts etc, DML) of CDC info for a table - a
 A task object defines a recurring schedule for executing a SQL statement (and SP calls) - can be chained together for successive execution of complex periodic processing. Can use streams by calling SYSTEM$STREAM_HAS_DATA. Users can define a tree-like structure of tasks to process/move data.
 
 ## Continuous data pipelines - Dynamic table
+Dynamic tables are the building blocks of declarative data transformation pipelines. Instead of defining data transformation steps as a series of tasks, and then monitoring dependencies and scheduling, you can simply define the end state of the transformation using dynamic tables, and leave the complex pipeline management to Snowflake.
+
+A dynamic table materializes the results of a query that you specify. 
+
+Dynamic tables can be used as the source of a stream. When used together, a stream based on a dynamic table works like any other stream.
+
+The automated process computes the changes that were made to the base objects, and merges those changes into the dynamic table. 
+
+You can set up a dynamic table to query other dynamic tables.
+
 
 
 ### Understanding the Dynamic Table Refresh
