@@ -293,8 +293,9 @@ Target lag is specified in 1 of 2 ways:
 1. Measure of freshness (target_lag). Defines the maximum amount of time that the dynamic table's content should lag behind updates to the base tables. Specified with the TARGET_LAG parameter.
 2. DOWNSTREAM. Specifies that the dynamic table should be refreshed, when its downstream dynamic tables need to refresh. 
 
+Joins: Joins use "entities" defined in your semantic model configs as the join keys between tables. 
 
-
+Validations: 
 
 
 
