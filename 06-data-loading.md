@@ -262,6 +262,9 @@ A stream object records the delta (inserts etc, DML) of CDC info for a table - a
 A task object defines a recurring schedule for executing a SQL statement (and SP calls) - can be chained together for successive execution of complex periodic processing. Can use streams by calling SYSTEM$STREAM_HAS_DATA. Users can define a tree-like structure of tasks to process/move data.
 
 ## Continuous data pipelines - Dynamic table
+
+
+### Understanding the Dynamic Table Refresh
 Dynamic table content is based on the results of a specific query. When the underlying data on which the dynamic table is based on changes, the table is updated to reflect those changes. These updates are referred to as a "refresh".
 
 When a dynamic table is created, it is initially populated using data from the underlying tables (via a full refresh, could take time to finish). The refresh ensures snapshot isolation. 
@@ -293,9 +296,9 @@ Target lag is specified in 1 of 2 ways:
 1. Measure of freshness (target_lag). Defines the maximum amount of time that the dynamic table's content should lag behind updates to the base tables. Specified with the TARGET_LAG parameter.
 2. DOWNSTREAM. Specifies that the dynamic table should be refreshed, when its downstream dynamic tables need to refresh. 
 
-Joins: Joins use "entities" defined in your semantic model configs as the join keys between tables. 
+How data is refreshed when dynamic tables depend on other dynamic tables. Target lag is not a guarantee - it is a target that Snowflake attempts to meet. In order to keep data consistent in cases when one dynamic table depends on another, the process refreshes all dynamic tables in an account at compatible times. This means that at any given time, when you query a set of dynamic tables that depend on each other, you are querying the same "snapshot" of the data across these tables. Note that the target lag of a dynamic table cannot be shorter than the target lag of the dynamic tables it depends on. If refreshes take too long, the scheduler may skip refreshes to try to stay up to date. However, snapshot isolation is preserved.
 
-Validations: 
+### Dynamic tables compared to streams & tasks, and materialized views
 
 
 
