@@ -309,9 +309,47 @@ Target lag is specified in 1 of 2 ways:
 How data is refreshed when dynamic tables depend on other dynamic tables. Target lag is not a guarantee - it is a target that Snowflake attempts to meet. In order to keep data consistent in cases when one dynamic table depends on another, the process refreshes all dynamic tables in an account at compatible times. This means that at any given time, when you query a set of dynamic tables that depend on each other, you are querying the same "snapshot" of the data across these tables. Note that the target lag of a dynamic table cannot be shorter than the target lag of the dynamic tables it depends on. If refreshes take too long, the scheduler may skip refreshes to try to stay up to date. However, snapshot isolation is preserved.
 
 ### Dynamic tables compared to streams & tasks, and materialized views
+| Streams and Tasks | Dynamic Tables |
+|----------|-------------|
+| imperative | declarative |
+| you define schedule | sf determines schedule to meet lag requirements |
+| can use non-deterministic code, SPs, other tasks. SP can use UDFs and external functions | select statement, cannot use external functions |
+| can use streams to incrementally refresh target | automated refresh |
+
+| Materialized Views | Dynamic Tables |
+|----------|-------------|
+| To improve query performance | To build multi-level data pipelines |
+| Can be automatically used in queries against the base table | not auto |
+| Can only use a single base table | Can use a complex query |
+| Data in there is always current | Data there have a lag |
+
+### Understanding the Costs of Dynamic Tables
+Incur cost in 3 ways:
+- Storage
+- Cloud services compute. For periodic checks to determine whether changes happened, if so, triggering refreshes. Only bills if this cost daily is > 10% of daily warehouse cost. 
+- Virtual warehouse compute. For initialization and actually doing refreshes. 
+
+Snowflake recommends testing dynamic tables using dedicated warehouses to understand related costs.
 
 
 
+### Dynamic Table States
+
+
+### Dynamic Table and Streams
+
+
+### About working with Dynamic Tables
+#### Create Dynamic Tables
+
+
+#### About managing Dynamic Tables
+
+
+#### Manage Dynamic Tables Refresh
+
+
+#### Monitor Dynamic Tables
 
 
 
