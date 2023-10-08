@@ -331,10 +331,10 @@ Incur cost in 3 ways:
 
 Snowflake recommends testing dynamic tables using dedicated warehouses to understand related costs.
 
-
-
 ### Dynamic Table States
+A dynamic table will be suspended, if there are 5 continuous refresh errors. 
 
+To view the scheduling state of a dynamic table, call the DYNAMIC_TABLE_GRAPH_HISTORY() table function, and examine the SCHEDULING_STATE column.
 
 ### Dynamic Table and Streams
 
