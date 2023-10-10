@@ -346,7 +346,31 @@ Dynamic tables differ from traditional tables, certain query constructs and func
 Some non-deterministic functions are supported, but only for full refreshes. 
 
 #### About managing Dynamic Tables
+```sql
+show dynamic tables like 'product_%' in schema mydb.myschema;
+desc dynamic table product;
+```
 
+Dynamic tables can be shared. 
+```sql
+grant select on all dynamic tables in schema mydb.public to share share1;
+grant select on dynamic table mydb.public to share share1;
+```
+
+Dynamic tables can be created on shared data. 
+```sql
+-- create a dynamic table to ingest shared data
+create or replace dynamic table my_dynamic_table
+target_lag = '1 day'
+warehouse = my_wh
+as
+  select * from shared_db.public.mydb
+;
+```
+
+Creating a dynamic table on top of a shared dynamic table is currently not supported.
+
+Creating a dynamic table on top of a shared secure view that references an upstream dynamic table is currently not supported.
 
 #### Manage Dynamic Tables Refresh
 
