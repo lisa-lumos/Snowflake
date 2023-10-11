@@ -373,7 +373,13 @@ Creating a dynamic table on top of a shared dynamic table is currently not suppo
 Creating a dynamic table on top of a shared secure view that references an upstream dynamic table is currently not supported.
 
 #### Manage Dynamic Tables Refresh
+Can suspend/resume/refresh-manually/alter-lag. 
 
+Suspend cascades to downstream dynamic tables.
+
+Resume cascades to downstream dynamic tables that are not manually suspended.
+
+Manual refresh cascades to all upstream dynamic tables.
 
 #### Monitor Dynamic Tables
 
