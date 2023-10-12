@@ -382,11 +382,13 @@ Resume cascades to downstream dynamic tables that are not manually suspended.
 Manual refresh cascades to all upstream dynamic tables.
 
 #### Monitor Dynamic Tables
+Snowsight can show:
+- refresh history of the dynamic table
+- a DAG of dynamic tables
 
-
-
-
-
+To determine whether problems occur with the refreshes, use the following information_schema table functions:
+- dynamic_table_refresh_history() provides the history of refreshes of dynamic tables in the account.
+- dynamic_table_graph_history() provides the history of each dynamic table, its properties, and its dependencies on other tables and dynamic tables.
 
 ## Continuous data pipelines - Streams
 A stream itself does not contain any table data - it only stores source object's offset and returns CDC records, using the source's versioning history. The stream rely on both the offset and the change tracking metadata stored in the table (several hidden cols created when stream for the table was first created, or when ALTER TABLE ... CHANGE_TRACKING = TRUE is executed).
