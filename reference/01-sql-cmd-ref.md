@@ -754,10 +754,15 @@ show dynamic tables ...; -- list the dynamic tables you have access to (have mon
 -- "copy grants" option specifies whether retain the replaced ext tables's permissions in the new ext table, if using "create or replace". 
 -- Partition columns optimize query performance,
 -- by pruning out the data files that do not need to be scanned.
--- You can set partition using expression automatically, or add it manually
+-- You can set partition using expression automatically, or add/rmv it manually
 create external table ...; -- need "create external table" privilege on the schema
-
-
+alter external table ... refresh ...;
+alter external table ... add/remove files ...; -- for manual refresh
+alter external table ... set/unset ...;
+-- An external table cannot be recovered using Time Travel; 
+-- also, there is no UNDROP EXTERNAL TABLE command. 
+-- A dropped external table must be recreated.
+drop external table ... [cascade/restrict];
 
 ```
 
