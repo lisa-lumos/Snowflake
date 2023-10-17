@@ -763,6 +763,11 @@ alter external table ... set/unset ...;
 -- also, there is no UNDROP EXTERNAL TABLE command. 
 -- A dropped external table must be recreated.
 drop external table ... [cascade/restrict];
+show external tables ...;
+describe external table ...;
+
+-- event table
+create event table ...;
 
 ```
 
