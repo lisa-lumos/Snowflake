@@ -768,6 +768,23 @@ describe external table ...;
 
 -- event table
 create event table ...;
+alter table ...;
+show event tables ...;
+desc event table ...;
+
+-- view
+-- When a view is created, 
+-- unqualified references to tables and other database objects are resolved in the view's schema, not in the session's current schema.
+create view ...;
+alter/drop/desc view ...;
+show views ...;
+
+--  materialized view
+
+
+
+
+
 
 ```
 
