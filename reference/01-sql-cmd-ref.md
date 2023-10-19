@@ -780,11 +780,12 @@ alter/drop/desc view ...;
 show views ...;
 
 --  materialized view
+create materialized view as ...; -- need "create materialized view" privilege on the schema
+alter/drop/desc materialized view ...;
+show materialized views ...;
 
-
-
-
-
+-- sequence
+create sequence ...;
 
 ```
 
