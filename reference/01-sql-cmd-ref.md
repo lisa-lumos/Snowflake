@@ -785,12 +785,15 @@ alter/drop/desc materialized view ...;
 show materialized views ...;
 
 -- sequence
-create sequence ...;
-
+-- A sequence does not necessarily produce a gap-free sequence
+create/alter/drop/desc sequence ...;
+show sequences ...;
 ```
 
 ## Functions, Procedures, & Scripting
+```sql
 
+```
 
 ## Streams & Tasks
 
