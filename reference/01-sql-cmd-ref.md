@@ -792,6 +792,25 @@ show sequences ...;
 
 ## Functions, Procedures, & Scripting
 ```sql
+-- UDFs
+-- Depending on the handler language, 
+-- you can either include the handler code in the CREATE FUNCTION statement 
+-- or refer the handler location on a stage from CREATE FUNCTION, 
+-- where the handler is precompiled, or as a source code.
+-- UDFs are identified and resolved by the combination of the name and argument types.
+create/alter/drop/desc function ...;
+show user functions ...;
+
+-- external functions
+create/alter/drop/desc function ...;
+show external functions ...;
+
+-- Stored procedure
+
+
+
+
+
 
 ```
 
