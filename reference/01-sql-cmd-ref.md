@@ -806,9 +806,16 @@ create/alter/drop/desc function ...;
 show external functions ...;
 
 -- Stored procedure
-
-
-
+-- Stored procedures are not atomic; 
+-- if one statement in a stored procedure fails, 
+-- the other statements in the stored procedure are not necessarily rolled back.
+-- Owner's rights stored procedures have less access to the caller's environment, -- and Snowflake defaults to this higher level of privacy/security. 
+-- Stored procedures support overloading
+create procedure ...;
+call ... [into :my_var];
+with ... as procedure ... call ...; -- for anonymous procedure, use like a CTE
+alter/drop/desc procedure ...;
+show procedures ...;
 
 
 
