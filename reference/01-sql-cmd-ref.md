@@ -817,8 +817,9 @@ with ... as procedure ... call ...; -- for anonymous procedure, use like a CTE
 alter/drop/desc procedure ...;
 show procedures ...;
 
-
-
+-- snowflake scripting
+execute immediate my_stmt using my_bind_var1, my_bind_var2, ...;
+execute immediate from myFilePath; -- run statements in a file in stage, allow for a version-controlled file
 ```
 
 ## Streams & Tasks
