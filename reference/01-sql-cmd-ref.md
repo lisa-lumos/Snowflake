@@ -823,7 +823,30 @@ execute immediate from myFilePath; -- run statements in a file in stage, allow f
 ```
 
 ## Streams & Tasks
+```sql
+-- stream
+-- A stream can be queried multiple times to update multiple objects in one transaction, and it will return the same data.
+-- The stream offset is advanced, when it is used in a DML statement.
+-- For streams on shared tables, the retention period for source table is not extended automatically
+-- change tracking of an object can only be enabled by its owner, or higher role
+-- A stream on a view breaks, if the source view or underlying tables are dropped/recreated
+create stream ... on table/view/stage/external table ...;
+alter stream ... set/unset ...;
+desc stream ...;
+drop stream ...;
+show streams ...;
 
+-- task
+
+
+
+
+
+
+
+
+
+```
 
 ## Data Governance
 
