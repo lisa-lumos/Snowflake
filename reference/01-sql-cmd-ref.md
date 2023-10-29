@@ -837,8 +837,8 @@ drop stream ...;
 show streams ...;
 
 -- task
-
-
+create task ... as ...;
+desc task ...;
 
 
 
