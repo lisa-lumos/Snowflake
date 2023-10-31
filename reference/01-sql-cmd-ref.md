@@ -839,19 +839,24 @@ show streams ...;
 -- task
 create task ... as ...;
 desc task ...;
+alter/drop task ...;
+-- manually trigger an async single run of a scheduled task. 
+-- A successful run of a root task triggers a cascading run of child tasks in the DAG, as though the root task had run on its defined schedule.
+execute task ...; -- RETRY LAST creates a new graph run, which begins execution at the last failed task(s).
+show tasks ...;
+```
 
+## Classes & Instances
+```sql
+show classes ...;
+drop instance ...; -- rmv an instance of a class
+```
 
-
-
-
-
-
+## Security
+```sql
 ```
 
 ## Data Governance
-
-
-## Secret
 
 
 ## Data Loading & Unloading
@@ -866,7 +871,7 @@ desc task ...;
 ## Native Apps Framework
 
 
-
+## Streamlit
 
 
 
