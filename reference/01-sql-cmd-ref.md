@@ -854,6 +854,27 @@ drop instance ...; -- rmv an instance of a class
 
 ## Security
 ```sql
+-- network policy
+-- When an IP is in both ALLOWED_IP_LIST and BLOCKED_IP_LIST, it is blocked.
+create network policy ...; -- need to be security admin or +, or have "create network policy" privilege on the account object
+alter/drop/desc network policy ...;
+show network policies ...;  
+
+-- network rule
+create network rule ...; -- need to be security admin or +, or have "create network rule" privilege on the schema object
+alter/drop/desc network rule ...;
+show network rules ...;
+
+-- packages policy
+create packages policy ...;
+alter/drop/desc packages policy ...;
+show packages policies ...;
+
+-- password policy
+
+
+
+
 ```
 
 ## Data Governance
