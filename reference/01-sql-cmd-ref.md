@@ -889,13 +889,20 @@ show secrets ...;
 
 ## Data Governance
 ```sql
+-- column-level security
+-- can be normal masking policy (e.g., relies on only one col)
+-- or conditional masking policy (e.g., an additional col participate in decision making)
+create masking policy ... as ... returns ...; -- need "create masking policy" privilege on the schema object
+alter/drop/desc masking policy ...;
+show masking policies ...;
+
+-- row access poilcy
 
 
 
 
 
-
-
+-- tag
 
 
 
