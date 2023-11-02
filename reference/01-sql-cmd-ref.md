@@ -871,14 +871,37 @@ alter/drop/desc packages policy ...;
 show packages policies ...;
 
 -- password policy
+create password policy ...; -- need "create password policy" privilege on the schema object
+alter/drop/desc password policy ...;
+show password policies ...;
+
+-- session policy (sets session timeout in secs)
+-- Needs Enterprise edition and +
+create session policy ...; -- need "create session policy" privilege on the schema object
+alter/drop/desc session policy ...;
+show session policies ...;
+
+-- secret
+create secret ...; -- need "create secret" privilege on the schema object
+alter/drop/desc secret ...;
+show secrets ...;
+```
+
+## Data Governance
+```sql
+
+
+
+
+
+
+
+
 
 
 
 
 ```
-
-## Data Governance
-
 
 ## Data Loading & Unloading
 
