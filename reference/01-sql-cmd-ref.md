@@ -896,22 +896,37 @@ create masking policy ... as ... returns ...; -- need "create masking policy" pr
 alter/drop/desc masking policy ...;
 show masking policies ...;
 
--- row access poilcy
-
-
-
-
+-- row access policy
+-- If a database object has both a row access policy, and one or more masking policy, the row access policy is evaluated first.
+-- The same column in an obj cannot live in both masking policy signature and row access policy signature for that obj.
+create row access policy ... as ...;
+alter/drop/desc row access policy ...;
+show row access policies ...;
 
 -- tag
+-- tag can have masking policies attached to it
+create tag ...; -- need "create tag" privilege on the schema object
+alter/drop/undrop tag ...;
+show tags ...;
+```
+
+## Data Loading & Unloading
+```sql
+-- stage
+
+
+
+
+
+
+
+
 
 
 
 
 
 ```
-
-## Data Loading & Unloading
-
 
 ## File Staging
 
