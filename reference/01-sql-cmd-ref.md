@@ -913,7 +913,9 @@ show tags ...;
 ## Data Loading & Unloading
 ```sql
 -- stage
-
+-- An internal/external stage can include a directory table. 
+-- Directory tables store a catalog of staged files in cloud storage.
+create stage ...;
 
 
 
