@@ -915,6 +915,8 @@ show tags ...;
 -- stage
 -- An internal/external stage can include a directory table. 
 -- Directory tables store a catalog of staged files in cloud storage.
+-- you can choose to "match by column name" for csv files for data loading
+-- copy options: ...
 create stage ...;
 
 
