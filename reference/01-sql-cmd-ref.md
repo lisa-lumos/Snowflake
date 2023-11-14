@@ -920,8 +920,15 @@ show tags ...;
 create/alter/drop/desc stage ...;
 show stages ...;
 
+-- file format
+create/alter/desc/drop file format ...;
+show file formats ...;
 
+-- pipe
+create/alter/desc/drop pipe ...;
+show pipes ...;
 
+-- snowpipe streaming
 
 
 
