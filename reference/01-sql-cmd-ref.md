@@ -929,27 +929,30 @@ create/alter/desc/drop pipe ...;
 show pipes ...;
 
 -- snowpipe streaming
+show channels ...;
 
-
-
-
-
-
-
-
+-- loading/unloading
+copy into ... from ...;
 ```
 
 ## File Staging
-
+```sql
+-- file staging
+put ... @...;
+get @... ...;
+list ...;
+remove ...; -- rmv fils from internal/external stage
+```
 
 ## Alerts
-
+```sql
+```
 
 ## Native Apps Framework
 
 
 ## Streamlit
-
+skipped.
 
 
 
