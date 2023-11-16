@@ -946,64 +946,12 @@ remove ...; -- rmv fils from internal/external stage
 
 ## Alerts
 ```sql
+create/alter/drop/desc/execute alert ...;
+show alerts ...;
 ```
 
 ## Native Apps Framework
-
+skipped. 
 
 ## Streamlit
 skipped.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
