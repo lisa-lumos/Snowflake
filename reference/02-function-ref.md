@@ -16,6 +16,11 @@ min()/max(): Ignores nulls, unless they are all nulls.
 
 min_by()/max_by(): find the row containing th min/max val of a col, and return the val of another col of that row. 
 
+mode(): Returns the most frequent value. 
+
+
+
+
 
 ## Bitwise Expression functions
 
