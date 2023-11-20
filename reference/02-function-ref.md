@@ -1,8 +1,8 @@
 # 2. Function Reference
 ## Aggregate functions
-any_value(): Non deterministic. Optimizes the group by statements when you do not need to agg on that col.
+Common ones: avg(), count(), count_if(), median(), sum(), 
 
-avg(), count(), count_if(), median(), 
+any_value(): Non deterministic. Optimizes the group by statements when you do not need to agg on that col.
 
 corr(): Correlation coefficient for not null pairs in a group. 
 
@@ -18,7 +18,9 @@ min_by()/max_by(): find the row containing th min/max val of a col, and return t
 
 mode(): Returns the most frequent value. 
 
+booland_agg()/boolor_agg()/boolxor_agg(): Returns the logical AND/OR/XOR val of all non-null boolean records in a group. Note that bool xor returns true when exactly one record in the group is true - different from bitwise xor. 
 
+Others: percentile_count(), percentile_disc(), ...
 
 
 
