@@ -30,7 +30,7 @@ array_union_agg(): Returns an array, that contains all distinct elements from ro
 
 array_unique_agg(): Similar to array_union_agg(), but with no duplicates in the output. 
 
-approx_count_distinct(): 
+approx_count_distinct(): Returns distinct count using HyperLogLog approximation. 
 
 
 Others: percentile_count(), percentile_disc(), ...
