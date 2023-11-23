@@ -30,17 +30,17 @@ array_union_agg(): Returns an array, that contains all distinct elements from ro
 
 array_unique_agg(): Similar to array_union_agg(), but with no duplicates in the output. 
 
-approx_count_distinct(): Returns distinct count using HyperLogLog approximation. 
+approx_count_distinct()/HLL(): Returns distinct count using HyperLogLog approximation. 
 
 
 Others: percentile_count(), percentile_disc(), ...
 
-
-
 ## Bitwise Expression functions
-
+skipped. 
 
 ## Conditional Expression functions
+[not] between ... and ...: equivalent to >= ... and <= ...
+
 
 
 ## Context functions
