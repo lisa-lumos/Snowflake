@@ -41,7 +41,36 @@ skipped.
 ## Conditional Expression functions
 [not] between ... and ...: equivalent to >= ... and <= ...
 
+booland()/boolnot()/boolor()/boolxor(): Input is numeric datatypes. If the number is 0, is is considered False, otherwise as True. Then perform the specified (in the function name)logical operation for two numbers.  
 
+case:
+```sql
+case
+  when my_condition1 then ...
+  when my_condition2 then ...
+  ...
+  else ...
+end
+
+case my_expression
+  when my_val1 then ...
+  when my_val2 then ...
+  ...
+  else ...
+end
+```
+
+coalesce(my_val_1, my_val2, ...): Returns the first non-NULL expression. 
+
+decode(my_expression_or_column, key1, val1, key2, val2, ...., default_val): Maps the calculated result from key to values. 
+
+equal_null(): Similar to the "=" expression, but it is NULL-safe, meaning, it thinks null is equal to null. 
+
+greatest(): Compared with max() with compares across rows, greatest() compares across cols for each row in its input, and it supports all data types. 
+
+iff(my_condition, my_val1, my_val2): Simplified if-then-else expression. 
+
+ifnull(my_val1, my_val2): 
 
 ## Context functions
 
