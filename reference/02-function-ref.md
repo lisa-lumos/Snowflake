@@ -70,7 +70,13 @@ greatest(): Compared with max() with compares across rows, greatest() compares a
 
 iff(my_condition, my_val1, my_val2): Simplified if-then-else expression. 
 
-ifnull(my_val1, my_val2): 
+ifnull(my_val1, my_val2): if my_val1 is null, return my_val2, otherwise return the original my_val1. 
+
+value [not] in (val1, val2, ...) / value [not] in (my_subquery)
+
+
+
+
 
 ## Context functions
 
