@@ -60,23 +60,39 @@ case my_expression
 end
 ```
 
-coalesce(my_val_1, my_val2, ...): Returns the first non-NULL expression. 
+coalesce(a, b, c, ...): Returns the first non-NULL expression. 
 
 decode(my_expression_or_column, key1, val1, key2, val2, ...., default_val): Maps the calculated result from key to values. 
 
-equal_null(): Similar to the "=" expression, but it is NULL-safe, meaning, it thinks null is equal to null. 
+equal_null(a, b): Similar to the "=" expression, but it is NULL-safe, meaning, it thinks null is equal to null. 
 
-greatest(): Compared with max() with compares across rows, greatest() compares across cols for each row in its input, and it supports all data types. 
+greatest(a, b, c, ...): Compared with max() with compares across rows, greatest() compares across cols for each row in its input, and it supports all data types. eturns null if any val in the list is null. 
 
-iff(my_condition, my_val1, my_val2): Simplified if-then-else expression. 
+iff(my_condition, a, b): Simplified if-then-else expression. 
 
-ifnull(my_val1, my_val2): if my_val1 is null, return my_val2, otherwise return the original my_val1. 
+ifnull(a, b): if a is null, return b, otherwise return the original a. 
 
-value [not] in (val1, val2, ...) / value [not] in (my_subquery)
+value [not] in (a, b, ...) / value [not] in (my_subquery): Here, null is not equal to null. 
 
+... is [not] distinct from ...: Same with equal_null(). This function is null-safe. "is distinct from" means "not equal to". 
 
+is [not] null
 
+is_null_value(my_variant_value): checks if a variant is json null. 
 
+least(a, b, c, ...): opposite to greatest(). Returns null if any val in the list is null. 
+
+nullif(a, b): if a = b, return null, otherwise returns a. Always return null is a is null. 
+
+nullifzero(a): if a is 0, return null; otherwise return a. 
+
+nvl(a, b): Null-replacing function. If a is null, return b, otherwise returns a. e.g.: nvl(my_col, 0) means map all null vals to 0s; zeroifnull(my_col) does the same.  
+
+nvl2(a, b, c): Null-replacing function. if a is null, return c; otherwise return b. nvl(my_col, my_col+100, 0) means map all null vals to 0s, and rest of the vals to val+100. 
+
+regr_valx(a, b)/regr_valy(a, b): Null-preserving function. 
+
+zeroifnull(a): Null-replacing function. If a is null, return 0. 
 
 ## Context functions
 
