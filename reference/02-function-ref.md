@@ -95,6 +95,52 @@ regr_valx(a, b)/regr_valy(a, b): Null-preserving function.
 zeroifnull(a): Null-replacing function. If a is null, return 0. 
 
 ## Context functions
+current_client(): Returns the version of the driver/client. 
+
+current_date(), current_timestamp(), current_time(), localtime(), localtimestamp(). 
+
+current_ip_address(): current ip of the client connected to sf. 
+
+current_region(): current account region
+
+current_version(): current sf version major_version.minor_version.patch_version
+
+sysdate(): current timestamp in UTC. 
+
+all_user_names(): Array of all user names in the current account.
+
+current_account(): account locator.
+
+current_account_name(): account name. 
+
+current_organization_name()
+
+current_role(): the name of the primary role in use for the current session, when the primary role is an account-level role; NULL if the role in use for the current session is a database role.
+
+current_available_roles(): a string that contains all account-level roles available to the current user. 
+
+current_secondary_roles(): all secondary roles being used. 
+
+current_session(): unique sys id for the cur sf session. 
+
+current_statement(): sql text of cur statement that is executing.
+
+current_transaction(): transaction id of the cur transaction. 
+
+current_user()
+
+getvariable('MY_VARIABLE'): the val of my_variable. 
+
+last_query_id([my_offset]): positive offset val starts from 1st query in the session, negative offset val starts from now and go backwards in time. 
+
+last_transaction(): prv transaction id that has completed. 
+
+
+
+
+
+
+
 
 
 ## Conversion functions
