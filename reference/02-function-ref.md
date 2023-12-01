@@ -135,13 +135,25 @@ last_query_id([my_offset]): positive offset val starts from 1st query in the ses
 
 last_transaction(): prv transaction id that has completed. 
 
+current_database(), current_schema(), current_warehouse(). 
 
+current_role_type(): role, or database_role.
 
+current_schemas(): active search path schemas. 
 
+invoker_role(): account-level role name, or null. For masking policy. 
 
+invoker_share(): share name that accesses the table/view. For making policy. 
 
+is_database_role_in_session('my_database_role'): check whether this db role is active in the session.  
 
+is_granted_to_invoker_role('my_role_name'): check if this role name is granted to the invoker role. Can be used in masking policy. 
 
+is_role_in_session('my_role_name'): check whether this account level role is active in the session. 
+
+policy_context(...): Simulates the query result for table or view columns protected by a masking policy, a table or view protected by a row access policy, or both. 
+
+snowflake.alert.get_condition_query_uuid(): check the results of the statement for the condition.
 
 ## Conversion functions
 
