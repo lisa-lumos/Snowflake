@@ -156,6 +156,16 @@ policy_context(...): Simulates the query result for table or view columns protec
 snowflake.alert.get_condition_query_uuid(): check the results of the statement for the condition.
 
 ## Conversion functions
+cast(... as ...), ::, 
+
+try_cast(... as ...): only works for casting string to other types. 
+
+
+
+
+
+
+
 
 
 ## Data Generation functions
