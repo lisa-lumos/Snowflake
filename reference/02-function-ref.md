@@ -160,13 +160,15 @@ cast(... as ...), ::,
 
 try_cast(... as ...): only works for casting string to other types. 
 
+try_to_...()
 
+convert_timezone(source_tz, target_tz, source_ts_ntz)
 
+convert_timezone(target_tz, source_ts): implicitly uses session time zone in source timezone, if source_ts doesn't already have a timezone inside. 
 
+snowflake.alert.last_successful_scheduled_time(): the timestamp representing the scheduled time for the most recent successful evaluation of the alert condition. 
 
-
-
-
+snowflake.alert.scheduled_time(): the timestamp of the scheduled time of the current alert.
 
 ## Data Generation functions
 
