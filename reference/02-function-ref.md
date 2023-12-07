@@ -166,15 +166,27 @@ convert_timezone(source_tz, target_tz, source_ts_ntz)
 
 convert_timezone(target_tz, source_ts): implicitly uses session time zone in source timezone, if source_ts doesn't already have a timezone inside. 
 
-snowflake.alert.last_successful_scheduled_time(): the timestamp representing the scheduled time for the most recent successful evaluation of the alert condition. 
+to_array(): returns a single elem array of the value. 
 
-snowflake.alert.scheduled_time(): the timestamp of the scheduled time of the current alert.
+to_object(), to_variant(). 
 
 ## Data Generation functions
+random([seed]): Returns a pseudo-random 64-bit integer. The seed only works for the same row - expect numbers to change across rows. 
+
+
+
+
+
+
+
+
+
 
 
 ## Date & Time functions
+snowflake.alert.last_successful_scheduled_time(): the timestamp representing the scheduled time for the most recent successful evaluation of the alert condition. 
 
+snowflake.alert.scheduled_time(): the timestamp of the scheduled time of the current alert.
 
 ## Encryption functions
 
