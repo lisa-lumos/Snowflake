@@ -182,8 +182,19 @@ normal(...), uniform(...), zipf(...),
 seq1(), seq2(), seq4(), seq8(). The trailing number is integer width. Generates mono increasing ints. 
 
 ## Date & Time functions
+date_from_parts(year_int, month_int, day_int): can take integers within these data part ranges, or out of the range, or be negative. E.g., the n-th day of the year. 
 
+time_from_parts(hr_int, min_int, sec_int [nano_int]). 
 
+timestamp_from_parts(...). 
+
+date_part(...)/extract(... from ...): return a number. 
+
+dayname()/monthname(): 3-letter day-of-week/month string, such as 'Fri', 'Jan'. 
+
+last_day(): commonly used to return the last day of the mo, etc. 
+
+next_day(), previous_day(): can get date of next Friday, etc. 
 
 
 
