@@ -173,17 +173,26 @@ to_object(), to_variant().
 ## Data Generation functions
 random([seed]): Returns a pseudo-random 64-bit integer. The seed only works for the same row - expect numbers to change across rows. 
 
+randstr(str_len, seed): Returns an alphanumberic string of specified length. 
 
+uuid_string()
 
+normal(...), uniform(...), zipf(...), 
 
-
-
-
-
-
-
+seq1(), seq2(), seq4(), seq8(). The trailing number is integer width. Generates mono increasing ints. 
 
 ## Date & Time functions
+
+
+
+
+
+
+
+
+
+
+
 snowflake.alert.last_successful_scheduled_time(): the timestamp representing the scheduled time for the most recent successful evaluation of the alert condition. 
 
 snowflake.alert.scheduled_time(): the timestamp of the scheduled time of the current alert.
