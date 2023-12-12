@@ -196,19 +196,20 @@ last_day(): commonly used to return the last day of the mo, etc.
 
 next_day(), previous_day(): can get date of next Friday, etc. 
 
+date_add(), datediff()
 
-
-
-
-
-
-
+date_trunc(): returns the timestamp/date. 
 
 snowflake.alert.last_successful_scheduled_time(): the timestamp representing the scheduled time for the most recent successful evaluation of the alert condition. 
 
 snowflake.alert.scheduled_time(): the timestamp of the scheduled time of the current alert.
 
 ## Encryption functions
+
+
+
+
+
 
 
 ## File functions
