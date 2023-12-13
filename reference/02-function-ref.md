@@ -205,14 +205,16 @@ snowflake.alert.last_successful_scheduled_time(): the timestamp representing the
 snowflake.alert.scheduled_time(): the timestamp of the scheduled time of the current alert.
 
 ## Encryption functions
+encrypt(): Encrypts a VARCHAR or BINARY value using a VARCHAR passphrase. Returns a binary value. 
 
+decrypt(): Decrypts a BINARY value using a VARCHAR passphrase.
 
-
-
-
-
+encrypt_raw()/decrypt_raw(): (uses a binary key)
 
 ## File functions
+get_stage_location(@my_stage_name): Retrieves the URL for an external/internal named stage, using the stage name.
+
+
 
 
 ## Geospatial functions
