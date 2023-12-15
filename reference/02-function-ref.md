@@ -234,7 +234,17 @@ generate_column_description(): inter_schema() takes a set of staged files, that 
 get_ddl(): Returns a ddl of an object, which can be used to recreate it. For UDFs and stored procedures, the output might be slightly different from the original DDL. 
 
 ## Numeric functions
+div0(): like /, but returns 0, when divisor is 0. 
 
+div0null(): like /, but returns 0, when divisor is 0, or null. 
+
+abs/ceil/floor/mod/round/sign/truncate
+
+cbrt/exp/factorial/power/sqrt/square
+
+ln/log
+
+acos/acosh/asin/asinh/atan/atan2/atanh/cos/cosh/cot/degrees/pi/radians/sin/sinh/tan/tanh
 
 ## Regular Expressions functions
 
