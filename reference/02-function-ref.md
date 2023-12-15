@@ -214,17 +214,24 @@ encrypt_raw()/decrypt_raw(): (uses a binary key)
 ## File functions
 get_stage_location(@my_stage_name): Retrieves the URL for an external/internal named stage, using the stage name.
 
+get_relative/absolute_path()
 
+get_presigned_url(): Generates a pre-signed URL to a staged file.
 
+build_scoped_file_url(): Generates a scoped Snowflake file URL to a staged file. Expires 24 hrs after first access. 
+
+build_stage_file_url(): Generates a Snowflake file URL to a staged file. It doesn't expire. 
 
 ## Geospatial functions
-
+skipped. 
 
 ## Hash functions
-
+hash(...)/hash_agg(...): returns a signed integer. SF proprietary. CANNOT be used to create unique keys. Can take multiple cols as input. 
 
 ## Metadata functions
+generate_column_description(): inter_schema() takes a set of staged files, that contains semi-structured data, its output feeds into generate_column_description(), who then returns a string that contains a list of cols. Which can then be manually referred to, when creating a table, etc, for that dataset. 
 
+get_ddl(): Returns a ddl of an object, which can be used to recreate it. For UDFs and stored procedures, the output might be slightly different from the original DDL. 
 
 ## Numeric functions
 
