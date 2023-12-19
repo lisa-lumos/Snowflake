@@ -247,7 +247,19 @@ ln/log
 acos/acosh/asin/asinh/atan/atan2/atanh/cos/cosh/cot/degrees/pi/radians/sin/sinh/tan/tanh
 
 ## Regular Expressions functions
+my_col regexp/rlike 'my_pattern': Returns boolean, of whether pattern matches col provided. It supports more complex patterns than the "like" function. 
 
+regexp_count(expression, 'my_pattern', ...): Returns the num of times a pattern occurs in a string. 
+
+regexp_extract_all/regexp_substr_all(expression, 'my_pattern', ...): Returns an ARRAY, that contains all substrings that matches the pattern. 
+
+regexp_instr(expression, 'my_pattern', ...): Returns the position of the specified occurrence of the pattern, from input. If no match is found, returns 0.
+
+regexp_like/rlike(expression, 'my_pattern', ...): Returns true, if the expression matches the pattern.
+
+regexp_replace(expression, 'my_pattern', 'my_replacement', ...): From input, replaces the pattern with replacement, and return it. 
+
+regexp_substr(expression, 'my_pattern', ...): From input, returns the substr that matches the pattern. 
 
 ## Semi-Structured Data functions
 
