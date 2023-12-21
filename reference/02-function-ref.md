@@ -262,6 +262,15 @@ regexp_replace(expression, 'my_pattern', 'my_replacement', ...): From input, rep
 regexp_substr(expression, 'my_pattern', ...): From input, returns the substr that matches the pattern. 
 
 ## Semi-Structured Data functions
+check_json/xml(string_or_variant_expr): Checks the validity of a JSON/XML document, if valid, returns null, otherwise, error message. 
+
+json_extract_path_text(col_name, 'path_name'): get the value for the corresponding path. 
+
+parse_json/try_parse_json(my_str): converts the input string to a variant type.  
+
+parse_xml(my_str): converts the input string to an object type.
+
+strip_null_value(my_path): get the value at the path, and, if the val is JSON null, convert it to SQL null. 
 
 
 ## String & Binary functions
