@@ -272,7 +272,7 @@ parse_xml(my_str): converts the input string to an object type.
 
 strip_null_value(my_path): get the value at the path, and, if the val is JSON null, convert it to SQL null. 
 
-array_agg
+array_append(my_array, my_new_elem): add a new elem to the array. 
 
 
 
