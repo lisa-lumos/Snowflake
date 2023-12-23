@@ -272,9 +272,51 @@ parse_xml(my_str): converts the input string to an object type.
 
 strip_null_value(my_path): get the value at the path, and, if the val is JSON null, convert it to SQL null. 
 
-array_append(my_array, my_new_elem): add a new elem to the array. 
+### array creation
+- array_construct(elem1, elem2, ...)
+- array_construct_compact(elem1, elem2, null, ...)
+- array_generate_range(start_int, end_int, step_size): create a new array
+
+### array querying
+- array_size(my_array)
+- array_max/array_min(my_array): return the max/min elem
+- array_contains(elem_to_look_for, my_array)
+- array_position(my_elem, my_array): return the idx
+
+### array manipulation
+- array_append(my_array, my_new_elem): add a new elem to the array. 
+- array_prepend(my_array, my_elem)
+- array_insert(my_array, my_idx, my_elem): insert an elem to the array. 
+- array_cat(array1, array2): return an array with concatenation. 
+- array_compact(my_array): rmv nulls from the input array. 
+- array_distinct(my_array): de-dupes the elems in the input array. 
+- array_flatten(my_array): flattens an array of arrays, into a single array. (first-level flattening, not recursive)
+- array_except(source_array, array_of_elems_to_exclude): rmvs specific elems from the source array. 
+- array_intersection(array_1, array2)
+- array_remove(my_array, my_elem)
+- array_remove_at(my_array, my_idx)
+- array_slice(my_array, start_idx, end_idx)
+- array_sort(my_array, ...)
+- array_to_string(my_array)
+- arrays_overlap(array1, array2): returns true if they have a common elem
+- arrays_to_object(my_key_array, my_val_array)
 
 
+### object
+- object_construct/object_construct_keep_null(key1, val1, key2, val2, ...)
+- object_delete(my_object, key1, key2, ...)
+- object_insert(my_object, my_key, my_val)
+- object_pick(my_object, key1, key2, ...): return an object, containing the subset of key-val pairs specified, from the input obj
+
+### map
+
+
+
+### extraction
+
+
+
+### type predicates
 
 
 
