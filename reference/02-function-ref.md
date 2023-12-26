@@ -301,7 +301,6 @@ strip_null_value(my_path): get the value at the path, and, if the val is JSON nu
 - arrays_overlap(array1, array2): returns true if they have a common elem
 - arrays_to_object(my_key_array, my_val_array)
 
-
 ### object
 - object_construct/object_construct_keep_null(key1, val1, key2, val2, ...)
 - object_delete(my_object, key1, key2, ...)
@@ -309,17 +308,31 @@ strip_null_value(my_path): get the value at the path, and, if the val is JSON nu
 - object_pick(my_object, key1, key2, ...): return an object, containing the subset of key-val pairs specified, from the input obj
 
 ### map
-
-
+map_cat
+map_contains_key
+map_delete/map_insert
+map_keys
+map_pick
+map_size
 
 ### extraction
+flatten(): parses a variant. Default parses one level. Can recursively parses all nested elems out. Can optionally recursively parse only object, or only array out. Can optionally specify a particular path to parse for each row. 
 
+get()/get_path(): extract val from variant. 
 
+get_ignore_case()
+
+object_keys(): returns an array, containing the list of first-level-keys of the input object. 
+
+xmlget(): extract an elem from xml. 
+
+### Conversion/casting
+as_...(my_variant): convert variant vals to other data types
 
 ### type predicates
+is_...(my_variant): check if the variant is a certain datatype
 
-
-
+typeof(my_variant): returns the type of the variant val
 
 ## String & Binary functions
 
