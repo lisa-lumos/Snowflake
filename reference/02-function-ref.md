@@ -335,6 +335,60 @@ is_...(my_variant): check if the variant is a certain datatype
 typeof(my_variant): returns the type of the variant val
 
 ## String & Binary functions
+ASCII(str)
+
+concat(str1, str2, ...): same with ||
+
+insert(source_str, idx1, idx2, str_to_be_inserted): delete chars between specified idxs, and insert a new str there. 
+
+length/len()
+
+lpad/rpad(): pads a string with characters from another string, so it reaches total length specified. 
+
+ltrim/rtrim/trim(): rmvs leading/trailing/surrounding spaces
+
+parse_url(url_string): returns a variant, key val pairs of host, parameters, path, port, query, scheme. 
+
+repeat(string_to_repeat, n_times_to_repeat)
+
+reverse(str)
+
+space(length): create a str with spaces
+
+split(str, delimiter): return an array of the separated substrs
+
+split_part(str, delimiter, idx_to_return)
+
+split_to_table(str, delimiter): instead of returning an array, it returns a table of rows that has each part
+
+strtok/strtok_to_array/strtok_split_to_table(): similar to split, but takes multiple delimiters. 
+
+translate(input_str, keys, vals): maps each char to another char. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## System functions
