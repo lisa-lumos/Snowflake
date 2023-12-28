@@ -365,33 +365,53 @@ strtok/strtok_to_array/strtok_split_to_table(): similar to split, but takes mult
 
 translate(input_str, keys, vals): maps each char to another char. 
 
+initcap(): format the first letter of each word to uppercase.
 
+lower()/upper()
 
+charindex(source_str, str_to_search_for): return the idx of the 1st occurrence.
 
+contains(source_str, str_to_search_for)
 
+editdistance(str1, str2)
 
+startswith/endswith()
 
+left/right(str, length_to_cutout)
 
+my_str like all/any (pattern1, pattern2, ...): check if matches all/any the patterns. 
 
+replace(source_str, pattern_to_find, replacement_str): removes all occurrences of the pattern, and optionally replace them. 
 
+substr(source_str, start_idx, length)
 
+compress(input_str, compress_method): returns a binary
 
+decompress_binary/decompress_string()
 
+base64_encode/hex_encode, ...
 
+md5(str): can be used as a checksum function to detect data corruption
 
+sha1/sha2(), ...
 
+collate(my_str, collation_spec_str): can be used to sort/compare strs using other languages sort order
 
-
-
-
-
-
-
-
-
-
+collation(my_str): returns the collation_spec_str of this str. 
 
 ## System functions
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Table functions
