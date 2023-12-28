@@ -400,18 +400,20 @@ collate(my_str, collation_spec_str): can be used to sort/compare strs using othe
 collation(my_str): returns the collation_spec_str of this str. 
 
 ## System functions
+cleanup_database_role_grants(db_role_name, share_name): Revokes privileges on dropped objects from the share, and grants the database role to the share.
 
+### the functions that starts with `system$`
+abort_session/transaction(session_id/transaction_id)
 
+cancel_all_queries(session_id)
 
+cancel_query(query_id)
 
+task_dependents_enable(root_task_name): Recursively resumes all dependent tasks tied to a specified root task. Need to be task owner to do this. 
 
+user_task_cancel_ongoing_executions(task_name): Aborts a run of the specified task, that is currently executing.
 
-
-
-
-
-
-
+wait(amount_of_time, time_unit): Waits for the specified amount of time before proceeding. 
 
 
 ## Table functions
