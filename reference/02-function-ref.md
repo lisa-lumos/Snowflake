@@ -402,6 +402,10 @@ collation(my_str): returns the collation_spec_str of this str.
 ## System functions
 cleanup_database_role_grants(db_role_name, share_name): Revokes privileges on dropped objects from the share, and grants the database role to the share.
 
+extract_semantic_categories(table_view_name): Returns a JSON, containing a set of categories (semantic and privacy) for each supported column in the specified table/view. 
+
+snowflake.snowpark.show_python_packages_dependencies(python_runtime_version, packages_list)
+
 ### the functions that starts with `system$`
 abort_session/transaction(session_id/transaction_id)
 
@@ -414,6 +418,34 @@ task_dependents_enable(root_task_name): Recursively resumes all dependent tasks 
 user_task_cancel_ongoing_executions(task_name): Aborts a run of the specified task, that is currently executing.
 
 wait(amount_of_time, time_unit): Waits for the specified amount of time before proceeding. 
+
+allowlist(): Returns hostnames and port numbers to add to your firewall's allowed list, so that you can access Snowflake from behind your firewall. Because by default, your firewall might block access to Snowflake. 
+
+clustering_depth(table_name, ...): Computes the average depth of the table, according to the specified columns, or the clustering key defined for the table.
+
+clustering_information(table_name, ...): Returns clustering information, including average clustering depth, based on one or more columns in the table.
+
+current_user_task_name(): Returns the task name that is currently executing.
+
+estimate_search_optimization_costs(table_name, ...)
+
+external_table_pipe_status(external_table_name): Retrieves a JSON, of the current refresh status for the internal pipe object, that is associated with an external table.
+
+get_compute_pool_status(pool_name): for Snowpark Container Services.
+
+get_directory_table_status(stage_name): for data replication, stage monitoring. 
+
+get_job_logs(job_uuid, container_name, ...): for Snowpark Container Services.
+
+get_job_status(), get_service_logs(), get_service_status(), 
+
+get_iceberg_table_information(iceberg_table_name): Returns the location of the root metadata file, and status of the latest snapshot for an Iceberg table.
+
+get_predecessor_return_value(predecessor_task_name)
+
+get_snowflake_platform_info(): Returns the IDs of the virtual network in which your Snowflake account is located.
+
+get_tag(tag_name, obj_name[.col_name], obj_domain): return the corresponding tag value. 
 
 
 ## Table functions
