@@ -406,6 +406,10 @@ extract_semantic_categories(table_view_name): Returns a JSON, containing a set o
 
 snowflake.snowpark.show_python_packages_dependencies(python_runtime_version, packages_list)
 
+explain_json(...): returns a table, input is the return result of explain_plan_json(...) function. 
+
+get_query_operator_stats(query_id): Returns statistics, about individual query operators within a completed query. Use this to understand the structure of a query, and identify query operators (e.g. the join operator) that cause performance problems.
+
 ### the functions that starts with `system$`
 abort_session/transaction(session_id/transaction_id)
 
@@ -437,7 +441,7 @@ get_directory_table_status(stage_name): for data replication, stage monitoring.
 
 get_job_logs(job_uuid, container_name, ...): for Snowpark Container Services.
 
-get_job_status(), get_service_logs(), get_service_status(), 
+get_job_status(), get_service_logs(), get_service_status(), registry_list_images(), ...
 
 get_iceberg_table_information(iceberg_table_name): Returns the location of the root metadata file, and status of the latest snapshot for an Iceberg table.
 
@@ -447,8 +451,54 @@ get_snowflake_platform_info(): Returns the IDs of the virtual network in which y
 
 get_tag(tag_name, obj_name[.col_name], obj_domain): return the corresponding tag value. 
 
+get_tag_allowed_values(tag_name)
+
+get_tag_on_current_column/table(tag_name): (this function can only be used in a masking policy condition, to dynamically evaluate the tag string value set on a column).
+
+get_task_graph_config(): Returns the value of the configuration string for the cur task.
+
+last_change_commit_time(obj_name): Returns a token, that can be used to detect whether a database table/view changed, between two calls to the function. The value can be used in applications, such as BI tools, to determine whether the underlying table data has changed. The value returned by the function is typically an "approximation" of the time that the database object was last changed, expressed as the UTC timestamp in nanoseconds, since the beginning of the epoch. 
+
+log(level_str, message_str): Logs a message at the specified severity level, into the event table.
+
+pipe_status(pipe_name): Retrieves a JSON representation of the current status of a pipe.
+
+query_reference(select_statement): Returns a query reference, that you can pass to a stored procedure. Within the stored procedure, when you execute the query, the query is executed using the role that created this query reference.
+
+reference(...): Returns a reference to an object (a table/view,/function). When you execute SQL actions on a reference to an object, the actions are performed using the role who created this reference.
+
+set_return_value(): Explicitly sets the return value for a task. Another task that identifies this task as its predecessor can retrieve this return value.
+
+set_span_attributes(...): Set the attribute name and value for a span, when using trace events from a handler, written in Snowflake Scripting.
+
+show_budgets_in_account(): Returns the budgets in the account.
+
+show_oauth_client_secrets(integration_name): Returns the client secrets in a string. The client ID and a client secret must be included in the authorization header to the OAuth token endpoint.
+
+stream_get_table_timestamp(stream_name): Returns the timestamp in nanoseconds, of current offset for the specified stream.
+
+stream_has_data(stream_name)
+
+task_runtime_info(type_of_info_to_return): can return name of current task, current root task name, original scheduled timestamp, etc
+
+typeof(expression): Returns a string, representing the SQL data type of an expression.
+
+estimate_query_acceleration(query_id): returns a JSON object, that specifies if the query is eligible to benefit from the query acceleration service.
+
+explain_plan_json(sql_query_text): return a string, of json-compatible format. 
+
+explain_json_to_text(explain_output_in_json_format)
 
 ## Table functions
+
+
+
+
+
+
+
+
+
 
 
 ## Window functions
