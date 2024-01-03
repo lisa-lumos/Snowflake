@@ -490,9 +490,9 @@ explain_plan_json(sql_query_text): return a string, of json-compatible format.
 explain_json_to_text(explain_output_in_json_format)
 
 ## Table functions
+infer_schema(...): Automatically detects the file metadata schema in staged data files, and retrieves the column definitions. Supports Apache Parquet, Apache Avro, ORC, JSON, and CSV files. Can then be used to automatically create a table using this template. 
 
-
-
+validate(table_name, job_id): Validates the files loaded in a previous execution of the COPY INTO table command, and returns all the errors encountered during the load. 
 
 
 
