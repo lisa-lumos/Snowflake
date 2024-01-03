@@ -494,6 +494,27 @@ infer_schema(...): Automatically detects the file metadata schema in staged data
 
 validate(table_name, job_id): Validates the files loaded in a previous execution of the COPY INTO table command, and returns all the errors encountered during the load. 
 
+generator(): Synthetic row generation
+
+snowflake.ml.top_insights(categorical_dimensions, continuous_dimensions, metric, label): Finds the most important dimensions in a dataset,  builds segments from those dimensions, and then detects which of those segments influenced the metric.
+
+get_object_references(): Returns a list of objects that a specified view reference. 
+
+result_scan(): Returns the result set of a previous command, specify by query id, or last query id. 
+
+login_history/login_history_by_user(): query login attempts by Snowflake users. 
+
+query_history()
+
+query_acceleration_history(): querying the query acceleration service history within a specified date range. 
+
+database_storage_usage_history(): query the average daily storage usage, in bytes, for database(s) within a specified date range.
+
+warehouse_load_history(): query the activity history for a single warehouse within a specified date range.
+
+warehouse_metering_history(): return the hourly credit usage for warehouse(s) within a specified date range.
+
+stage_storage_usage_history(): query the average daily data storage usage, in bytes, for all the Snowflake stages in your account within a specified date range. 
 
 
 
