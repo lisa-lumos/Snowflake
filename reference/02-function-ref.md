@@ -536,13 +536,39 @@ validate_pipe_load(): returns details about any errors encountered, during an at
 
 automatic_clustering_history(): for querying the Automatic Clustering history for given tables, within a specified date range.
 
+dynamic_table_graph_history(): returns the dependencies between dynamic tables and on base tables. Used to identify all dynamic tables that are part of a pipeline.
 
+dynamic_table_refresh_history()
 
+external_functions_history(); retrieves the history of external functions called by Snowflake, for your entire Snowflake account. 
 
+auto_refresh_registration_history(): query the history of data files registered in the metadata of specified objects, and the credits billed for these operations. 
 
+external_table_files(): for a specified external table, query information about the staged data files included in the metadata.
 
+external_table_file_registration_history(): query information about the metadata history for an external table, like files added/removed, errors, etc. 
 
+materialized_view_refresh_history(): returns the view name, and credits consumed each time a materialized view is refreshed. 
 
+notification_history(): the history of task/snowpipe/email notifications sent through Snowflake. 
+
+rest_event_history(): Returns a list of SCIM REST API requests made to Snowflake, over a specified time interval. 
+
+search_optimization_history(): querying the search optimization service maintenance history for a specified table. 
+
+system$stream_backlog(): Use this function to analyze the volume of CDC records generated for each stream, enabling you to estimate the compute resources required, for a task to process the records.
+
+complete_task_graphs(): Returns the status of a completed graph run. 
+
+current_task_graphs(): Returns the status of a graph run that is currently scheduled or is executing.
+
+serverless_task_history(): Returns the task name, and credits consumed by runs of each task. 
+
+task_dependents(): returns the list of child tasks, for a given root task, in a DAG of tasks.
+
+task_history()
+
+alert_history(): query the history of alerts within a specified date range. 
 
 ## Window functions
 
