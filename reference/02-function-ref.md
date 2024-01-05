@@ -516,6 +516,28 @@ warehouse_metering_history(): return the hourly credit usage for warehouse(s) wi
 
 stage_storage_usage_history(): query the average daily data storage usage, in bytes, for all the Snowflake stages in your account within a specified date range. 
 
+policy_references(): Returns a row for each object that has a policy assigned to it, or, returns a row for each policy that is assigned to an object.
+
+tag_references/tag_references_all_columns(): return tags assigned to an obj/cols-in-an-obj. 
+
+replication_group_refresh_history(), replication_group_refresh_progress(), replication_group_usage_history()
+
+database_refresh_history(), database_refresh_progress(), database_replication_usage_history()
+
+copy_history(): for a table, returns activity for both copy into command and snowpipe. 
+
+data_transfer_history(): query the history of data transferred from Snowflake tables into a different cloud storage provider's network. 
+
+pipe_usage_history(): query the history of data loaded into Snowflake tables using Snowpipe within a specified date range. 
+
+stage_directory_file_registration_history(): query information about the metadata history for a directory table. 
+
+validate_pipe_load(): returns details about any errors encountered, during an attempted data load into Snowflake tables. 
+
+automatic_clustering_history(): for querying the Automatic Clustering history for given tables, within a specified date range.
+
+
+
 
 
 
