@@ -571,9 +571,9 @@ task_history()
 alert_history(): query the history of alerts within a specified date range. 
 
 ## Window functions
+conditional_change_event(): returns a window event number for each row within a window partition, it increments by 1, when the value of the expression in the current row is different from that of the previous row. Starts from 0. 
 
-
-
+conditional_true_event(): Similar to prv, but the number is incremented by 1 for each row, on which the expr1 evaluates to true.
 
 
 
