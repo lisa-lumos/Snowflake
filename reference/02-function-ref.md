@@ -575,14 +575,19 @@ conditional_change_event(): returns a window event number for each row within a 
 
 conditional_true_event(): Similar to prv, but the number is incremented by 1 for each row, on which the expr1 evaluates to true.
 
+cume_dist(), ntile(), percent_rank() ...
 
+dense_rank(): Returns the rank of a value within a group of values, without gaps in the ranks. If two values are the same, they have the same rank.
 
+first_value(), last_value(), nth_value()
 
+lag(): Accesses data in a previous row in the same result set, based on the offset. For example, an offset of 2 returns the expression value 2 rows backward from from the current row.
 
+lead(): opposite of lag()
 
+rank(): Returns the rank of a value within an ordered group of values. The rank value starts at 1, and continues up sequentially. If two values are the same, they have the same rank.
 
-
-
+row_number(): The row number starts at 1, and continues up sequentially.
 
 
 
