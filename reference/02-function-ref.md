@@ -588,27 +588,3 @@ lead(): opposite of lag()
 rank(): Returns the rank of a value within an ordered group of values. The rank value starts at 1, and continues up sequentially. If two values are the same, they have the same rank.
 
 row_number(): The row number starts at 1, and continues up sequentially.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
