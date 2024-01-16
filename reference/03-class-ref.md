@@ -10,63 +10,41 @@ The method to detect anomalies takes similar arguments, and the same col names.
 Enable you to manage budgets in your account.
 
 ### Commands
-CREATE BUDGET
+create snowflake.core.budget ...
 
-DROP BUDGET
-
+drop snowflake.core.budget ...
 
 ### Methods
-activate
+activate(): You must activate the "account budget", in order to use the budgets feature. Not for custom budgets. 
 
-add_resource
+add_resource(): Add an object to a "custom budget"; add by obj reference. 
 
-get_config
+get_config(): View the config properties for a budget.
 
-get_linked_resources
+get_linked_resources(): List the objects in a "custom budget".
 
-get_measurement_table
+get_measurement_table(): View the credit usage data collected by the budget maintenance task. 
 
-get_notification_email
+get_notification_email()
 
-get_notification_integration_name
+get_notification_integration_name()
 
-get_notification_mute_flag
+get_notification_mute_flag()
 
-get_service_type_usage
+get_service_type_usage(): View the credit usage for a budget by service type.
 
-get_spending_history
+get_spending_history(): View the spending history for a budget.
 
-get_spending_limit
+get_spending_limit(): Remove an object from a "custom budget". 
 
-remove_resource
+remove_resource()
 
-set_email_notifications
+set_email_notifications()
 
-set_notification_mute_flag
+set_notification_mute_flag()
 
-set_spending_limit
+set_spending_limit()
 
 
 ## forecast
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+A forecast model produces a forecast, for a single time series, or for multiple time series.
