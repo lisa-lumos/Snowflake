@@ -29,7 +29,7 @@ The WHEN OTHER THEN clause catches any exception not yet specified.
 If a stored procedure is intended to return a value, then it should return a value from each possible path, including each WHEN clause of the exception handler.
 
 ## fetch
-
+Uses the specified cursor to fetch one or more rows.
 
 ## for
 
