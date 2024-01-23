@@ -28,20 +28,20 @@ The WHEN OTHER THEN clause catches any exception not yet specified.
 
 If a stored procedure is intended to return a value, then it should return a value from each possible path, including each WHEN clause of the exception handler.
 
-## fetch
+## fetch ... into ...
 Uses the specified cursor to fetch one or more rows.
 
-## for
+## for ... end for
+loop
 
+## if ... then elseif ... then ... else ... end if
+conditional
 
-## if
+## let ... := ...
+Assigns an expression to a Snowflake Scripting variable, cursor, or RESULTSET.
 
-
-## let
-
-
-## loop
-
+## loop ... end loop
+The user must explicitly exit the loop, by using BREAK or RETURN inside it.
 
 ## null
 
