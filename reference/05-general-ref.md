@@ -16,9 +16,9 @@ max_data_extension_time_in_days: By default, if the DATA_RETENTION_TIME_IN_DAYS 
 
 min_data_retention_time_in_days: Minimum number of days, for which Snowflake retains historical data for performing Time Travel actions on an object. 
 
+search_path: Specifies the path to search, to resolve unqualified object names in queries.
 
-
-
+statement_timeout_in_seconds: Amount of time, in seconds, after which a running SQL statement is canceled by the system. Default is 2 days. 
 
 
 ## References
