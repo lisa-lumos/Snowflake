@@ -20,6 +20,13 @@ search_path: Specifies the path to search, to resolve unqualified object names i
 
 statement_timeout_in_seconds: Amount of time, in seconds, after which a running SQL statement is canceled by the system. Default is 2 days. 
 
+suspend_task_after_num_failures: Default is 10. 
+
+transaction_default_isolation_level: Default is READ COMMITTED. 
+
+use_cached_result: Can be used for evaluate query performance improvements. 
+
+user_task_timeout_ms: default is 1 hr. 
 
 ## References
 
