@@ -29,6 +29,22 @@ use_cached_result: Can be used for evaluate query performance improvements.
 user_task_timeout_ms: default is 1 hr. 
 
 ## References
+A reference can be used to authorize access on objects, to a SP, application, or class instance, that does not have access to those objects by default.
+
+A reference is a string that can be used as an identifier. The identifier resolves to the object being referenced.
+
+A reference encapsulates the following:
+1. The object name.
+2. The role used to create the object reference, and any active secondary roles if applicable.
+3. The privileges on the object, when the reference is created.
+
+Examples of reference use cases:
+- An owner's rights SP need to insert data in a table owned by a different role.
+- An application performs data analytics, and requires read access to a table.
+- An instance of the SNOWFLAKE.ML.ANOMALY_DETECTION class requires read access to a view, for training the anomaly detection ML model.
+
+
+
 
 
 ## Ternary Logic
