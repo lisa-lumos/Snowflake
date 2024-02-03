@@ -39,13 +39,18 @@ A reference encapsulates the following:
 3. The privileges on the object, when the reference is created.
 
 Examples of reference use cases:
-- An owner's rights SP need to insert data in a table owned by a different role.
+- An owner's rights SP need to insert data in a table owned by the caller.
 - An application performs data analytics, and requires read access to a table.
 - An instance of the SNOWFLAKE.ML.ANOMALY_DETECTION class requires read access to a view, for training the anomaly detection ML model.
 
+A reference identifies an object by name - If an object is renamed after a reference is created, the reference is invalid. However, if a new object with the same name is created, the reference might be valid.
 
+The lifespan of a reference can be specified at creation time, it can either be transient or persistent.
 
-
+A reference can become invalid for any of these reasons:
+- The object it references is renamed.
+- The role that created the reference is dropped.
+- The role that created the reference no longer has privileges on the object.
 
 ## Ternary Logic
 
