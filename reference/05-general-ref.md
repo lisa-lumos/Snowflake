@@ -53,9 +53,23 @@ A reference can become invalid for any of these reasons:
 - The role that created the reference no longer has privileges on the object.
 
 ## Ternary Logic
+When used in expressions (e.g. SELECT list), UNKNOWN results are returned as NULL values.
 
+When used as a predicate (e.g. WHERE clause), UNKNOWN results evaluate to FALSE.
 
 ## Collation Support
+Collation allows you to specify rules for comparing strings, which can be used to compare/sort data according to a particular language, or other user-specified rules.
+
+Text strings in Snowflake are stored using the UTF-8 character set and, by default, strings are compared according to their Unicode codes.
+
+
+
+
+
+
+
+
+
 
 
 ## SQL Format Models
