@@ -62,7 +62,12 @@ Collation allows you to specify rules for comparing strings, which can be used t
 
 Text strings in Snowflake are stored using the UTF-8 character set and, by default, strings are compared according to their Unicode codes.
 
+Collation control is granular. You can explicitly specify the collation to use for account/db/schema/table/table-col/statement.
 
+Using collation can affect the performance of various database operations:
+1. Operations involving comparisons might be slower.
+2. Micro-partition pruning might be less efficient.
+3. Using collation in a WHERE predicate that is different from the collation specified for the column,might result in reduced pruning efficiency, or completely eliminating pruning.
 
 
 
