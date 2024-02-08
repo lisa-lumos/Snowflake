@@ -69,13 +69,10 @@ Using collation can affect the performance of various database operations:
 2. Micro-partition pruning might be less efficient.
 3. Using collation in a WHERE predicate that is different from the collation specified for the column,might result in reduced pruning efficiency, or completely eliminating pruning.
 
-
-
-
-
-
-
-
+Collation Limitations: 
+- Collation is Supported only for resulting Strings up to 8MB
+- No support with collation with UDFs
+- Collation Not Supported for Strings in variant/array/object
 
 ## SQL Format Models
 
