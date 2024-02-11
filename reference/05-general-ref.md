@@ -78,6 +78,16 @@ Collation Limitations:
 In Snowflake, SQL format models (literals containing format strings) are used to specify how numeric values are converted to text strings, and vice versa. They can be specified as arguments in the to_char/to_varchar and to_decimal/to_number/to_numeric conversion functions. 
 
 ## Object Identifiers
+It just means object name. 
+
+### Requirements
+
+
+### Literals and Variables as Identifiers
+
+
+### Object Name Resolution
+
 
 
 ## Constraints
