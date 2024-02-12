@@ -81,7 +81,12 @@ In Snowflake, SQL format models (literals containing format strings) are used to
 It just means object name. 
 
 ### Requirements
+Unquoted object ids:
+- Start with a letter (A-Z, a-z) or an underscore (_).
+- Contain only letters, underscores, decimal digits (0-9), and dollar signs ($).
 
+Quoted ids:
+- Can contain/start with anything. 
 
 ### Literals and Variables as Identifiers
 
