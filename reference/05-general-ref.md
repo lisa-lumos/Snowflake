@@ -96,8 +96,23 @@ For example, you can use a session variable, that is set to the name of a table 
 e.g.: `identifier('my_db.my_schema.my_table')`. 
 
 ### Object Name Resolution
+When the database name is omitted, the object name is resolved with the current database in the context. 
 
+The name of the current database is returned by the current_database() function.
 
+When the schema name is omitted using `<database_name>..<object_name>`, the object name is resolved with the public default schema. Note that using it in this way is not recommended.  
+
+In DDL and DML statements, unqualified objects are augmented with the current database and schema. The current schema is maintained similarly to the current database.
+
+When a session is initiated, the current schema is initialized based on the connection's settings. When the current database is changed, the current schema defaults to the value of an internal property (normally set to PUBLIC).
+
+In queries, unqualified object names are resolved through a search path, which usually contains the current schema, but can also contain other schemas.
+
+The search path is stored in the session-level parameter SEARCH_PATH (basically the search path of schemas). You can modify it. The default value of the search path is `$current, $public`.
+
+To see the schemas that will be searched for unqualified objects in queries, use the current_schemas() function. 
+
+The SEARCH_PATH is not used inside views or UDFs. All unqualified objects in a view or UDF definition will be resolved in the view's or UDF's schema only.
 
 ## Constraints
 
