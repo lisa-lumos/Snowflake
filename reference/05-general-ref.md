@@ -89,7 +89,11 @@ Quoted ids:
 - Can contain/start with anything. 
 
 ### Literals and Variables as Identifiers
+In Snowflake SQL statements, in addition to referring to objects by name, you can also use a string literal, session variable, bind variable, or Snowflake Scripting variable to refer to an object. 
 
+For example, you can use a session variable, that is set to the name of a table in the FROM clause of a SELECT statement.
+
+e.g.: `identifier('my_db.my_schema.my_table')`. 
 
 ### Object Name Resolution
 
