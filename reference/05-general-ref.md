@@ -115,7 +115,17 @@ To see the schemas that will be searched for unqualified objects in queries, use
 The SEARCH_PATH is not used inside views or UDFs. All unqualified objects in a view or UDF definition will be resolved in the view's or UDF's schema only.
 
 ## Constraints
+Snowflake supports defining and maintaining constraints, but does not enforce them, except for the NOT NULL constraint. 
 
+Snowflake supports the following constraint types, from the ANSI SQL standard:
+- UNIQUE
+- PRIMARY KEY
+- FOREIGN KEY
+- NOT NULL
+
+For Snowflake Time Travel, when previous versions of a table are copied, the current version of the constraints on the table are used, because Snowflake does not store previous versions of constraints in table metadata.
+
+Constraints can be defined on a single column, or on multiple columns in the same table. For multi-column constraints (i.e. compound primary keys or unique keys), the columns are ordered, and each column has a corresponding key sequence.
 
 ## SQL Variables
 
