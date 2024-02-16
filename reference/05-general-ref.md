@@ -128,7 +128,12 @@ For Snowflake Time Travel, when previous versions of a table are copied, the cur
 Constraints can be defined on a single column, or on multiple columns in the same table. For multi-column constraints (i.e. compound primary keys or unique keys), the columns are ordered, and each column has a corresponding key sequence.
 
 ## SQL Variables
-
+Examples:
+- `set my_var = 10;`
+- `select $my_var;`
+- `create table identifier($my_table_name) (i integer);`
+- `show variables; `
+- `unset my_var;`
 
 ## Bind Variables
 
