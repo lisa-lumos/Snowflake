@@ -136,7 +136,7 @@ Examples:
 - `unset my_var;`
 
 ## Bind Variables
-
+To execute a sql statement that should contain user input info, you can concatenate strings and form a statement, or, you can use bind variables, such as `insert into my_table (c1, c2) values (?, ?);`. bind variables can prevent SQL injection attacks. 
 
 ## Transactions
 
