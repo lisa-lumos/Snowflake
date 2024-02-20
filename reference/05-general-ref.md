@@ -139,6 +139,36 @@ Examples:
 To execute a sql statement that should contain user input info, you can concatenate strings and form a statement, or, you can use bind variables, such as `insert into my_table (c1, c2) values (?, ?);`. bind variables can prevent SQL injection attacks. 
 
 ## Transactions
+A transaction is a sequence of SQL statements that are committed or rolled back as a unit. A transaction can include both reads and writes.
+
+Transactions follow these rules:
+- Transactions are never nested. For example, you cannot create an outer transaction that would roll back an inner transaction that was committed, or create an outer transaction that would commit an inner transaction that had been rolled back.
+- A transaction is associated with a single session. 
+
+Explicit transactions should contain only DML statements and query statements. 
+
+DDL statements implicitly commit active transactions. Each DDL statement executes as a separate transaction.
+
+If a DDL statement is executed while a transaction is active, the DDL statement:
+1. First, implicitly commits the active transaction.
+2. Then, executes the DDL statement as a separate transaction.
+
+To avoid writing confusing code, you should avoid mixing implicit and explicit starts and ends in the same transaction. 
+
+Snowflake recommends that multi-threaded client programs do at least one of the following:
+- Use a separate connection for each thread.
+- Execute the threads synchronously rather than asynchronously, to control the order in which steps are performed.
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Table Literals
