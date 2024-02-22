@@ -163,7 +163,7 @@ A transaction can be inside a stored procedure, or a stored procedure can be ins
 
 A stored procedure that contains a transaction can be called from within another transaction. An outer ROLLBACK/COMMIT does not undo an inner COMMIT/ROLLBACK.
 
-
+READ COMMITTED is the only isolation level currently supported for tables.
 
 
 
