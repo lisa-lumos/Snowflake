@@ -159,9 +159,9 @@ Snowflake recommends that multi-threaded client programs do at least one of the 
 - Use a separate connection for each thread.
 - Execute the threads synchronously rather than asynchronously, to control the order in which steps are performed.
 
+A transaction can be inside a stored procedure, or a stored procedure can be inside a transaction; however, a transaction cannot be partly inside and partly outside a stored procedure, or started in one stored procedure and finished in a different stored procedure.
 
-
-
+A stored procedure that contains a transaction can be called from within another transaction. An outer ROLLBACK/COMMIT does not undo an inner COMMIT/ROLLBACK.
 
 
 
