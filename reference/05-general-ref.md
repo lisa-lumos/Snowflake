@@ -163,7 +163,25 @@ A transaction can be inside a stored procedure, or a stored procedure can be ins
 
 A stored procedure that contains a transaction can be called from within another transaction. An outer ROLLBACK/COMMIT does not undo an inner COMMIT/ROLLBACK.
 
-READ COMMITTED is the only isolation level currently supported for tables.
+READ COMMITTED is the only isolation level currently supported for tables. When a statement is executed inside a multi-statement transaction:
+- A statement sees only data that was committed before the statement began. Two successive statements in the same transaction can see different data if another transaction is committed between the execution of the first and the second statements.
+- A statement does see the changes made by previous statements executed within the same transaction, even though those changes are not yet committed.
+
+Most INSERT and COPY statements write only new partitions. Those statements often can run in parallel with other INSERT and COPY operations, and sometimes can run in parallel with an UPDATE, DELETE, or MERGE statement.
+
+Best practices:
+- In general, one transaction should contain only related statements.
+- Having less statements in a transaction can improve performance in some cases. In Snowflake, as in most databases, managing transactions consumes resources. For example, inserting 10 rows in one transaction is generally faster and cheaper than inserting one row each in 10 separate transactions. 
+- Overly large number of statements in a transaction can reduce parallelism or increase deadlocks.
+- Snowflake recommends keeping AUTOCOMMIT enabled, and using explicit transactions as much as possible.
+
+Every Snowflake transaction is assigned a unique transaction id. 
+
+
+
+
+
+
 
 
 
