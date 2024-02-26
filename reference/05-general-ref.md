@@ -177,22 +177,34 @@ Best practices:
 
 Every Snowflake transaction is assigned a unique transaction id. 
 
-
-
-
-
-
-
-
-
-
-
-
-
 ## Table Literals
+Table literals are used to pass the name of a table or a placeholder value (instead of a table name) to a query. 
 
+```sql
+set my_var = 'my_table';
+select * from table($my_var);
+```
 
 ## Snowflake Database
+### Account Usage
+
+
+
+### Data Sharing Usage
+
+
+
+### Organization Usage
+
+
+
+### SNOWFLAKE Database Roles
+
+
+
+### Snowflake Classes
+
+
 
 
 ## Snowflake Information Schema
