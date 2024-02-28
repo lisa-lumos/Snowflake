@@ -187,6 +187,21 @@ select * from table($my_var);
 
 ## Snowflake Database
 ### Account Usage
+access_history: which root/parent query's which child query executed by which user accessed/modified which direct/base objects, used which policies. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
