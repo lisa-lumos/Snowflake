@@ -189,11 +189,11 @@ select * from table($my_var);
 ### Account Usage
 access_history: which root/parent query's which child query executed by which user accessed/modified which direct/base objects, used which policies. 
 
+aggregate_access_history: similar data to the access_history View, aggregated for repeated queries in one-minute intervals.
 
+aggregate_query_history: contains similar data to the query_history view, but is aggregated in one-minute intervals for repeated SQL statements. Who executed which query under which db/sc context using which role, which wh, and run-time info typically included in query profile, such as bytes spilled to local/remote storage, etc. 
 
-
-
-
+aggregation_policies: An aggregation policy is a schema-level object, that controls what type of query can access a table/view.
 
 
 
