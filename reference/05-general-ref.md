@@ -193,11 +193,11 @@ aggregate_access_history: similar data to the access_history View, aggregated fo
 
 aggregate_query_history: contains similar data to the query_history view, but is aggregated in one-minute intervals for repeated SQL statements. Who executed which query under which db/sc context using which role, which wh, and run-time info typically included in query profile, such as bytes spilled to local/remote storage, etc. 
 
-aggregation_policies: An aggregation policy is a schema-level object, that controls what type of query can access a table/view.
+aggregation_policies: An aggregation policy is a schema-level object, that controls what type of query can access a table/view. When an aggregation policy is applied to a table, queries against that table must aggregate data into groups of a minimum size, in order to return results, thereby preventing a query from returning information from an individual record. 
 
+alert_history: For the past year, which alert in which location included which query, with which condition, when was it executed to check for the condition. 
 
-
-
+automatic_clustering_history: in a specified time span, clustering a table took how many credits; how many bytes/rows was reclustered. 
 
 
 
