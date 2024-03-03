@@ -217,7 +217,7 @@ database_replication_usage_history: when, which db was replicated, used how many
 
 database_storage_usage_history: for the past year, for each day, for each db, its avg bytes, avg failsafe bytes, avg hybrid table bites. If the db was dropped, when it happened. 
 
-databases
+databases: who owns which database, is it transient, when was it created/altered, was it deleted, if so, when; retention time, whether it is from a share.  
 
 element_types
 
