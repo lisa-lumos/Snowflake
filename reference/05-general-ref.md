@@ -219,13 +219,13 @@ database_storage_usage_history: for the past year, for each day, for each db, it
 
 databases: who owns which database, is it transient, when was it created/altered, was it deleted, if so, when; retention time, whether it is from a share.  
 
-element_types
+element_types: if a table has cols of structured array type, what is this col's detailed elem type.
 
-event_usage_history
+event_usage_history: credits and bytes related for data ingestion. 
 
-external_access_history
+external_access_history: from which source to target cloud each external access happened, sent/received how many bytes, what is their host name, IP, what is the query that initialized it. 
 
-fields
+fields: if a table has cols of structured object type, what is this col's detailed key and val types.
 
 file_formats
 
