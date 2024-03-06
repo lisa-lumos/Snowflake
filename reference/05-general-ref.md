@@ -227,13 +227,13 @@ external_access_history: from which source to target cloud each external access 
 
 fields: if a table has cols of structured object type, what is this col's detailed key and val types.
 
-file_formats
+file_formats: for each file format object, who is its owner, what is in this file format, like skip_header, delimiter, etc; when was it created, and last altered. 
 
-functions
+functions: for each UDF, what is its return type, its body, its language, when was created/updated, its owner, is it external, etc. 
 
-grants_to_roles
+grants_to_roles: for each role, show each privileges granted to it, when was each privilege granted, who granted it. 
 
-grants_to_users
+grants_to_users: for each user, what roles they have, when was it granted, who granted it to this user. 
 
 hybrid_tables
 
