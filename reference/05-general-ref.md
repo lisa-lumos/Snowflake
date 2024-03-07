@@ -235,29 +235,29 @@ grants_to_roles: for each role, show each privileges granted to it, when was eac
 
 grants_to_users: for each user, what roles they have, when was it granted, who granted it to this user. 
 
-hybrid_tables
+hybrid_tables: for each hybrid table, who is its owner, how many rows/bytes it has, its retention time, when it was created/altered/deleted. 
 
-hybrid_tables_usage_history
+hybrid_tables_usage_history: credits used for hybrid tables. 
 
-index_columns
+index_columns: for each index, which db/sc/tbl/col it belongs to, who is the owner, its status, when it was created/deleted. 
 
-indexes
+indexes: same with above. 
 
-load_history
+load_history: manual copy into history. Loaded into which table, file name loaded, number of rows, etc. 
 
-lock_wait_history
+lock_wait_history: history of transactions that wait on locks. Which object was locked by which query at which time, which query/transaction requested the lock at when. 
 
-login_history
+login_history: which user attempted to login at when, using which client, was it successful, what error they had. 
 
-masking_policies
+masking_policies: for each masking policy, who is its owner, when was it created/altered/deleted, its body, signature and return type. 
 
-materialized_view_refresh_history
+materialized_view_refresh_history: Each time a materialized view is refreshed, when it started/ended, for which table, used how many credits. 
 
-metering_daily_history
+metering_daily_history: type of service that consumed credits, on which day it happened, how many compute credits used, how many cloud services credits used, actually credits billed. 
 
-metering_history
+metering_history: type/name of service that consumed credits, its start/end time, how many compute credits used, how many cloud services credits used, total credits used. 
 
-network_policies
+network_policies: for each network policy, its name/owner/comment, when it was created/altered/deleted. 
 
 network_rule_references
 
