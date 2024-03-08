@@ -261,21 +261,21 @@ network_policies: for each network policy, its name/owner/comment, when it was c
 
 network_rule_references
 
-network_rules
+network_rules: for each network rule, its owner/comment, when it was created/altered/deleted. 
 
-object_dependencies
+object_dependencies: for each object, such as a view, what are its base tables. 
 
-password_policies
+password_policies: for each password policy, its owner/comment/content-specs, its created/altered/deleted date. 
 
-pipe_usage_history
+pipe_usage_history: which pipe at start/end time loaded how many files, used how many credits, inserted how many bytes. 
 
-pipes
+pipes: for each pipe, its sqs notification channel name, does it auto ingest, it definition, owner, when it was created/altered/deleted. 
 
-policy_references
+policy_references: for each policy, which objects it refers to, its tag
 
-procedures
+procedures: for each procedure, its return type, its language, body, owner, when it was created/altered/deleted. 
 
-projection_policies
+projection_policies: for each projection policy, its owner, return type, body, etc. 
 
 query_acceleration_eligible
 
