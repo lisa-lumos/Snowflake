@@ -277,9 +277,9 @@ procedures: for each procedure, its return type, its language, body, owner, when
 
 projection_policies: for each projection policy, its owner, return type, body, etc. 
 
-query_acceleration_eligible
+query_acceleration_eligible: for each query, its query text, start/end time, wh name and size, num of secs eligible for the query acceleration service, max useful scale factor. 
 
-query_acceleration_history
+query_acceleration_history: which warehouse used how many credits between start/end time. 
 
 query_history
 
