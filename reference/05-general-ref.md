@@ -281,21 +281,21 @@ query_acceleration_eligible: for each query, its query text, start/end time, wh 
 
 query_acceleration_history: which warehouse used how many credits between start/end time. 
 
-query_history
+query_history: for each query, its id/body/context/type/session/user/role/wh/wh_size/wh_type/query_tag/status/error/start_and_end_time/bytes_scanned/rows/partitions_scanned/bytes_spilled/query_acceleration_info/transaction_info. 
 
-referential_constraints
+referential_constraints: for each constraint, its match option, rules, created/altered/deleted time. 
 
-replication_group_refresh_history
+replication_group_refresh_history: for each replication group, its start/end time, bytes info, object count, snapshot time, error.  
 
-replication_group_usage_history
+replication_group_usage_history: for each replication group, its start/end time, credits used, bytes transferred. 
 
-replication_usage_history
+replication_usage_history: (deprecated)
 
-resource_monitors
+resource_monitors: (under READER_ACCOUNT_USAGE schema) for each resource monitor for reader account, its created time, quota, used credits, owner, wh, notify/suspend/etc policy. 
 
-roles
+roles: for each role, its owner, when it was created/deleted. 
 
-row_access_policies
+row_access_policies: for each row access policy, its owner, signature, return type, body. When it was created/altered/deleted. 
 
 schemata
 
