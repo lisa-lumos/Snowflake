@@ -297,7 +297,7 @@ roles: for each role, its owner, when it was created/deleted.
 
 row_access_policies: for each row access policy, its owner, signature, return type, body. When it was created/altered/deleted. 
 
-schemata
+schemata: for each schema, its retention time, is_transient, crated/altered/deleted date. 
 
 search_optimization_history
 
@@ -345,7 +345,7 @@ warehouse_events_history
 
 warehouse_load_history
 
-warehouse_metering_histoy
+warehouse_metering_history
 
 
 
