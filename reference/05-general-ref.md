@@ -299,7 +299,7 @@ row_access_policies: for each row access policy, its owner, signature, return ty
 
 schemata: for each schema, its retention time, is_transient, crated/altered/deleted date. 
 
-search_optimization_history
+search_optimization_history: for which table, at which span, its search optimization consumed how many credits. 
 
 sequences
 
