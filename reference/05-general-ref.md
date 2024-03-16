@@ -301,9 +301,9 @@ schemata: for each schema, its retention time, is_transient, crated/altered/dele
 
 search_optimization_history: for which table, at which span, its search optimization consumed how many credits. 
 
-sequences
+sequences: for each sequence, its owner/data-type/min-max-val/increment, etc. When it was created/altered/deleted. 
 
-serverless_task_history
+serverless_task_history: for each serverless task, its start/end time, number of credits it consumed. 
 
 services
 
