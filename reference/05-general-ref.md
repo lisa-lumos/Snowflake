@@ -305,25 +305,25 @@ sequences: for each sequence, its owner/data-type/min-max-val/increment, etc. Wh
 
 serverless_task_history: for each serverless task, its start/end time, number of credits it consumed. 
 
-services
+services: for each service, including container service, its DNS name, min/max instances, wh, dates. 
 
-session_policies
+session_policies: for each session policy, it owner, idle timeout time, UI idle timeout time, dates. 
 
-sessions
+sessions: for each session, when it was created, it user, authentication method, client, close reason. 
 
-snowpark_container_services_history
+snowpark_container_services_history: compute pool credit usage and time span. 
 
-snowpipe_streaming_client_history
+snowpipe_streaming_client_history: for each snowpipe data loading, when it happened, bytes loaded. 
 
-snowpipe_streaming_file_migration_history
+snowpipe_streaming_file_migration_history: for each snowpipe destination table, its data loading time span, credits used, bytes/rows moved. 
 
-stage_storage_usage_history
+stage_storage_usage_history: for each day in the past year, how may bytes the internal stages used. 
 
-stages
+stages: for each stage, it url, internal/external, region, owner, dates. 
 
-storage_usage
+storage_usage: for each day, the number of bytes in stage/failsafe/hybrid_tables, and total table storage including time travel. 
 
-table_constraints
+table_constraints: for each constraint, its target table, the constraint info, time. 
 
 table_storage_metrics
 
