@@ -325,9 +325,9 @@ storage_usage: for each day, the number of bytes in stage/failsafe/hybrid_tables
 
 table_constraints: for each constraint, its target table, the constraint info, time. 
 
-table_storage_metrics
+table_storage_metrics: for every existing/deleted table that incur storage cost, is it transient, number of bytes in current state, num of bytes in time travel/failsafe, num of bytes used for its clones, whether the table is deleted, its dates.  
 
-tables
+tables: for each table, it owner, table type, is it transient, its clustering key, number of rows, size, retention time, dates, which user did last ddl on it. 
 
 tag_references
 
