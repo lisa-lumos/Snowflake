@@ -333,70 +333,44 @@ tag_references: for each tag, its referenced objects.
 
 tags: for each tag, its owner, dates, allowed values. 
 
-task_history
+task_history: for each task run, its task name, its body, scheduled time, completed time, run state, return value, error, root task id, run reason, 
 
-task_versions
+task_versions: for each task, its root task, graph version, owner, wh, schedule, predecessors, state, dates. 
 
-users
+users: for each user, its dates, user info parameter values, owner. 
 
-views
+views: for each view, owner, ddl, whether it is secure, its dates. 
 
-warehouse_events_history
+warehouse_events_history: Event such as creating/dropping/altering/resuming/suspending a warehouse, and stopping/starting new wh clusters. The user/role that initiated the event, and when, using which query. 
 
-warehouse_load_history
+warehouse_load_history: which warehouse at which time span has which load (avg running, avg queue load, avg blocked). 
 
-warehouse_metering_history
-
-
-
-
-
-
-
-
-
-
-
+warehouse_metering_history: for each wh, its hourly credit usage. 
 
 ### Data Sharing Usage
-
-
+skipped. 
 
 ### Organization Usage
-
+skipped. 
 
 
 ### SNOWFLAKE Database Roles
+When an account is provisioned, the SNOWFLAKE database is automatically imported. The database is an example of Snowflake using Secure Data Sharing, to provide object metadata and other usage metrics for your organization and accounts.
 
+Access to schema objects in the SNOWFLAKE database is controlled by different database roles.
 
 
 ### Snowflake Classes
-
-
-
+skipped. 
 
 ## Snowflake Information Schema
-
+skipped. 
 
 ## Metadata Fields
-
+skipped. 
 
 ## Conventions
-
+skipped. 
 
 ## Reserved Keywords
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+skipped. 
