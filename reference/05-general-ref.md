@@ -329,9 +329,9 @@ table_storage_metrics: for every existing/deleted table that incur storage cost,
 
 tables: for each table, it owner, table type, is it transient, its clustering key, number of rows, size, retention time, dates, which user did last ddl on it. 
 
-tag_references
+tag_references: for each tag, its referenced objects. 
 
-tags
+tags: for each tag, its owner, dates, allowed values. 
 
 task_history
 
