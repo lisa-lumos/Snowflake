@@ -6,7 +6,7 @@ Available in two types:
 - Snowpark-optimized
 
 ## Overview
-Warehouse has 10 sizes: xs, s, m, l, xl, 2xl, ..., 6xl. xs warehouse consumes 1 credit per hour, and the credit usage doubles with each size up. 
+Warehouse has 10 sizes: xs, s, m, l, xl, 2xl, ..., 6xl. xs warehouse consumes 1 credit/hr, and the credit usage doubles with each size up. 
 
 For warehouses created using CREATE WAREHOUSE command, size is `xs by default`, as opposed to xl default for those created in the legacy web UI. 
 
@@ -18,11 +18,13 @@ The size of a warehouse impacts the queries runtime, particularly for larger, mo
 
 Resizing a running warehouse do not impact running queries, but can be used for queued or new queries.
 
-By default, a warehouse automatically resume or suspend based on activity. 
+By default, a warehouse automatically resume/suspend based on activity. 
 
 The number of queries runs concurrently in a warehouse is determined by the size and complexity of each query. As a query is submitted, the warehouse calculates and reserves the compute resources. If there is not enough resources for it, the query is queued until resources become available.
 
 A default warehouse can be set for each user, which then be used by all sessions initiated by the user. The same can be set for SF clients such as SnowSQL, JDBC driver, ODBC driver, Python connector, etc. 
+
+Default wh precedence: ad hoc command > default wh set for the client driver > default wh set for the user.  
 
 ## Multi-cluster (starts from Enterprise Edition)
 With multi-cluster warehouses, Snowflake supports allocating statically/dynamically additional clusters to allow better concurrency, in contrast, a single cluster warehouse will put queries into queues if there are not enough resources for them. Define a multi-cluster warehouse by specifying maximum and minimum number of clusters (up to 10). Num of clusters will not affect query performance, only concurrency. 
