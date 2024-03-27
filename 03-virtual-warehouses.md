@@ -73,11 +73,14 @@ A Snowflake session can only have one current warehouse at a time, which can be 
 ## Query acceleration service (starts from Enterprise Edition)
 `Can be enabled for a warehouse.` Can accelerate query or its sub-queries, by offloading parts of the work in parallel to serverless compute resources provided by the service. Reduces the impact of outlier queries. 
 
-To identify the queries that might benefit from this service
-- use the SYSTEM$ESTIMATE_QUERY_ACCELERATION function to check a specific query
-- query the QUERY_ACCELERATION_ELIGIBLE View. It identifies the queries and warehouses that might benefit the most from the service. 
+Types of workloads that might benefit from the query acceleration service:
+- Ad hoc analytics.
+- Workloads with unpredictable data volume per query.
+- Queries with large scans and selective filters.
 
-The service does not accelerate queries on tables that have search optimization enabled.
+To identify the queries that might benefit from this service: 
+- use the system$estimate_query_acceleration() function to check a specific query
+- query the QUERY_ACCELERATION_ELIGIBLE View. It identifies the queries/warehouses that might benefit the most from the service. 
 
 Enable the service by specifying ENABLE_QUERY_ACCELERATION = TRUE for a warehouse. 
 
