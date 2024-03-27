@@ -108,7 +108,7 @@ Query load chart from the UI shows num of concurrent queries of a warehouse in t
 
 In the query_history view, you can see wh performance metrics for different queries.
 
-## Snowpark-optimized warehouses
+## Snowpark-optimized warehouses (aka, memory-optimized)
 They have 16x ram/node compared to standard ones. Can be used for snowpark workloads with:
 - large memory requirements (ML with a SP on a single wh node). 
 - UDF or UDTF
@@ -118,26 +118,3 @@ They do not support query acceleration.
 To maximize CPU and memory resources of a wh, set its MAX_CONCURRENCY_LEVEL = 1. 
 
 They have sizes m, l, xl, 2xl, ..., 6xl; their cost of credit/hr starts from 6, and doubles with each size up. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
