@@ -13,8 +13,15 @@ Data in Snowflake tables is automatically divided into compressed micro-partitio
 
 Data in a table is partitioned by the data insertion/load order. 
 
+Snowflake stores these metadata about a micro-partition:
+1. val range for each col
+2. num of distinct values
+3. other properties
+
+When a column in a table is dropped, the micro-partitions that contain the data for the dropped column are not re-written. The data in the dropped column remains in storage.
+
 Benefits: 
-- done automatically, no need to manual definition
+- done automatically, no need manual definition
 - small partitions allow for fast dml and fine-grained pruning
 - partitions can overlap, prevents skew
 - columnar format allows for efficient analytical queries
@@ -23,15 +30,15 @@ Benefits:
 Clustering metadata for a table contains:
 - num of partitions
 - num of partitions with overlapping vals
-- overlap depth of partitions (clustering depth)
+- overlap depth of partitions (clustering depth, starts from 1)
 
 Clustering depth can be use for:
 - monitor cluster health of a large table
 - decide whether a large table would benefit from a clustering key
 
 To view clustering info for a col in a table, use these system functions:
-- `SYSTEM$CLUSTERING_DEPTH()`
-- `SYSTEM$CLUSTERING_INFORMATION()` (including clustering depth)
+- `system$clustering_depth()`
+- `system$clustering_information()` (including clustering depth)
 
 ### Cluster Keys & Clustered Tables
 A clustering key for a table is some columns (or expressions) that are used to co-locate the data in the same micro-partitions. Useful for large tables who do not have ideal ordering. Queries benefit from clustering when the queries filter/sort on the clustering key.
