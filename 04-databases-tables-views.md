@@ -41,7 +41,7 @@ To view clustering info for a col in a table, use these system functions:
 - `system$clustering_information()` (including clustering depth)
 
 ### Cluster Keys & Clustered Tables
-A clustering key for a table is some columns (or expressions) that are used to co-locate the data in the same micro-partitions. Useful for large tables who do not have ideal ordering. Queries benefit from clustering when the queries filter/sort on the clustering key.
+A clustering key for a table is some columns/expressions that are used to co-locate the data in the same micro-partitions. Useful for large tables who do not have ideal ordering. Queries benefit from clustering when the queries filter/sort on the clustering key.
 
 Enable clustering on a table/materialized view by specifying a clustering key for it. Snowflake then will automatically maintain it being clustered (by reclustering), which consumes serverless compute credits and storage costs (especially for time travel and fail-safe). 
 
