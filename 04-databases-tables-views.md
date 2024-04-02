@@ -81,7 +81,7 @@ View cost by:
 ## Temporary and Transient tables/stages
 Permanent table cannot be changed to other table types. 
 ### Temporary tables
-Lives in the session only. Not visible to other users or sessions, and when the session ends, it is gone forever. You pay for the storage for its duration, can manually drop when it is no longer needed to save cost. It cannot be changed to other table types. 
+Lives in the session only. Not visible to other users/sessions, and when the session ends, it is gone forever. You pay for the storage for its duration, can manually drop when it is no longer needed to save cost. It cannot be changed to other table types. 
 
 Have 0 or 1 (default) day of time travel as long as the session is alive, otherwise gone forever. Do not have fail-safe. 
 
