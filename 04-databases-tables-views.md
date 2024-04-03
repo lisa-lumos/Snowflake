@@ -97,12 +97,12 @@ All tables created in a transient schema, as well as all schemas created in a tr
 ## External Tables
 The data in an external table is stored in files in an external stage. It stores metadata about the data files (filename, version identifier, ...), so you can query a file in an external stage as if it were inside a database. Can access data supported by COPY INTO statements.
 
-This metadata can be manually refreshed (charged as cloud services), or configured to auto-refresh using event notifications (cloud messaging) from your cloud service (within snowpipe charges). AUTO_REFRESH_REGISTRATION_HISTORY() table function, EXTERNAL_TABLES View, etc shows history of metadata and credits consumption. 
+This metadata can be manually refreshed (charged as cloud services), or configured to auto-refresh using event notifications (cloud messaging) from your cloud service (within snowpipe charges). auto_refresh_registration_history() table function, EXTERNAL_TABLES View, etc shows history of metadata and credits consumption. 
 
 `External tables are read-only. Views/materialized views can be created based on them.`
 
 All external tables include the following columns:
-- VALUE - A VARIANT col of one row in the external file; select * returns this col
+- VALUE - A variant col represents each row in the external file; select * returns this col
 - METADATA$FILENAME - A pseudo col of path_in_stage/filename for each file
 - METADATA$FILE_ROW_NUMBER - A pseudo col of row number for each row.
 
