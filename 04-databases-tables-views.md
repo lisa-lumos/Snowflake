@@ -110,11 +110,15 @@ You can create additional virtual cols as expressions using the VALUE cols and/o
 
 Performance is slower compared with regular tables, but saves cost. Recommend external tables to be partitioned to improve query performance. 
 
-Partition example: Suppose you have order data from different years S3, with each file contain a particular year of data, and the external table points to all these files. Without partition, if you only need the orders data from a particular year, the query needs to scan all files (of all years), then do the filtering to return only data for that year. With partitioning, you will have one data file in each folder named by year, and the query only retrieves the data in that file. You declare partition by year in the external table definition, and select year as extract year from METADATA$FILENAME. 
+Partition example: Suppose you have order data from different years S3, with each file contain a particular year of data, and the external table points to all these files. Without partition, if you only need the orders data from a particular year, the query needs to scan all files (of all years), then do the filtering to return only data for that year. With partitioning, you will have one data file in each folder named by year, and the query only retrieves the data in that file. You declare partition by year in the external table definition, and select year as extracting year from METADATA$FILENAME. 
 
 Similar to tables, the query results for external tables persist for 24 hours, as long as metadata is not refreshed. 
 
 Use case: in a S3 bucket, you have weather data of each city in a country that is uploaded daily into the bucket. But your customer has a manufacture business in city A, so they are only interested in visualizing the weather data of this city (only a subset of your massive data). 
+
+External table supports Delta lake. 
+
+The Hive metastore connector for Snowflake can integrate Apache Hive metastores with Snowflake, using external tables.
 
 ## Search Optimization service (Enterprise edition and higher)
 `Applies to a whole table or columns in a table.` Can significantly improve the performance of certain types of queries that
