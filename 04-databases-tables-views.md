@@ -120,6 +120,12 @@ External table supports Delta lake.
 
 The Hive metastore connector for Snowflake can integrate Apache Hive metastores with Snowflake, using external tables.
 
+## Iceberg Tables
+Snowflake supports Iceberg tables that use the Apache Parquet file format.
+
+Iceberg tables for Snowflake combine the performance and query semantics of regular Snowflake tables with external cloud storage that you manage. They are ideal for existing data lakes that you cannot, or choose not to, store in Snowflake. 
+
+
 ## Search Optimization service (Enterprise edition and higher)
 `Applies to a whole table or columns in a table.` Can significantly improve the performance of certain types of queries that
 - returns small num of distinct rows (with highly selective filters like equal to)
