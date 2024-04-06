@@ -125,6 +125,15 @@ Snowflake supports Iceberg tables that use the Apache Parquet file format.
 
 Iceberg tables for Snowflake combine the performance and query semantics of regular Snowflake tables with external cloud storage that you manage. They are ideal for existing data lakes that you cannot, or choose not to, store in Snowflake. 
 
+# Hybrid tables
+A hybrid table is a Snowflake table type, that is optimized for hybrid transactional/operational workloads, that require low latency and high throughput on small random point reads/writes. 
+
+A hybrid table supports unique and referential integrity constraint enforcement that is critical for transactional workloads.
+
+While you should expect Snowflake standard tables to offer better performance on large analytical queries, hybrid tables allows for faster results on short-running operational queries. The following types of queries are most likely to benefit from hybrid tables:
+- High concurrency random point reads, versus large range reads.
+- High concurrency random writes, versus large sequential writes (for example, bulk loading).
+- Retrieval of a small number of entire records (for example, customer object) versus narrow projections with analytical functions (for example, aggregations or group by).
 
 ## Search Optimization service (Enterprise edition and higher)
 `Applies to a whole table or columns in a table.` Can significantly improve the performance of certain types of queries that
