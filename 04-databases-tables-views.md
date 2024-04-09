@@ -142,7 +142,7 @@ While you should expect Snowflake standard tables to offer better performance on
 - uses variant, object, array fields with filters
 - uses geospatial functions with geography vals
 
-A background maintenance service creates and maintains the search access path. Has storage and compute cost. 
+A background maintenance service creates and maintains the "search access path". Has storage and compute cost. 
 
 The search optimization can improve the performance of views (including secure views).
 
@@ -163,6 +163,8 @@ If a table in the primary database has the SEARCH OPTIMIZATION property enabled,
 If a table has a high churn rate, enabling automatic clustering and configuring search optimization for the table can result in higher maintenance costs than if the table is just configured for search optimization.
 
 To estimate the cost of search optimization, use the `SYSTEM$ESTIMATE_SEARCH_OPTIMIZATION_COSTS()` function.
+
+Search optimization and query acceleration can work together to optimize query performance. 
 
 ## Views
 A regular view is a named definition of a query, and can be recursive. Views can be used for combining, segregating, and protecting data (by granting privileges on a view, instead of on the underlying tables). Can be used for writing modular code and increase code re-use. 
