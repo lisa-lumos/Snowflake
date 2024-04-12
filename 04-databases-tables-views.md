@@ -216,13 +216,13 @@ You can share a materialized view.
 You can create a materialized view on external tables. 
 
 ## Table design
-When defining cols of dates/timestamps, recommend use date/timestamp data type rather than VARCHAR. This improves query performance.
+When defining cols of dates/timestamps, recommend to use date/timestamp data type rather than VARCHAR. This improves query performance.
 
 Referential integrity constraints in SF are informational (not enforced), except for NOT NULL. 
 
 There is no storage/performance difference between a col with a max length declaration like VARCHAR(16777216), and a smaller precision. But using appropriate col length is recommended for easy debugging and convenience for 3rd party tools. 
 
-If unsure what operations to perform on semi-structured data, recommend storing it in a VARIANT column for now. 
+If unsure what operations to perform on semi-structured data, recommend storing it in a VARIANT column for now. For data that is mostly regular and uses only native types (strings and integers), the storage requirements and query performance for operations on relational data and data in a VARIANT column is very similar.
 
 ## Cloning
 When a db or schema got cloned, privileges of all its child objects are copied, but the container itself's privileges do not get copied. Use "copy grants" clause to copy container's privileges (except ownership). 
