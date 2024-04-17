@@ -225,7 +225,7 @@ There is no storage/performance difference between a col with a max length decla
 If unsure what operations to perform on semi-structured data, recommend storing it in a VARIANT column for now. For data that is mostly regular and uses only native types (strings and integers), the storage requirements and query performance for operations on relational data and data in a VARIANT column is very similar.
 
 ## Cloning
-When a db or schema got cloned, privileges of all its child objects are copied, but the container itself's privileges do not get copied. Use "copy grants" clause to copy container's privileges (except ownership). 
+When a db or schema got cloned, privileges of all its child objects are copied, but the container itself's privileges do not get copied. Use "copy grants" clause to copy container's privileges (except ownership), or grant explicitly. 
 
 Cloned objects get object parameters that were set on the source object.
 
@@ -246,6 +246,9 @@ A explicitly cloned table maps to the same policies as the source table.
 You can use Time Travel to clone objects at a specific time point in the past. 
 
 Clones can be cloned. 
+
+Cloning is fast, but not instantaneous, particularly for large tables. 
+
 
 ## Data storage considerations
 Storage charged for data in the Active, Time Travel, and Fail-safe state. 
