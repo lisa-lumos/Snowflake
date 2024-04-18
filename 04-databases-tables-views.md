@@ -251,7 +251,7 @@ Cloning is fast, but not instantaneous, particularly for large tables.
 
 
 ## Data storage considerations
-Storage charged for data in the Active, Time Travel, and Fail-safe state. 
+Storage is charged for data in the Active, Time Travel, and Fail-safe state. 
 
 TABLE_STORAGE_METRICS view includes a breakdown of the physical storage (in bytes) for table data in the 3 states of the CDP life-cycle. 
 
