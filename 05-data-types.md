@@ -103,7 +103,7 @@ print(response.content)
 ```
 
 ### Processing with Java UDFs or UDTFs (preview)
-To make your code resilient to file injection attacks, always use a scoped URL when passing a file’s location to a UDF. 
+To make your code resilient to file injection attacks, always use a scoped URL when passing a file's location to a UDF. 
 
 example:
 ```java
