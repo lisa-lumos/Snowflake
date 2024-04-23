@@ -25,7 +25,7 @@ The Snowflake Connector for Kafka can connect to an Apache Kafka server, load da
 
 For semi-structured data (Apache Parquet, Apache Avro, and ORC files), snowflake supports auto detection of schema, which retrieves the column definitions (names, data types, and ordering of columns in the files). Use function `INFER_SCHEMA` and `GENERATE_COLUMN_DESCRIPTION`. Create tables with the column definitions derived from a set of staged files using the `CREATE TABLE ... USING TEMPLATE`. 
 
-Instead of loading data into sf table, you can query then directly in the stage also. Useful if you only want to query a subset of data. 
+Instead of loading data into sf table, you can query them directly in the stage also. Useful if you only want to query a subset of data. 
 
 You can create external stages/tables on software and devices, on premises or in a private cloud, that is highly compliant with Amazon S3 API (Amazon S3-compatible Storage). 
 
