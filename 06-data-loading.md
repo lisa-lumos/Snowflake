@@ -272,8 +272,6 @@ The automated process computes the changes that were made to the base objects, a
 
 You can set up a dynamic table to query other dynamic tables.
 
-
-
 ### Understanding the Dynamic Table Refresh
 Dynamic table content is based on the results of a specific query. When the underlying data on which the dynamic table is based on changes, the table is updated to reflect those changes. These updates are referred to as a "refresh".
 
