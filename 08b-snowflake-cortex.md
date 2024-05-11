@@ -20,12 +20,8 @@ Snowflake Cortex LLM functions incur compute cost based on the number of tokens 
 
 Snowflake recommends executing queries that call a Snowflake Cortex LLM Function with a smaller warehouse (no larger than MEDIUM) because larger warehouses do not increase performance.
 
-
-
-
-
-
-
+Vector embeddings use cases:
+- find similar documents using vector similarity
 
 ## ML Functions
 
