@@ -24,31 +24,10 @@ Vector embeddings use cases:
 - find similar documents using vector similarity
 
 ## ML Functions
+- Anomaly Detection. Identifying outliers in data. 
+- Classification. Sort data into different classes using patterns detected in training data.
+- Contribution Explorer. Streamline/improve the process of root cause analysis around changes in observed metrics.
+- Forecasting. Predict future data by using historical time series data.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## Document AI
+Processes documents of various formats, and extracts information from both text-heavy paragraphs and the images that contain text, such as logos, handwritten text (signatures), or checkmarks. With Document AI, you can prepare pipelines for continuous processing of new documents of a specific type, such as invoice or finance statement documents.
