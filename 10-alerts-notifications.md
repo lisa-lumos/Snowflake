@@ -1,7 +1,7 @@
 # 10. Alerts & Notifications
 Use Snowflake alerts & email notifications to send notifications and perform actions automatically.
 
-## Snowflake Alerts (Preview)
+## Snowflake Alerts
 Use cases - you want to receive a notification when:
 - The warehouse credit usage increases by ?% of your current quota.
 - The resource consumption for your pipelines/tasks/materialized views/etc increases beyond a specified amount.
@@ -34,7 +34,7 @@ To monitor the execution of the alerts:
 
 The queries executed by alerts only appear in the alert history, not in the query history. 
 
-## Email Notifications (Preview)
+## Email Notifications
 Sending an email can be the action of an alert. 
 
 A single account can define a max of 10 email integrations and enable one or more simultaneously.
