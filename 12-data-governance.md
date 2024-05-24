@@ -1,4 +1,12 @@
 # 12. Data governance
+## Data Quality Monitoring (Enterprise &+)
+### Introduction
+Data Quality uses data metric functions (DMFs), which include Snowflake-provided system DMFs and user-defined DMFs, to monitor the state and integrity of your data. You can use DMFs to measure key metrics, such as, but not limited to, freshness, duplicates, NULLs, and unique values.
+
+
+### System DMFs
+### Working with DMFs
+
 ## Data sensitivity & Access visibility
 ### Object Tagging (Enterprise Edition &+)
 Tags enable data stewards to monitor sensitive data. A tag is a schema-level object that can be assigned to another Snowflake object.
