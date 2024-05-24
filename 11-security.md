@@ -2,7 +2,7 @@
 These topics are intended primarily for admins (ACCOUNTADMIN, SYSADMIN, or SECURITYADMIN).
 
 ## Authentication
-### API Authentication & Secrets (Preview)
+### API Authentication & Secrets
 External API authentication let you authenticate to a service hosted outside of Snowflake. Snowflake supports these authentication methods for External API Authentication:
 - Basic authentication (such as username and password).
 - OAuth with code-grant/client-credentials flow.
@@ -181,7 +181,7 @@ When a custom role is first created, it exists in isolation. By default, not eve
 
 For optimal flexibility in access control, create object `access roles` with different object permissions (such as db1_r, db1_rw, ...), and grant them to `functional roles` (such as analyst, data_engineer, ...). These functional roles can can form their own hierarchy. 
 
-Database roles (in preview), scope is the db that they live in:
+Database roles, scope is the db that they live in:
 - Ease of management: Database owners can create & manage db roles, grant privileges to db roles, grant db roles to other db roles in the same db. 
 - Data share: can be used in data share, instead of one IMPORTED PRIVILEGES to all. 
 
