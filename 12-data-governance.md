@@ -3,8 +3,27 @@
 ### Introduction
 Data Quality uses data metric functions (DMFs), which include Snowflake-provided system DMFs and user-defined DMFs, to monitor the state and integrity of your data. You can use DMFs to measure key metrics, such as, but not limited to, freshness, duplicates, NULLs, and unique values.
 
+Snowflake provides built-in system DMFs in the SNOWFLAKE.CORE schema to measure common metrics without having to define them. You can also define your own custom DMFs to fine-tune your data quality measurements more precisely, and these DMFs are stored in the database and schema of your choice.
+
+After you assign a DMF to a table or view, Snowflake records the results of calling the DMF in the event table for your account. You can specify the schedule for how often the DMF is called. All DMFs that are set on the table follow the same schedule.
+
+After you schedule the DMFs to run, you can configure alerts to notify you when changes to data quality occur. 
+
+Snowflake creates and manages the virtual warehouse objects to support this feature. 
+
+DMF limitations:
+- Only regular tables are supported. dynamic/external table etc not supported.
+- You cannot grant privileges on a DMF to share or set a DMF on a shared table/ view.
+- Using the CLONE operation and the CREATE TABLE ... LIKE operation does not result in DMF assignments on the target object.
+- You cannot set a DMF on objects in a reader account.
+- You cannot create a dynamic table or a stream based on the data in the event table.
+- Trial accounts and accounts within the U.S. SnowGov regions do not support this feature.
 
 ### System DMFs
+
+
+
+
 ### Working with DMFs
 
 ## Data sensitivity & Access visibility
