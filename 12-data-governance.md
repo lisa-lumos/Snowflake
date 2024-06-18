@@ -20,11 +20,13 @@ DMF limitations:
 - Trial accounts and accounts within the U.S. SnowGov regions do not support this feature.
 
 ### System DMFs
-
-
-
-
-### Working with DMFs
+list:
+- freshness(): secs between max timestamp col, and the scheduled time. 
+- data_metric_scheduled_time(): Returns the timestamp for when a DMF is scheduled to run, or the current_timestamp if the function is called manually.
+- null_count(): total num of NULLs for the specified col in a table.
+- duplicate_count(): num of vals that has duplicates, including NULLs. 
+- unique_count(): basically count(distinct ...)
+- row_count(): basically count(*)
 
 ## Data sensitivity & Access visibility
 ### Object Tagging (Enterprise Edition &+)
