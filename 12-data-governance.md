@@ -196,8 +196,8 @@ By default, when your account is provisioned, the first user is assigned the ACC
 **ACCOUNTADMIN best practices:**
 - Assign it only to a `limited number of people`.
 - All users with this role should use multi-factor authentication (`MFA`) for login.
-- Assign it to `at least two users`. So avoids having to go through complex resetting procedures because they can reset each other’s passwords.
-- Associate an `actual person’s email address` to its users, so Snowflake knows who to contact in an urgent situation.
+- Assign it to `at least two users`. So avoids having to go through complex resetting procedures because they can reset each other's passwords.
+- Associate an `actual person's email address` to its users, so Snowflake knows who to contact in an urgent situation.
 - `Do not` make it the `default role` for any users
 - `Do not` use it for `automated scripts`
 
@@ -230,15 +230,15 @@ End-to-end encryption (E2EE) is a method to secure data that prevents third part
 
 Client-side encryption means that a client encrypts data before copying it into a cloud storage staging area. It follows a specific protocol defined by the cloud storage service. The service SDK and third-party tools implement this protocol. The client-side encryption protocol works as follows:
 1. The customer creates a secret master key, which is shared with Snowflake.
-2. The client, which is provided by the cloud storage service, generates a random encryption key and encrypts the file before uploading it into cloud storage. The random encryption key, in turn, is encrypted with the customer’s master key.
-3. Both the encrypted file and the encrypted random key are uploaded to the cloud storage service. The encrypted random key is stored with the file’s metadata.
+2. The client, which is provided by the cloud storage service, generates a random encryption key and encrypts the file before uploading it into cloud storage. The random encryption key, in turn, is encrypted with the customer's master key.
+3. Both the encrypted file and the encrypted random key are uploaded to the cloud storage service. The encrypted random key is stored with the file's metadata.
 
-When downloading data, the client downloads both the encrypted file and the encrypted random key. The client decrypts the encrypted random key using the customer’s master key. Next, the client decrypts the encrypted file using the now decrypted random key. This encryption and decryption happens on the client side. At no time does the cloud storage service or any other third party (such as an ISP) see the data in the clear. Customers may upload client-side encrypted data using any client or tool that supports client-side encryption.
+When downloading data, the client downloads both the encrypted file and the encrypted random key. The client decrypts the encrypted random key using the customer's master key. Next, the client decrypts the encrypted file using the now decrypted random key. This encryption and decryption happens on the client side. At no time does the cloud storage service or any other third party (such as an ISP) see the data in the clear. Customers may upload client-side encrypted data using any client or tool that supports client-side encryption.
 
 ### Encryption Key Management in Snowflake
-Tri-Secret Secure (business critical feature): Snowflake manages data encryption keys to protect customer data. This management occurs automatically without any need for customer intervention. Customers can use the key management service in the cloud platform that hosts their Snowflake account to maintain their own additional encryption key. When enabled, the combination of `a Snowflake-maintained key` and `a customer-managed key` creates `a composite master key` to protect the Snowflake data. This dual-key encryption model, together with Snowflake’s built-in user authentication, enables the three levels of data protection offered by `Tri-Secret Secure`.
+Tri-Secret Secure (business critical feature): Snowflake manages data encryption keys to protect customer data. This management occurs automatically without any need for customer intervention. Customers can use the key management service in the cloud platform that hosts their Snowflake account to maintain their own additional encryption key. When enabled, the combination of `a Snowflake-maintained key` and `a customer-managed key` creates `a composite master key` to protect the Snowflake data. This dual-key encryption model, together with Snowflake's built-in user authentication, enables the three levels of data protection offered by `Tri-Secret Secure`.
 
-Snowflake uses strong `AES 256-bit encryption` with a `hierarchical key model` rooted in a hardware security module. A hierarchical key model provides a framework for Snowflake’s encryption key management. The hierarchy is composed of several layers of keys in which `each higher layer of keys (parent keys) encrypts the layer below (child keys`). Snowflake’s hierarchical key model consists of four levels of keys: The root key, Account master keys, Table master keys, File keys. 
+Snowflake uses strong `AES 256-bit encryption` with a `hierarchical key model` rooted in a hardware security module. A hierarchical key model provides a framework for Snowflake's encryption key management. The hierarchy is composed of several layers of keys in which `each higher layer of keys (parent keys) encrypts the layer below (child keys)`. Snowflake's hierarchical key model consists of four levels of keys: The root key, Account master keys, Table master keys, File keys. 
 
 <img src="images/hierarchical-key-model.png" style="width: 70%">
 
