@@ -61,7 +61,7 @@ Queries running concurrently in a warehouse must share the warehouse's resources
 
 Lowering the concurrency level may boost performance for individual queries, especially large, complex, or multi-statement queries, but these adjustments should be thoroughly tested to ensure they have the desired effect.
 
-Be aware that lowering the `MAX_CONCURRENCY_LEVEL` for a warehouse can lead to more queries being placed in a queue, which has a performance implication for those queries. Other strategies, such as using a dedicated warehouse, or using the Query Acceleration Service, can boost the performance of a large or complex query, without impacting the rest of the workload.
+Be aware that lowering the `MAX_CONCURRENCY_LEVEL` for a warehouse can lead to more queries being placed in a queue, which has a performance implication for those queries. Other strategies, such as using a dedicated warehouse, or using the Query Acceleration Service, can boost the performance of a large or complex query, without impacting the rest of the workload. 
 
 Adjusting the `STATEMENT_QUEUED_TIMEOUT_IN_SECONDS` parameter can cancel queries, rather than let them remain in the queue for an extended period of time.
 
