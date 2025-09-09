@@ -128,12 +128,22 @@ Iceberg tables for Snowflake combine the performance and query semantics of regu
 ## Hybrid tables
 A hybrid table is a Snowflake table type, that is optimized for hybrid transactional/operational workloads, that require low latency and high throughput on small random point reads/writes. 
 
-A hybrid table supports unique and referential integrity constraint enforcement that is critical for transactional workloads.
+A hybrid table supports unique and referential integrity constraint enforcement, that is critical for transactional workloads.
 
 While you should expect Snowflake standard tables to offer better performance on large analytical queries, hybrid tables allows for faster results on short-running operational queries. The following types of queries are most likely to benefit from hybrid tables:
 - High concurrency random point reads, versus large range reads.
 - High concurrency random writes, versus large sequential writes (for example, bulk loading).
 - Retrieval of a small number of entire records (for example, customer object) versus narrow projections with analytical functions (for example, aggregations or group by).
+
+You can join hybrid tables with other Snowflake tables in one query. 
+
+Asynchronously, some data in row store may also be cached in columnar format, to provide better performance for analytical queries. Snowflake query optimizer decides where to read data from, to get the best performance. 
+
+
+
+
+
+
 
 ## Search Optimization service (Enterprise edition and higher)
 `Applies to a whole table or columns in a table.` Can significantly improve the performance of certain types of queries that
