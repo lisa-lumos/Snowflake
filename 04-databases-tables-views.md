@@ -137,13 +137,21 @@ While you should expect Snowflake standard tables to offer better performance on
 
 You can join hybrid tables with other Snowflake tables in one query. 
 
-Asynchronously, some data in row store may also be cached in columnar format, to provide better performance for analytical queries. Snowflake query optimizer decides where to read data from, to get the best performance. 
+Asynchronously, some data in row store may also be cached in columnar format (secondary columnar storage), to provide better performance for analytical queries. Snowflake query optimizer decides where to read data from, to get the best performance. 
 
+Hybrid tables have PK required, FK optional. 
 
+Applications commonly work with a mix of hybrid tables and standard tables. 
 
+Whey a hybrid table is empty, CTAS, COPY and INSERT INTO ... SELECT have the same bulk loading speed. After the table is loaded, normal INSERT performance applies, which will be slower (future release will fix it). 
 
+Index sizes are limited in width.
 
+Types of index:
+1. Auto created, when you declare PK/FK/UNIQUE constraints
+2. User defined. Can cover 1 or more cols. 
 
+The data in a hybrid table is ordered by its PK. 
 
 ## Search Optimization service (Enterprise edition and higher)
 `Applies to a whole table or columns in a table.` Can significantly improve the performance of certain types of queries that
