@@ -149,9 +149,25 @@ Index sizes are limited in width.
 
 Types of index:
 1. Auto created, when you declare PK/FK/UNIQUE constraints
-2. User defined. Can cover 1 or more cols. 
+2. User defined (aka secondary indexes). Can cover 1 or more cols. 
 
-The data in a hybrid table is ordered by its PK. 
+The data in a hybrid table is ordered by its PK. To accelerate lookups on other cols, can create secondary indexes. 
+
+Indexes can help with these predicates: comparison, `in`, `between` conditions. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Search Optimization service (Enterprise edition and higher)
 `Applies to a whole table or columns in a table.` Can significantly improve the performance of certain types of queries that
