@@ -155,11 +155,15 @@ The data in a hybrid table is ordered by its PK. To accelerate lookups on other 
 
 Indexes can help with these predicates: comparison, `in`, `between` conditions. 
 
+Indexes could increase storage consumption, and create overhead on DMLs due to synchronous maintenance. 
 
+You can add secondary indexes at table creation, or after creation (which doesn't lock the table during running). 
 
+If table is large and downtime is not issue, recommend to recreate hybrid table to add a new index, because it is more efficient. 
 
+`create table as select` for bulk loading doesn't work with table that has FK constraints. 
 
-
+When you create a secondary index, you can use INCLUDE to associate columns with the index, which can sometimes avoid costly table scans. e.g., on queries that select the included columns, and filtering on the indexed cols. 
 
 
 
