@@ -165,10 +165,10 @@ If table is large and downtime is not issue, recommend to recreate hybrid table 
 
 When you create a secondary index, you can use INCLUDE to associate columns with the index, which can sometimes avoid costly table scans. e.g., on queries that select the included columns, and filtering on the indexed cols. 
 
+Queries executed via code/driver has lower latency than those executed via Snowsight, as the later provides rich access to query plans, statistics, etc. 
 
-
-
-
+Index design best practices:
+- create secondary indexes for frequently used predicates
 
 
 
