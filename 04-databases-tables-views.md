@@ -169,6 +169,12 @@ Queries executed via code/driver has lower latency than those executed via Snows
 
 Index design best practices:
 - create secondary indexes for frequently used predicates
+- use composite indexes to match complete query patterns, such as when filtering happens often on two columns together
+- don't create overlapping indexes that start with the same leading column(s)
+- indexes built with a single, low-cardinality column have limited benefit
+- indexes add write overhead and storage requirements. Be careful to balance read versus write performance for applications that require low-latency write operations.
+
+In some cases, adding columns with calculated or surrogate key values provides better performance than complex composite indexes.
 
 
 
