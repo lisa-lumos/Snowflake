@@ -118,3 +118,31 @@ They do not support query acceleration.
 To maximize CPU and memory resources of a wh, set its MAX_CONCURRENCY_LEVEL = 1. 
 
 They have sizes m, l, xl, 2xl, ..., 6xl; their cost of credit/hr starts from 6, and doubles with each size up. 
+
+# Interactive tables and warehouses
+They deliver low-latency query performance for high-concurrency, interactive workloads. Together, they enable use cases such as real-time dashboards, data-powered APIs, and serving high-concurrency workloads. 
+
+Interactive warehouse is optimized to run continuously, serving high volumes of concurrent queries.
+
+Interactive tables have different methods for data ingestion and support a more limited set of SQL statements and query operators than standard Snowflake tables. They are optimized for fast, simple queries when you require consistent low-latency responses. Interactive warehouses provide the compute resources required to serve these queries efficiently. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
