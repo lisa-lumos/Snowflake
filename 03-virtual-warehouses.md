@@ -126,6 +126,13 @@ Interactive warehouse is optimized to run continuously, serving high volumes of 
 
 Interactive tables have different methods for data ingestion and support a more limited set of SQL statements and query operators than standard Snowflake tables. They are optimized for fast, simple queries when you require consistent low-latency responses. Interactive warehouses provide the compute resources required to serve these queries efficiently. 
 
+The simple queries that work best with interactive tables are SELECT statements with selective WHERE clauses, optionally including a GROUP BY clause on a few dimensions. Avoid queries involving large joins and large subqueries. The performance of queries that use other features, such as window functions, is highly dependent on the data shapes that you are querying.
+
+Limitations:
+- wh do not support long running queries
+- interactive wh do not auto suspend
+- limited table DML, such as no update/delete. 
+- table do not support materialized view, etc. 
 
 
 
