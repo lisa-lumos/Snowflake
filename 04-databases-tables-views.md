@@ -120,11 +120,6 @@ External table supports Delta lake.
 
 The Hive metastore connector for Snowflake can integrate Apache Hive metastores with Snowflake, using external tables.
 
-## Iceberg Tables
-Snowflake supports Iceberg tables that use the Apache Parquet file format.
-
-Iceberg tables for Snowflake combine the performance and query semantics of regular Snowflake tables with external cloud storage that you manage. They are ideal for existing data lakes that you cannot, or choose not to, store in Snowflake. 
-
 ## Hybrid tables
 A hybrid table is a Snowflake table type, that is optimized for hybrid transactional/operational workloads, that require low latency and high throughput on small random point reads/writes. 
 
@@ -143,7 +138,7 @@ Hybrid tables have PK required, FK optional.
 
 Applications commonly work with a mix of hybrid tables and standard tables. 
 
-Whey a hybrid table is empty, CTAS, COPY and INSERT INTO ... SELECT have the same bulk loading speed. After the table is loaded, normal INSERT performance applies, which will be slower (future release will fix it). 
+When a hybrid table is empty, CTAS, COPY and INSERT INTO ... SELECT have the same bulk loading speed. After the table is loaded, normal INSERT performance applies, which will be slower (future release will fix it). 
 
 Index sizes are limited in width.
 
@@ -176,8 +171,10 @@ Index design best practices:
 
 In some cases, adding columns with calculated or surrogate key values provides better performance than complex composite indexes.
 
+## Iceberg Tables
+Snowflake supports Iceberg tables that use the Apache Parquet file format.
 
-
+Iceberg tables for Snowflake combine the performance and query semantics of regular Snowflake tables with external cloud storage that you manage. They are ideal for existing data lakes that you cannot, or choose not to, store in Snowflake. 
 
 ## Search Optimization service (Enterprise edition and higher)
 `Applies to a whole table or columns in a table.` Can significantly improve the performance of certain types of queries that
