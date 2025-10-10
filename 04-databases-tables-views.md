@@ -171,6 +171,17 @@ Index design best practices:
 
 In some cases, adding columns with calculated or surrogate key values provides better performance than complex composite indexes.
 
+When connecting to databases that contain hybrid tables, best practices:
+- Avoid the overhead of repeatedly establishing new connections, use connection pooling (long-lived connections).
+- Optimize network proximity. Colocate client software and Snowflake account in the same cloud region.
+- Use prepared statements with bound parameters, so the query planner will reuse previously created query plans.
+
+When a primary key index is used to scan a hybrid table, a "TableScan" operator appears in the query profile, not an "IndexScan" operator. When any other index is used to scan a hybrid table, such as a secondary index, you will see an "IndexScan" operator.
+
+Queries against standard tables always use table scans; they do not use index scans.
+
+Hybrid table data is maintained in two formats to serve both operational and analytical workloads. A query may read from one or both types of row/col storage, depending on the tables in question, the specific requirements of the query, availability of indexes, and other factors.
+
 ## Iceberg Tables
 Snowflake supports Iceberg tables that use the Apache Parquet file format.
 
