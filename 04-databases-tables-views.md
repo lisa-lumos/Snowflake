@@ -267,6 +267,30 @@ You can share a materialized view.
 
 You can create a materialized view on external tables. 
 
+## Semantic Views
+You can store semantic business concepts directly in the database in a semantic view, which lives inside a schema. You can also share semantic views in private listings, in public listings on the Snowflake Marketplace, and in organizational listings.
+
+Semantic views address the mismatch between how business users describe data, and how it's stored in database schemas. For example, for a critical business concept like "gross revenue", the data might be stored in a table column named "amt_ttl_pre_dsc" in the database, making it difficult for business users to find and interpret.
+
+Additionally, if "net revenue" within a company always means gross revenue after discounts, the semantic view can define it consistently as a metric with the correct aggregation: `SUM(gross_revenue * (1 - discount))`. This ensures a single authoritative definition with proper aggregation behavior. For example, when a user asks for "Net Revenue by Region", the semantic view knows to aggregate at the appropriate level, whereas, without semantic views, dozens of inconsistent calculations might exist throughout different reports and applications, often with incorrect aggregation methods leading to erroneous results.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Table design
 When defining cols of dates/timestamps, recommend to use date/timestamp data type rather than VARCHAR. This improves query performance.
 
