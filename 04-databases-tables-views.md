@@ -328,7 +328,14 @@ CREATE SEMANTIC VIEW tpch_rev_analysis
 ```
 
 
-
+```sql
+SELECT * FROM SEMANTIC_VIEW(
+    tpch_analysis
+    DIMENSIONS customer.customer_market_segment
+    METRICS orders.order_average_value
+  )
+  ORDER BY customer_market_segment;
+```
 
 
 
