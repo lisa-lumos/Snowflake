@@ -337,17 +337,6 @@ SELECT * FROM SEMANTIC_VIEW(
   ORDER BY customer_market_segment;
 ```
 
-
-
-
-
-
-
-
-
-
-
-
 ## Table design
 When defining cols of dates/timestamps, recommend to use date/timestamp data type rather than VARCHAR. This improves query performance.
 
@@ -395,5 +384,3 @@ Zero-copy clone is useful for creating instant backups that do not have any addi
 High-churn dimension tables can be identified by calculating the ratio of FAILSAFE_BYTES divided by ACTIVE_BYTES in the TABLE_STORAGE_METRICS view. Any table with a large ratio is a high-churn table. 
 
 For large, high-churn dimension tables that incur overly-excessive CDP costs, the solution is to create these tables as transient with 0 Time Travel retention, and then copy these tables periodically (at least once a day) into a permanent table. This creates a full backup of these tables. When a new backup is created, the old one can be deleted and protected by CDP.
-
-
