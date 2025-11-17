@@ -1,0 +1,33 @@
+# Storage Lifecycle Policies
+A storage lifecycle policy is a schema-level object that automatically manages the data lifecycle for standard Snowflake tables. Use these policies to archive/expire specific table rows based on conditions that you define, such as data age or other criteria. Snowflake automatically executes these policies daily using shared compute resources.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
