@@ -5,7 +5,7 @@ When the policy runs, it checks each row against your expression and either arch
 
 Archive storage tiers:
 - Cool: fast retrieval time, min archival period is 90d. 
-- Cold: cost savings than cool, long retrieval time. 
+- Cold: cost savings than cool, long retrieval time. Min 180d. 
 
 When you attach a storage lifecycle policy to a table, Snowflake waits approximately 24 hours before running it for the first time.
 
@@ -15,6 +15,17 @@ After Snowflake archives rows, you can't query them directly.
 
 Truncating a table doesn't affect archived data for that table. You can still retrieve data from archive storage after truncating the table.
 
+## Billing
+Each time Snowflake runs a storage lifecycle policy, you incur serverless compute charges to identify and process rows that meet your defined conditions.
+
+
+## Creating and managing policies
+
+
+## Retrieving archived data
+
+
+## Monitoring
 
 
 
