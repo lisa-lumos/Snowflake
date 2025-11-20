@@ -18,9 +18,8 @@ Truncating a table doesn't affect archived data for that table. You can still re
 ## Billing
 Each time Snowflake runs a storage lifecycle policy, you incur serverless compute charges to identify and process rows that meet your defined conditions.
 
-
 ## Creating and managing policies
-
+To improve performance and ensure consistent policy execution, convert timestamps to dates in your policy expressions when you compare time values.
 
 ## Retrieving archived data
 
