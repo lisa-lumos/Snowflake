@@ -22,8 +22,14 @@ Each time Snowflake runs a storage lifecycle policy, you incur serverless comput
 To improve performance and ensure consistent policy execution, convert timestamps to dates in your policy expressions when you compare time values.
 
 ## Retrieving archived data
+To estimate how many files Snowflake will retrieve from archive storage, use the EXPLAIN command.
 
-
+```sql
+explain
+create table my_table
+from archive of my_source_table as st
+where st.event_timestamp between '01/15/2023' and '01/20/2023';
+```
 ## Monitoring
 
 
