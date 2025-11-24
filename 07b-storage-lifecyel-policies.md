@@ -31,23 +31,5 @@ from archive of my_source_table as st
 where st.event_timestamp between '01/15/2023' and '01/20/2023';
 ```
 ## Monitoring
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- List all tables associated with a policy. 
+- Monitor storage lifecycle policy runs
