@@ -1,7 +1,9 @@
 # Migrations
 
 ## SnowConvert AI
-Converts SQL code from legacy platforms to Snowflake SQL Supports migrations from:
+Converts SQL code from legacy platforms to Snowflake.
+
+SQL Supports migrations from:
 - Teradata
 - Oracle
 - SQL Server
@@ -16,27 +18,9 @@ Converts SQL code from legacy platforms to Snowflake SQL Supports migrations fro
 - Hive
 
 ## Snowpark Migration Accelerator
+Converts code from Spark to Snowpark API. 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Supports:
+- Python
+- Scala
+- Java
