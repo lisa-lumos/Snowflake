@@ -5,30 +5,3 @@ With listings, you can
 
 A listing is an enhanced method of Secure Data Sharing, and uses the same provider and consumer model.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
